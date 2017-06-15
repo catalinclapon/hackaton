@@ -1,0 +1,45 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "desc",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "min",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "required",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "max",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "extValidation",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20170615104357",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "field",
+    "pagination": "pagination"
+}
