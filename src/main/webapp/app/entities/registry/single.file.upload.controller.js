@@ -4,7 +4,7 @@
         $scope.uploadFile = function (file) {
             $scope.file = file;
             file.upload = Upload.upload({
-                url: 'api/upload',
+                url: 'api/uploadBulk',
                 data: {file: file}
             });
 
