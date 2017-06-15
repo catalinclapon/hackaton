@@ -10,7 +10,7 @@
     function stateConfig($stateProvider) {
         $stateProvider
         .state('user-management', {
-            parent: 'admin',
+            parent: 'users-groups',
             url: '/user-management?page&sort',
             data: {
                 authorities: ['ROLE_ADMIN'],
@@ -18,7 +18,7 @@
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/admin/user-management/user-management.html',
+                    templateUrl: 'app/users-groups/user-management/user-management.html',
                     controller: 'UserManagementController',
                     controllerAs: 'vm'
                 }
@@ -54,7 +54,7 @@
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/user-management/user-management-dialog.html',
+                    templateUrl: 'app/users-groups/user-management/user-management-dialog.html',
                     controller: 'UserManagementDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -83,7 +83,7 @@
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/user-management/user-management-dialog.html',
+                    templateUrl: 'app/users-groups/user-management/user-management-dialog.html',
                     controller: 'UserManagementDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -109,7 +109,7 @@
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/admin/user-management/user-management-detail.html',
+                    templateUrl: 'app/users-groups/user-management/user-management-detail.html',
                     controller: 'UserManagementDetailController',
                     controllerAs: 'vm'
                 }
@@ -128,7 +128,7 @@
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/user-management/user-management-delete-dialog.html',
+                    templateUrl: 'app/users-groups/user-management/user-management-delete-dialog.html',
                     controller: 'UserManagementDeleteController',
                     controllerAs: 'vm',
                     size: 'md',

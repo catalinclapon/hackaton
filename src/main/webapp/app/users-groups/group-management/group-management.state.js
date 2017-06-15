@@ -9,16 +9,15 @@
 
     function stateConfig($stateProvider) {
         $stateProvider
-        .state('groups', {
-            parent: 'entity',
-            url: '/groups?page&sort&search',
+        .state('group-management', {
+            parent: 'users-groups',
+            url: '/group-management?page&sort&search',
             data: {
-                authorities: ['ROLE_USER'],
-                pageTitle: 'hackatonApp.groups.home.title'
+                authorities: ['ROLE_ADMIN','ROLE_PROVIDER']
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/groups/groups.html',
+                    templateUrl: 'app/users-groups/group-management/group-management.html',
                     controller: 'GroupsController',
                     controllerAs: 'vm'
                 }
@@ -51,16 +50,15 @@
                 }]
             }
         })
-        .state('groups-detail', {
-            parent: 'groups',
-            url: '/groups/{id}',
+        .state('group-management-detail', {
+            parent: 'group-management',
+            url: '/group-management/{id}',
             data: {
-                authorities: ['ROLE_USER'],
-                pageTitle: 'hackatonApp.groups.detail.title'
+                authorities: ['ROLE_ADMIN','ROLE_PROVIDER']
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/groups/groups-detail.html',
+                    templateUrl: 'app/users-groups/group-management/group-management-detail.html',
                     controller: 'GroupsDetailController',
                     controllerAs: 'vm'
                 }
@@ -83,15 +81,15 @@
                 }]
             }
         })
-        .state('groups-detail.edit', {
-            parent: 'groups-detail',
+        .state('group-management-detail.edit', {
+            parent: 'group-management-detail',
             url: '/detail/edit',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: ['ROLE_ADMIN','ROLE_PROVIDER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/groups/groups-dialog.html',
+                    templateUrl: 'app/users-groups/group-management/group-management-dialog.html',
                     controller: 'GroupsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -108,15 +106,15 @@
                 });
             }]
         })
-        .state('groups.new', {
-            parent: 'groups',
+        .state('group-management.new', {
+            parent: 'group-management',
             url: '/new',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: ['ROLE_ADMIN','ROLE_PROVIDER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/groups/groups-dialog.html',
+                    templateUrl: 'app/users-groups/group-management/group-management-dialog.html',
                     controller: 'GroupsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -130,21 +128,21 @@
                         }
                     }
                 }).result.then(function() {
-                    $state.go('groups', null, { reload: 'groups' });
+                    $state.go('group-management', null, { reload: 'group-management' });
                 }, function() {
-                    $state.go('groups');
+                    $state.go('group-management');
                 });
             }]
         })
-        .state('groups.edit', {
-            parent: 'groups',
+        .state('group-management.edit', {
+            parent: 'group-management',
             url: '/{id}/edit',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: ['ROLE_ADMIN','ROLE_PROVIDER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/groups/groups-dialog.html',
+                    templateUrl: 'app/users-groups/group-management/group-management-dialog.html',
                     controller: 'GroupsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -155,21 +153,21 @@
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('groups', null, { reload: 'groups' });
+                    $state.go('group-management', null, { reload: 'group-management' });
                 }, function() {
                     $state.go('^');
                 });
             }]
         })
-        .state('groups.delete', {
-            parent: 'groups',
+        .state('group-management.delete', {
+            parent: 'group-management',
             url: '/{id}/delete',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: ['ROLE_ADMIN','ROLE_PROVIDER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/groups/groups-delete-dialog.html',
+                    templateUrl: 'app/users-groups/group-management/group-management-delete-dialog.html',
                     controller: 'GroupsDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
@@ -179,7 +177,7 @@
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('groups', null, { reload: 'groups' });
+                    $state.go('group-management', null, { reload: 'group-management' });
                 }, function() {
                     $state.go('^');
                 });
