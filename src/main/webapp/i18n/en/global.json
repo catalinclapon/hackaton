@@ -98,7 +98,8 @@
             "open": "Open",
             "save": "Save",
             "view": "View",
-            "approve": "Approve"
+            "approve": "Approve",
+            "newGroup": "Add new group"
         },
         "detail": {
             "field": "Field",

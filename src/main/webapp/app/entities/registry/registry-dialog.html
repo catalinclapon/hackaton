@@ -33,19 +33,19 @@
         </div>
         </div>
 
-                <div class="panel panel-default" ng-repeat="(category, fields) in vm.groupedFields">
+                <div class="panel panel-default" ng-repeat="category in vm.groups">
                     <div class="panel-heading">
-                        <button type="button" class="close" ng-click="vm.removeCategory(category)">&times;</button>
+                        <button type="button" class="close" ng-click="vm.removeCategory($index)">&times;</button>
                         <div class="form-inline">
                             <div class="form-group">
                                 <label for="categoryName{{$index}}">{{$index + 1}}:</label>
                                 <input type="text" class="form-control" name="name" id="categoryName{{$index}}"
-                                       ng-model="category"/>
+                                       ng-model="category.name"/>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
-                        <table class="jh-table table table-striped">
+                        <table class="jh-table table table-striped"  ng-init="categIndex = $index">
                             <thead>
                             <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
                                 <th jh-sort-by="name"><span data-translate="hackatonApp.registry.field.name">Name</span> <span class="glyphicon glyphicon-sort"></span></th>
@@ -57,8 +57,8 @@
                                 <th></th>
                             </tr>
                             </thead>
-                            <tbody ui-sortable ng-model="fields">
-                            <tr ng-repeat="field in fields track by field.id">
+                            <tbody ui-sortable ng-model="vm.groupedFields[$index]">
+                            <tr ng-repeat="field in vm.groupedFields[$index] track by field.name">
                                 <td>{{field.name}}</td>
                                 <td>{{field.type}}</td>
                                 <td>{{field.required}}</td>
@@ -68,7 +68,7 @@
                                 <td class="text-right">
                                     <div class="btn-group flex-btn-group-container">
                                         <button type="button"
-                                                class="btn btn-info btn-sm">
+                                                class="btn btn-info btn-sm" ng-click="vm.removeField(field, categIndex)">
                                             <span class="glyphicon glyphicon-remove"></span>
                                             <span class="hidden-sm-down" data-translate="entity.action.delete"></span>
                                         </button>
@@ -80,11 +80,11 @@
                         <div class="form-inline">
                             <div class="form-group">
                                 <label class="sr-only" for="{{category}}_newFieldName">Field name</label>
-                                <input type="text" class="form-control" id="{{category}}_newFieldName" placeholder="Field name" ng-model="vm.newField[category].name">
+                                <input type="text" class="form-control" id="{{category}}_newFieldName" placeholder="Field name" ng-model="vm.newField[categIndex].name">
                             </div>
                             <div class="form-group">
                                 <label class="sr-only" for="{{category}}_newFieldType">Field type</label>
-                                <select class="form-control" id="{{category}}_newFieldType" ng-model="vm.newField[category].type">
+                                <select class="form-control" id="{{category}}_newFieldType" ng-model="vm.newField[categIndex].type">
                                     <option></option>
                                     <option>TEXT</option>
                                     <option>NUMBER</option>
@@ -94,22 +94,22 @@
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" ng-model="vm.newField[category].required"> Required
+                                    <input type="checkbox" ng-model="vm.newField[categIndex].required"> Required
                                 </label>
                             </div>
-                            <div class="form-group" ng-if="vm.newField[category].type == 'NUMBER'">
+                            <div class="form-group" ng-if="vm.newField[categIndex].type == 'NUMBER'">
                                 <label class="sr-only" for="{{category}}_newFieldMin">Min value</label>
-                                <input type="text" class="form-control" id="{{category}}_newFieldMin" placeholder="Min value" ng-model="vm.newField[category].min"  style="width:100px;">
+                                <input type="text" class="form-control" id="{{category}}_newFieldMin" placeholder="Min value" ng-model="vm.newField[categIndex].min"  style="width:100px;">
                             </div>
-                            <div class="form-group" ng-if="vm.newField[category].type == 'NUMBER'">
+                            <div class="form-group" ng-if="vm.newField[categIndex].type == 'NUMBER'">
                                 <label class="sr-only" for="{{category}}_newFieldMax">Max value</label>
-                                <input type="text" class="form-control" id="{{category}}_newFieldMax" placeholder="Max value" ng-model="vm.newField[category].max" style="width:100px;">
+                                <input type="text" class="form-control" id="{{category}}_newFieldMax" placeholder="Max value" ng-model="vm.newField[categIndex].max" style="width:100px;">
                             </div>
-                            <div class="form-group" ng-if="vm.newField[category].type == 'DROPDOWN'">
+                            <div class="form-group" ng-if="vm.newField[categIndex].type == 'DROPDOWN'">
                                 <label class="sr-only" for="{{category}}_newFieldValues">Values</label>
-                                <input type="text" class="form-control" id="{{category}}_newFieldValues" placeholder="Values" ng-model="vm.newField[category].values">
+                                <input type="text" class="form-control" id="{{category}}_newFieldValues" placeholder="Values" ng-model="vm.newField[categIndex].values">
                             </div>
-                            <button type="button" class="btn btn-default pull-right" ng-click="vm.addNewField(category)">Add</button>
+                            <button type="button" class="btn btn-default pull-right" ng-click="vm.addNewField(categIndex)">Add</button>
                         </div>
                     </div>
                 </div>

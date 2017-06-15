@@ -16,9 +16,9 @@
         .module('hackatonApp')
         .controller('RegistryDialogController', RegistryDialogController);
 
-    RegistryDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Registry', 'Field'];
+    RegistryDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Registry'];
 
-    function RegistryDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Registry, Field) {
+    function RegistryDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Registry) {
         var vm = this, groupCount = 0;
 
         vm.registry = entity;
@@ -26,11 +26,11 @@
         vm.save = save;
         vm.removeField = removeField;
         vm.removeCategory = removeCategory;
-        vm.newField = {};
+        vm.newField = [];
+        vm.groups = [];
         vm.groupedFields = groupByKey();
         vm.newGroup = newGroup;
         vm.addNewField = addNewField;
-        vm.fields = Field.queryAll();
 
 
         $timeout(function (){
@@ -51,6 +51,32 @@
             }
         }
 
+        function recreateRegistry(){
+            var result = {};
+
+            result.id = vm.registry.id;
+            result.uuid = vm.registry.uuid;
+            result.name = vm.registry.name;
+            result.desc = vm.registry.desc;
+
+            result.fields = [];
+
+            vm.groups.forEach(function(item, index) {
+                var fields = vm.groupedFields[index];
+                if(angular.isDefined(fields)){
+                    fields.forEach(function(field, findex){
+                        result.fields.push({
+                            category: item.name,
+                            order: index*10,
+                            field: field
+                        });
+                    });
+                }
+            });
+
+            return result;
+        }
+
         function onSaveSuccess (result) {
             $scope.$emit('hackatonApp:registryUpdate', result);
             $uibModalInstance.close(result);
@@ -61,40 +87,59 @@
             vm.isSaving = false;
         }
 
-        function removeCategory(category) {
-            delete vm.groupedFields[category]
+        function removeCategory(index) {
+            var cat = vm.groups[index];
+            delete vm.groupedFields[cat]
+            vm.groups.remove(cat);
         }
 
-        function removeField(field, category) {
-            var grouped = vm.groupedFields[category];
+        function removeField(field, index) {
+            var grouped = vm.groupedFields[index];
             if(angular.isDefined(grouped)){
                 grouped.remove(field)
             }
         }
 
         function newGroup(){
-            vm.groupedFields['New group ' + groupCount++] = [];
+            vm.groups.push({name: 'New group ' + groupCount++});
         }
 
-        function addNewField(category){
-            var field = vm.newField[category];
-            vm.groupedFields[category].push({
-                name: field.name,
-                type: field.type,
-                required: field.required,
-                min: field.min,
-                max: field.max,
-                extValidation: field.values
-            })
+        function addNewField(index){
+            var field = vm.newField[index];
+
+            if(field.name != '') {
+                if(angular.isUndefined(vm.groupedFields[index])){
+                    vm.groupedFields[index] = [];
+                }
+
+                vm.groupedFields[index].push({
+                    name: field.name,
+                    type: field.type,
+                    required: field.required ? 'y' : '',
+                    min: field.min,
+                    max: field.max,
+                    extValidation: field.values
+                });
+                vm.newField[index] = {
+                    name: '',
+                    type: '',
+                    required: '',
+                    min: '',
+                    max: '',
+                    values: ''
+                };
+            }
         }
 
         function groupByKey(){
-            var grouped = {}, fields = entity.fields;
+            var grouped = [], fields = entity.fields, index;
 
             for(var i = 0; i < fields.length; i++){
-                if(!angular.isDefined(grouped[fields[i].category])){
-                    grouped[fields[i].category] = [];
-                    vm.newField[fields[i].category] = {
+                index = getCategoryIndex(fields[i].category);
+                if(index == -1){
+                    vm.groups.push({name: fields[i].category});
+                    index = getCategoryIndex(fields[i].category);
+                    vm.newField[index] = {
                         name: '',
                         type: '',
                         required: '',
@@ -102,12 +147,22 @@
                         max: '',
                         values: ''
                     };
+                    grouped[index] = [];
                     groupCount++;
                 }
-                grouped[fields[i].category].push(fields[i].field);
+                grouped[index].push(fields[i].field);
             }
 
             return grouped;
+        }
+
+        function getCategoryIndex(category) {
+            for(var i = 0; i < vm.groups.length; i++) {
+                if(vm.groups[i].name == category) {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 })();
