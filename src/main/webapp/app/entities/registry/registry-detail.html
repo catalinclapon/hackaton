@@ -1,10 +1,25 @@
-
 <div>
 
-    <button type="button" ui-sref="registry-detail.edit({id:vm.registry.id})" class="btn btn-primary pull-right">
-        <span class="glyphicon glyphicon-pencil"></span>
-        <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
-    </button>
+    <div class="btn-toolbar pull-right row">
+
+        <button type="button" ui-sref="registry-detail.edit({id:vm.registry.id})" class="btn btn-primary">
+            <span class="glyphicon glyphicon-pencil"></span>
+            <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
+        </button>
+
+        <button class="btn btn-primary" ui-sref="registry-detail.bulk-upload">
+            <span class="glyphicon glyphicon-upload"></span>
+            <span class="hidden-xs-down" data-translate="hackatonApp.registry.home.bulkUpload"> Bulk upload </span>
+        </button>
+
+        <button class="btn btn-primary" ui-sref="registry-detail.download-template">
+            <span class="glyphicon glyphicon-download"></span>
+            <span class="hidden-xs-down"
+                  data-translate="hackatonApp.registry.home.downloadTemplate"> Download template </span>
+        </button>
+
+    </div>
+</div>
 
     <h2>{{vm.registry.name}}</h2>
     <small><span data-translate="hackatonApp.registry.admin">Admins</span>: <a>User admin 1</a>, <a>User admin 2</a> </small><!-- TODO: add user link //-->
