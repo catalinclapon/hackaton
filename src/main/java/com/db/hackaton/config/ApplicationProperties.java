@@ -1,5 +1,6 @@
 package com.db.hackaton.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -10,10 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * </p>
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
+@Data
 public class ApplicationProperties {
-
-    String localStoragePath;
-
-
-
+    private String localStoragePath;
 }
