@@ -2,6 +2,7 @@ package com.db.hackaton.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -24,35 +25,40 @@ public class RegistryField implements Serializable {
     private Long id;
 
     @Column(name = "jhi_order")
-    private String order;
+    private Integer order;
 
     @Column(name = "category")
     private String category;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Registry registry;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Field field;
 
     public Long getId() {
         return id;
     }
 
+    public RegistryField id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getOrder() {
+    public Integer getOrder() {
         return order;
     }
 
-    public RegistryField order(String order) {
+    public RegistryField order(Integer order) {
         this.order = order;
         return this;
     }
 
-    public void setOrder(String order) {
+    public void setOrder(Integer order) {
         this.order = order;
     }
 

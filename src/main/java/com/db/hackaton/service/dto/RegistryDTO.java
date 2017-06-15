@@ -32,7 +32,7 @@ public class RegistryDTO {
 
     private String status;
 
-    private Set<FieldDTO> fields = new HashSet<>();
+    private Set<RegistryFieldDTO> fields = new HashSet<>();
 
     public static Registry build(RegistryDTO registry) {
         return new Registry()
@@ -41,7 +41,7 @@ public class RegistryDTO {
             .desc(registry.getDescription())
             .status(registry.getStatus())
             .fields(registry.getFields().stream()
-                .map(FieldDTO::build)
+                .map(RegistryFieldDTO::build)
                 .collect(Collectors.toSet())
             );
     }
@@ -53,7 +53,7 @@ public class RegistryDTO {
             .name(registry.getName())
             .id(registry.getId())
             .fields(registry.getFields().stream()
-                .map(FieldDTO::build)
+                .map(RegistryFieldDTO::build)
                 .collect(Collectors.toSet()))
             .build();
     }
