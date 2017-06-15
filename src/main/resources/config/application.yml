@@ -123,3 +123,4 @@ jhipster:
 # ===================================================================
 
 application:
+    localStoragePath: C:/temp/uploads
