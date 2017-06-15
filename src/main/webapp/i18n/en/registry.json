@@ -6,7 +6,8 @@
                 "title": "Registries",
                 "createLabel": "Create a new Registry",
                 "createOrEditLabel": "Create or edit a Registry",
-                "search": "Search for Registry"
+                "search": "Search for Registry",
+                "bulkUpload": "Bulk upload"
             },
             "created": "A new Registry is created with identifier {{ param }}",
             "updated": "A Registry is updated with identifier {{ param }}",
