@@ -63,5 +63,12 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
 
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/field.csv"
+                  separator=","
+                  tableName="field">
+            <column name="jhi_min" type="numeric"/>
+            <column name="jhi_max" type="numeric"/>
+        </loadData>
     </changeSet>
 </databaseChangeLog>
