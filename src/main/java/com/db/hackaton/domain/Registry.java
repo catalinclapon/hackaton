@@ -47,14 +47,8 @@ public class Registry extends AbstractAuditingEntity implements Serializable {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @ManyToMany
-    @JoinTable(
-        name = "registry_field",
-        joinColumns = {@JoinColumn(name = "registry_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "field_id", referencedColumnName = "id")})
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @BatchSize(size = 50)
-    private Set<Field> fields = new HashSet<>();
+    @OneToMany(mappedBy = "registry", targetEntity = RegistryField.class)
+    private Set<RegistryField> fields = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -121,16 +115,16 @@ public class Registry extends AbstractAuditingEntity implements Serializable {
         this.status = status;
     }
 
-    public Set<Field> getFields() {
+    public Set<RegistryField> getFields() {
         return fields;
     }
 
-    public Registry fields(Set<Field> fields) {
+    public Registry fields(Set<RegistryField> fields) {
         this.fields = fields;
         return this;
     }
 
-    public void setFields(Set<Field> fields) {
+    public void setFields(Set<RegistryField> fields) {
         this.fields = fields;
     }
 

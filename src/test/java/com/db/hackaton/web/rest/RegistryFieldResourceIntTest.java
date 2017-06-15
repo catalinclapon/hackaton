@@ -39,8 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = HackatonApp.class)
 public class RegistryFieldResourceIntTest {
 
-    private static final String DEFAULT_ORDER = "AAAAAAAAAA";
-    private static final String UPDATED_ORDER = "BBBBBBBBBB";
+    private static final Integer DEFAULT_ORDER = 222;
+    private static final Integer UPDATED_ORDER = 333;
 
     private static final String DEFAULT_CATEGORY = "AAAAAAAAAA";
     private static final String UPDATED_CATEGORY = "BBBBBBBBBB";
