@@ -1,6 +1,7 @@
 {
     "hackatonApp": {
         "registry" : {
+            "admin": "Admin",
             "home": {
                 "title": "Registries",
                 "createLabel": "Create a new Registry",

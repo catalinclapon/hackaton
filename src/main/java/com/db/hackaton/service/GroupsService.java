@@ -1,53 +1,52 @@
 package com.db.hackaton.service;
 
-import com.db.hackaton.domain.Registry;
-import com.db.hackaton.service.dto.RegistryDTO;
+import com.db.hackaton.service.dto.GroupsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing Registry.
+ * Service Interface for managing Groups.
  */
-public interface RegistryService {
+public interface GroupsService {
 
     /**
-     * Save a registry.
+     * Save a groups.
      *
-     * @param registry the entity to save
+     * @param groupsDTO the entity to save
      * @return the persisted entity
      */
-    RegistryDTO save(RegistryDTO registry);
+    GroupsDTO save(GroupsDTO groupsDTO);
 
     /**
-     *  Get all the registries.
+     *  Get all the groups.
      *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    Page<RegistryDTO> findAll(Pageable pageable);
+    Page<GroupsDTO> findAll(Pageable pageable);
 
     /**
-     *  Get the "id" registry.
+     *  Get the "id" groups.
      *
      *  @param id the id of the entity
      *  @return the entity
      */
-    RegistryDTO findOne(Long id);
+    GroupsDTO findOne(Long id);
 
     /**
-     *  Delete the "id" registry.
+     *  Delete the "id" groups.
      *
      *  @param id the id of the entity
      */
     void delete(Long id);
 
     /**
-     * Search for the registry corresponding to the query.
+     * Search for the groups corresponding to the query.
      *
      *  @param query the query of the search
-     *
+     *  
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    Page<RegistryDTO> search(String query, Pageable pageable);
+    Page<GroupsDTO> search(String query, Pageable pageable);
 }

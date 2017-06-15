@@ -12,6 +12,7 @@
     <include file="classpath:config/liquibase/changelog/20170615113643_added_entity_Patient.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170615115917_added_entity_MedicalCaseField.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170615120159_added_entity_MedicalCaseAttachment.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170615130653_added_entity_Groups.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="classpath:config/liquibase/changelog/20170615110735_added_entity_constraints_RegistryField.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170615113643_added_entity_constraints_Patient.xml" relativeToChangelogFile="false"/>

@@ -4,6 +4,7 @@ import com.db.hackaton.service.RegistryService;
 import com.db.hackaton.domain.Registry;
 import com.db.hackaton.repository.RegistryRepository;
 import com.db.hackaton.repository.search.RegistrySearchRepository;
+import com.db.hackaton.service.dto.RegistryDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -23,7 +25,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class RegistryServiceImpl implements RegistryService{
 
     private final Logger log = LoggerFactory.getLogger(RegistryServiceImpl.class);
-    
+
     private final RegistryRepository registryRepository;
 
     private final RegistrySearchRepository registrySearchRepository;
@@ -36,29 +38,30 @@ public class RegistryServiceImpl implements RegistryService{
     /**
      * Save a registry.
      *
-     * @param registry the entity to save
+     * @param registryDTO the entity to save
      * @return the persisted entity
      */
     @Override
-    public Registry save(Registry registry) {
-        log.debug("Request to save Registry : {}", registry);
-        Registry result = registryRepository.save(registry);
-        registrySearchRepository.save(result);
-        return result;
+    public RegistryDTO save(RegistryDTO registryDTO) {
+        log.debug("Request to save Registry : {}", registryDTO);
+        Registry registry = registryRepository.save(Optional.of(registryDTO)
+            .map(RegistryDTO::build).get());
+        registrySearchRepository.save(registry);
+        return RegistryDTO.build(registry);
     }
 
     /**
      *  Get all the registries.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<Registry> findAll(Pageable pageable) {
+    public Page<RegistryDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Registries");
-        Page<Registry> result = registryRepository.findAll(pageable);
-        return result;
+        return registryRepository.findAll(pageable)
+            .map(RegistryDTO::build);
     }
 
     /**
@@ -69,10 +72,9 @@ public class RegistryServiceImpl implements RegistryService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Registry findOne(Long id) {
+    public RegistryDTO findOne(Long id) {
         log.debug("Request to get Registry : {}", id);
-        Registry registry = registryRepository.findOne(id);
-        return registry;
+        return RegistryDTO.build(registryRepository.findOne(id));
     }
 
     /**
@@ -83,8 +85,9 @@ public class RegistryServiceImpl implements RegistryService{
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Registry : {}", id);
-        registryRepository.delete(id);
-        registrySearchRepository.delete(id);
+        // TODO: Logical delete
+        //registryRepository.delete(id);
+        //registrySearchRepository.delete(id);
     }
 
     /**
@@ -96,9 +99,9 @@ public class RegistryServiceImpl implements RegistryService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<Registry> search(String query, Pageable pageable) {
+    public Page<RegistryDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Registries for query {}", query);
-        Page<Registry> result = registrySearchRepository.search(queryStringQuery(query), pageable);
-        return result;
+        return registrySearchRepository.search(queryStringQuery(query), pageable)
+            .map(RegistryDTO::build);
     }
 }

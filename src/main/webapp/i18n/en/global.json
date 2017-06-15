@@ -13,7 +13,9 @@
                 "patient": "Patient",
                 "medicalCaseField": "Medical Case Field",
                 "medicalCaseAttachment": "Medical Case Attachment",
-                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+                "groups": "Groups",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+                "field": "Field"
             },
             "account": {
                 "main": "Account",
@@ -94,7 +96,8 @@
             "edit": "Edit",
             "open": "Open",
             "save": "Save",
-            "view": "View"
+            "view": "View",
+            "approve": "Approve"
         },
         "detail": {
             "field": "Field",
@@ -126,5 +129,5 @@
         "emailexists": "Email is already in use!",
         "idexists": "A new {{ entityName }} cannot already have an ID"
     },
-    "footer": "&copy; Infiniti Team 2017"
+    "footer": "&copy; Colegiul Pacientilor"
 }
