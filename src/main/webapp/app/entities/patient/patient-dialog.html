@@ -1,0 +1,64 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myPatientLabel" data-translate="hackatonApp.patient.home.createOrEditLabel">Create or edit a Patient</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.patient.id">
+            <label for="id" data-translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.patient.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="hackatonApp.patient.firstName" for="field_firstName">First Name</label>
+            <input type="text" class="form-control" name="firstName" id="field_firstName"
+                    ng-model="vm.patient.firstName"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="hackatonApp.patient.lastName" for="field_lastName">Last Name</label>
+            <input type="text" class="form-control" name="lastName" id="field_lastName"
+                    ng-model="vm.patient.lastName"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="hackatonApp.patient.cnp" for="field_cnp">Cnp</label>
+            <input type="text" class="form-control" name="cnp" id="field_cnp"
+                    ng-model="vm.patient.cnp"
+                    required ng-minlength="13" ng-maxlength="13"/>
+            <div ng-show="editForm.cnp.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.cnp.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.cnp.$error.minlength" data-translate="entity.validation.minlength" translate-value-min="13">
+                    This field is required to be at least 13 characters.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.cnp.$error.maxlength" data-translate="entity.validation.maxlength" translate-value-max="13">
+                    This field cannot be longer than 13 characters.
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label data-translate="hackatonApp.patient.user" for="field_user">User</label>
+            <select class="form-control" id="field_user" name="user" ng-model="vm.patient.user" ng-options="user as user.login for user in vm.users track by user.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

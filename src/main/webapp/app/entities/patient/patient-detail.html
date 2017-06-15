@@ -1,0 +1,35 @@
+
+<div>
+    <h2><span data-translate="hackatonApp.patient.detail.title">Patient</span> {{vm.patient.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="hackatonApp.patient.firstName">First Name</span></dt>
+        <dd>
+            <span>{{vm.patient.firstName}}</span>
+        </dd>
+        <dt><span data-translate="hackatonApp.patient.lastName">Last Name</span></dt>
+        <dd>
+            <span>{{vm.patient.lastName}}</span>
+        </dd>
+        <dt><span data-translate="hackatonApp.patient.cnp">Cnp</span></dt>
+        <dd>
+            <span>{{vm.patient.cnp}}</span>
+        </dd>
+        <dt><span data-translate="hackatonApp.patient.user">User</span></dt>
+        <dd>
+            {{vm.patient.user.login}}
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="patient-detail.edit({id:vm.patient.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>
