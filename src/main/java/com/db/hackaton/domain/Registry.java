@@ -16,7 +16,7 @@ import java.util.Objects;
 @Table(name = "registry")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "registry")
-public class Registry implements Serializable {
+public class Registry extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
