@@ -11,6 +11,8 @@
                 "registryField": "Registry Field",
                 "medicalCase": "Medical Case",
                 "patient": "Patient",
+                "medicalCaseField": "Medical Case Field",
+                "medicalCaseAttachment": "Medical Case Attachment",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
