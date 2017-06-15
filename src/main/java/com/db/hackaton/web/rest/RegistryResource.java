@@ -8,16 +8,21 @@ import com.db.hackaton.web.rest.util.HeaderUtil;
 import com.db.hackaton.web.rest.util.PaginationUtil;
 import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.awt.*;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -144,6 +149,24 @@ public class RegistryResource {
         Page<RegistryDTO> page = registryService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/registries");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping( produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE},value = "/registries/{id}/template")
+    @Timed
+    public void getTemplate(@PathVariable Long id,
+                            HttpServletResponse response) throws IOException {
+
+        try {
+            // get your file as InputStream
+            InputStream is = new FileInputStream("C:/Temp/uploads/Abonament-MEDLIFE-2015_2016..xls");
+            // copy it to response's OutputStream
+            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException ex) {
+            log.info("Error writing file to output stream. Filename was '{}'", id, ex);
+            throw new RuntimeException("IOError writing file to output stream");
+        }
+
     }
 
 

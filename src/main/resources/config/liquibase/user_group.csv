@@ -1,0 +1,5 @@
+id;user_id;group_id;created_by
+1;1;1;system
+2;2;1;system
+3;3;2;system
+4;4;3;system
