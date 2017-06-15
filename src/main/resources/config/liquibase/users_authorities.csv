@@ -4,3 +4,4 @@ user_id;authority_name
 3;ROLE_DOCTOR
 4;ROLE_PROVIDER
 5;ROLE_PATIENT
+6;ROLE_USER

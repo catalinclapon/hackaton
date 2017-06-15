@@ -3,4 +3,5 @@ id;login;password_hash;first_name;last_name;email;image_url;activated;lang_key;c
 2;admin;$2a$04$M7WepImD/xyyDDTFNiHovOku7iJP89JVYHjVMlZU/1rSOUqOgwj6u;Admin;Admin;admin@localhost;;true;en;system;system
 3;doctor;$2a$04$HMXqcmte.hkjuBV03BwfZOyKp1ODZryopNxvFOb1o8gBzMLEkLkd6;Doctor;Doctor;doctor@localhost;;true;en;system;system
 4;medlife;$2a$04$VrhEWpbkdipr/vQnn6J0D.Y8sAJAjxv44IxZRhyHX/DNjzDw0gxz2;Provider;Medlife;medlife@localhost;;true;en;system;system
-5;user;$2a$04$7Dec.j0bzzCL5vxAN7rBsOqeBkDKjl8UjyBAm4qzNm/6dKeD2rVpS;An basic;User;user@localhost;;true;en;system;system
+5;patient;$2a$04$BlcCqsgF440HhmvNJvXFhOEUaHGUy0jCLERqxFOGDLOeRW1NqiqiW;An basic;Patient;user@localhost;;true;en;system;system
+6;user;$2a$04$7Dec.j0bzzCL5vxAN7rBsOqeBkDKjl8UjyBAm4qzNm/6dKeD2rVpS;An basic;User;user@localhost;;true;en;system;system
