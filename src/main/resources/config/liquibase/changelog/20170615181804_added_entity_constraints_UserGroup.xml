@@ -10,13 +10,13 @@
 
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="user_group"
-                                 constraintName="fk_user_id"
+                                 constraintName="fk_user_group_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
         <addForeignKeyConstraint baseColumnNames="group_id"
                                  baseTableName="user_group"
-                                 constraintName="fk_group_id"
+                                 constraintName="fk_user_group_group_id"
                                  referencedColumnNames="id"
                                  referencedTableName="groups"/>
 
