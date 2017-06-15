@@ -1,22 +1,28 @@
 package com.db.hackaton.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.db.hackaton.config.ApplicationProperties;
 import com.db.hackaton.domain.MedicalCase;
 import com.db.hackaton.service.MedicalCaseService;
 import com.db.hackaton.web.rest.util.HeaderUtil;
 import com.db.hackaton.web.rest.util.PaginationUtil;
 import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -36,11 +42,14 @@ public class MedicalCaseResource {
     private final Logger log = LoggerFactory.getLogger(MedicalCaseResource.class);
 
     private static final String ENTITY_NAME = "medicalCase";
-        
+
     private final MedicalCaseService medicalCaseService;
 
-    public MedicalCaseResource(MedicalCaseService medicalCaseService) {
+    private ApplicationProperties applicationProperties;
+
+    public MedicalCaseResource(MedicalCaseService medicalCaseService, ApplicationProperties applicationProperties) {
         this.medicalCaseService = medicalCaseService;
+        this.applicationProperties = applicationProperties;
     }
 
     /**
@@ -132,7 +141,7 @@ public class MedicalCaseResource {
      * SEARCH  /_search/medical-cases?query=:query : search for the medicalCase corresponding
      * to the query.
      *
-     * @param query the query of the medicalCase search 
+     * @param query    the query of the medicalCase search
      * @param pageable the pagination information
      * @return the result of the search
      */
@@ -145,5 +154,16 @@ public class MedicalCaseResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @PostMapping("/upload")
+    @Timed
+    public void upload(@RequestParam("file") MultipartFile file) throws IOException {
+        byte[] bytes;
+        if (!file.isEmpty()) {
+            bytes = file.getBytes();
+            String filePath = applicationProperties.getLocalStoragePath() + "/" + file.getOriginalFilename();
+            FileUtils.writeByteArrayToFile(new File(filePath), file.getBytes());
+        }
+        System.out.println(String.format("receive %s", file.getOriginalFilename()));
+    }
 
 }

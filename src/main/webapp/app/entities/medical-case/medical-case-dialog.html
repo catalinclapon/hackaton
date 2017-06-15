@@ -55,6 +55,26 @@
                 This field is required.
             </p>
         </div>
+
+        <!--Attachments-->
+        <div class="form-group" ng-controller="FileUploadCtrl">
+            <button ngf-select="uploadFiles($files, $invalidFiles)" multiple ngf-max-size="2MB">
+                Select attachments
+            </button>
+            <br><br>
+            Files:
+            <ul>
+                <li ng-repeat="f in files">{{f.name}} {{f.$errorParam}}
+                    <span class="progress" ng-show="f.progress >= 0">
+                    <div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div>
+                </span>
+                </li>
+                <li ng-repeat="f in errFiles">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                </li>
+            </ul>
+            {{errorMsg}}
+        </div>
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">

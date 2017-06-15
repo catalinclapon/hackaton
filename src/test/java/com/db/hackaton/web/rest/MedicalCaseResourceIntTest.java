@@ -2,6 +2,7 @@ package com.db.hackaton.web.rest;
 
 import com.db.hackaton.HackatonApp;
 
+import com.db.hackaton.config.ApplicationProperties;
 import com.db.hackaton.domain.MedicalCase;
 import com.db.hackaton.domain.Patient;
 import com.db.hackaton.repository.MedicalCaseRepository;
@@ -56,6 +57,9 @@ public class MedicalCaseResourceIntTest {
     private MedicalCaseService medicalCaseService;
 
     @Autowired
+    private ApplicationProperties applicationProperties;
+
+    @Autowired
     private MedicalCaseSearchRepository medicalCaseSearchRepository;
 
     @Autowired
@@ -77,7 +81,7 @@ public class MedicalCaseResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        MedicalCaseResource medicalCaseResource = new MedicalCaseResource(medicalCaseService);
+        MedicalCaseResource medicalCaseResource = new MedicalCaseResource(medicalCaseService, applicationProperties);
         this.restMedicalCaseMockMvc = MockMvcBuilders.standaloneSetup(medicalCaseResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
