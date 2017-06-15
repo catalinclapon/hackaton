@@ -14,7 +14,8 @@
                 "medicalCaseField": "Medical Case Field",
                 "medicalCaseAttachment": "Medical Case Attachment",
                 "groups": "Groups",
-                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+                "field": "Field"
             },
             "account": {
                 "main": "Account",
@@ -95,7 +96,8 @@
             "edit": "Edit",
             "open": "Open",
             "save": "Save",
-            "view": "View"
+            "view": "View",
+            "approve": "Approve"
         },
         "detail": {
             "field": "Field",
@@ -127,5 +129,5 @@
         "emailexists": "Email is already in use!",
         "idexists": "A new {{ entityName }} cannot already have an ID"
     },
-    "footer": "This is your footer"
+    "footer": "&copy; Colegiul Pacientilor"
 }

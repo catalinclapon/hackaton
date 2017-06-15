@@ -6,6 +6,7 @@ import com.db.hackaton.domain.Registry;
 import com.db.hackaton.repository.RegistryRepository;
 import com.db.hackaton.service.RegistryService;
 import com.db.hackaton.repository.search.RegistrySearchRepository;
+import com.db.hackaton.service.dto.RegistryDTO;
 import com.db.hackaton.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -251,7 +252,7 @@ public class RegistryResourceIntTest {
     @Transactional
     public void updateRegistry() throws Exception {
         // Initialize the database
-        registryService.save(registry);
+        registryService.save(RegistryDTO.build(registry));
 
         int databaseSizeBeforeUpdate = registryRepository.findAll().size();
 
@@ -304,7 +305,7 @@ public class RegistryResourceIntTest {
     @Transactional
     public void deleteRegistry() throws Exception {
         // Initialize the database
-        registryService.save(registry);
+        registryService.save(RegistryDTO.build(registry));
 
         int databaseSizeBeforeDelete = registryRepository.findAll().size();
 
@@ -326,7 +327,7 @@ public class RegistryResourceIntTest {
     @Transactional
     public void searchRegistry() throws Exception {
         // Initialize the database
-        registryService.save(registry);
+        registryService.save(RegistryDTO.build(registry));
 
         // Search the registry
         restRegistryMockMvc.perform(get("/api/_search/registries?query=id:" + registry.getId()))

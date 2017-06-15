@@ -51,6 +51,7 @@ public class CacheConfiguration {
             cm.createCache(com.db.hackaton.domain.MedicalCaseField.class.getName(), jcacheConfiguration);
             cm.createCache(com.db.hackaton.domain.MedicalCaseAttachment.class.getName(), jcacheConfiguration);
             cm.createCache(com.db.hackaton.domain.Groups.class.getName(), jcacheConfiguration);
+            cm.createCache(com.db.hackaton.domain.Registry.class.getName() + ".fields", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

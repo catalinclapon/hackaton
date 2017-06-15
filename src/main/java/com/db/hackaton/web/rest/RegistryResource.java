@@ -3,6 +3,7 @@ package com.db.hackaton.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.db.hackaton.domain.Registry;
 import com.db.hackaton.service.RegistryService;
+import com.db.hackaton.service.dto.RegistryDTO;
 import com.db.hackaton.web.rest.util.HeaderUtil;
 import com.db.hackaton.web.rest.util.PaginationUtil;
 import io.swagger.annotations.ApiParam;
@@ -36,7 +37,7 @@ public class RegistryResource {
     private final Logger log = LoggerFactory.getLogger(RegistryResource.class);
 
     private static final String ENTITY_NAME = "registry";
-        
+
     private final RegistryService registryService;
 
     public RegistryResource(RegistryService registryService) {
@@ -52,12 +53,12 @@ public class RegistryResource {
      */
     @PostMapping("/registries")
     @Timed
-    public ResponseEntity<Registry> createRegistry(@Valid @RequestBody Registry registry) throws URISyntaxException {
+    public ResponseEntity<RegistryDTO> createRegistry(@Valid @RequestBody RegistryDTO registry) throws URISyntaxException {
         log.debug("REST request to save Registry : {}", registry);
         if (registry.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new registry cannot already have an ID")).body(null);
         }
-        Registry result = registryService.save(registry);
+        RegistryDTO result = registryService.save(registry);
         return ResponseEntity.created(new URI("/api/registries/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,12 +75,12 @@ public class RegistryResource {
      */
     @PutMapping("/registries")
     @Timed
-    public ResponseEntity<Registry> updateRegistry(@Valid @RequestBody Registry registry) throws URISyntaxException {
+    public ResponseEntity<RegistryDTO> updateRegistry(@Valid @RequestBody RegistryDTO registry) throws URISyntaxException {
         log.debug("REST request to update Registry : {}", registry);
         if (registry.getId() == null) {
             return createRegistry(registry);
         }
-        Registry result = registryService.save(registry);
+        RegistryDTO result = registryService.save(registry);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, registry.getId().toString()))
             .body(result);
@@ -93,9 +94,9 @@ public class RegistryResource {
      */
     @GetMapping("/registries")
     @Timed
-    public ResponseEntity<List<Registry>> getAllRegistries(@ApiParam Pageable pageable) {
+    public ResponseEntity<List<RegistryDTO>> getAllRegistries(@ApiParam Pageable pageable) {
         log.debug("REST request to get a page of Registries");
-        Page<Registry> page = registryService.findAll(pageable);
+        Page<RegistryDTO> page = registryService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/registries");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -108,9 +109,9 @@ public class RegistryResource {
      */
     @GetMapping("/registries/{id}")
     @Timed
-    public ResponseEntity<Registry> getRegistry(@PathVariable Long id) {
+    public ResponseEntity<RegistryDTO> getRegistry(@PathVariable Long id) {
         log.debug("REST request to get Registry : {}", id);
-        Registry registry = registryService.findOne(id);
+        RegistryDTO registry = registryService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(registry));
     }
 
@@ -132,15 +133,15 @@ public class RegistryResource {
      * SEARCH  /_search/registries?query=:query : search for the registry corresponding
      * to the query.
      *
-     * @param query the query of the registry search 
+     * @param query the query of the registry search
      * @param pageable the pagination information
      * @return the result of the search
      */
     @GetMapping("/_search/registries")
     @Timed
-    public ResponseEntity<List<Registry>> searchRegistries(@RequestParam String query, @ApiParam Pageable pageable) {
+    public ResponseEntity<List<RegistryDTO>> searchRegistries(@RequestParam String query, @ApiParam Pageable pageable) {
         log.debug("REST request to search for a page of Registries for query {}", query);
-        Page<Registry> page = registryService.search(query, pageable);
+        Page<RegistryDTO> page = registryService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/registries");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

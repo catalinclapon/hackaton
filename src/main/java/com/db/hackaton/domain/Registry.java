@@ -1,5 +1,11 @@
 package com.db.hackaton.domain;
 
+import com.db.hackaton.service.dto.FieldDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -7,7 +13,9 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Registry.
@@ -39,8 +47,22 @@ public class Registry extends AbstractAuditingEntity implements Serializable {
     @Column(name = "status", nullable = false)
     private String status;
 
+    @ManyToMany
+    @JoinTable(
+        name = "registry_field",
+        joinColumns = {@JoinColumn(name = "registry_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "field_id", referencedColumnName = "id")})
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @BatchSize(size = 50)
+    private Set<Field> fields = new HashSet<>();
+
     public Long getId() {
         return id;
+    }
+
+    public Registry id(Long id) {
+        this.id = id;
+        return this;
     }
 
     public void setId(Long id) {
@@ -97,6 +119,19 @@ public class Registry extends AbstractAuditingEntity implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Set<Field> getFields() {
+        return fields;
+    }
+
+    public Registry fields(Set<Field> fields) {
+        this.fields = fields;
+        return this;
+    }
+
+    public void setFields(Set<Field> fields) {
+        this.fields = fields;
     }
 
     @Override

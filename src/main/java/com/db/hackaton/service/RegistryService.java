@@ -1,6 +1,7 @@
 package com.db.hackaton.service;
 
 import com.db.hackaton.domain.Registry;
+import com.db.hackaton.service.dto.RegistryDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,15 +16,15 @@ public interface RegistryService {
      * @param registry the entity to save
      * @return the persisted entity
      */
-    Registry save(Registry registry);
+    RegistryDTO save(RegistryDTO registry);
 
     /**
      *  Get all the registries.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    Page<Registry> findAll(Pageable pageable);
+    Page<RegistryDTO> findAll(Pageable pageable);
 
     /**
      *  Get the "id" registry.
@@ -31,7 +32,7 @@ public interface RegistryService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    Registry findOne(Long id);
+    RegistryDTO findOne(Long id);
 
     /**
      *  Delete the "id" registry.
@@ -44,9 +45,9 @@ public interface RegistryService {
      * Search for the registry corresponding to the query.
      *
      *  @param query the query of the search
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    Page<Registry> search(String query, Pageable pageable);
+    Page<RegistryDTO> search(String query, Pageable pageable);
 }
