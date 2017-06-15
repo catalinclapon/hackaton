@@ -45,6 +45,7 @@ public class FieldDTO {
             .required(field.getRequired())
             .min(field.getMin())
             .max(field.getMax())
+            .type(field.getType())
             .build();
     }
 

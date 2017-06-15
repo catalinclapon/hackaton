@@ -11,6 +11,7 @@
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
+            'queryAll': { method:'GET', isArray: true },
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

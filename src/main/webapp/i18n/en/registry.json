@@ -20,7 +20,16 @@
             "name": "Name",
             "desc": "Desc",
             "uuid": "Uuid",
-            "status": "Status"
+            "status": "Status",
+            "field": {
+                "name": "Name",
+                "desc": "Description",
+                "type": "Type",
+                "min": "Min value",
+                "required": "Required",
+                "max": "Max value",
+                "values": "Values"
+            }
         }
     }
 }

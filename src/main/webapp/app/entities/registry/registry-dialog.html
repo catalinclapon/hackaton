@@ -4,57 +4,119 @@
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title" id="myRegistryLabel" data-translate="hackatonApp.registry.home.createOrEditLabel">Create or edit a Registry</h4>
+        <h4 class="modal-title" data-translate="hackatonApp.registry.home.createOrEditLabel" ng-show="!vm.registry.id">Create a Registry</h4>
+        <h4 class="modal-title" data-translate="hackatonApp.registry.home.createOrEditLabel" ng-show="vm.registry.id">Edit: {{vm.registry.name}}</h4>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" ng-show="vm.registry.id">
-            <label for="id" data-translate="global.field.id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                    ng-model="vm.registry.id" readonly />
-        </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="hackatonApp.registry.name" for="field_name">Name</label>
-            <input type="text" class="form-control" name="name" id="field_name"
-                    ng-model="vm.registry.name"
-                    required/>
-            <div ng-show="editForm.name.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.name.$error.required" data-translate="entity.validation.required">
-                    This field is required.
-                </p>
+        <div class="row">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="form-group col-md-5">
+                    <label class="control-label" data-translate="hackatonApp.registry.name" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                           ng-model="vm.registry.name"
+                           required/>
+                    <div ng-show="editForm.name.$invalid">
+                        <p class="help-block"
+                           ng-show="editForm.name.$error.required" data-translate="entity.validation.required">
+                            This field is required.
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group col-md-7">
+                    <label class="control-label" data-translate="hackatonApp.registry.desc" for="field_description">Description</label>
+                    <input type="text" class="form-control" name="uuid" id="field_description"
+                           ng-model="vm.registry.description" />
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="hackatonApp.registry.desc" for="field_desc">Desc</label>
-            <input type="text" class="form-control" name="desc" id="field_desc"
-                    ng-model="vm.registry.desc"
-                    />
         </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="hackatonApp.registry.uuid" for="field_uuid">Uuid</label>
-            <input type="text" class="form-control" name="uuid" id="field_uuid"
-                    ng-model="vm.registry.uuid"
-                    required/>
-            <div ng-show="editForm.uuid.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.uuid.$error.required" data-translate="entity.validation.required">
-                    This field is required.
-                </p>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="hackatonApp.registry.status" for="field_status">Status</label>
-            <input type="text" class="form-control" name="status" id="field_status"
-                    ng-model="vm.registry.status"
-                    required/>
-            <div ng-show="editForm.status.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.status.$error.required" data-translate="entity.validation.required">
-                    This field is required.
-                </p>
-            </div>
-        </div>
+
+                <div class="panel panel-default" ng-repeat="(category, fields) in vm.groupedFields">
+                    <div class="panel-heading">
+                        <button type="button" class="close" ng-click="vm.removeCategory(category)">&times;</button>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label for="categoryName{{$index}}">{{$index + 1}}:</label>
+                                <input type="text" class="form-control" name="name" id="categoryName{{$index}}"
+                                       ng-model="category"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="jh-table table table-striped">
+                            <thead>
+                            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                                <th jh-sort-by="name"><span data-translate="hackatonApp.registry.field.name">Name</span> <span class="glyphicon glyphicon-sort"></span></th>
+                                <th jh-sort-by="type"><span data-translate="hackatonApp.registry.field.type">Type</span> <span class="glyphicon glyphicon-sort"></span></th>
+                                <th jh-sort-by="required"><span data-translate="hackatonApp.registry.field.required">Required</span> <span class="glyphicon glyphicon-sort"></span></th>
+                                <th jh-sort-by="min"><span data-translate="hackatonApp.registry.field.min">Min</span> <span class="glyphicon glyphicon-sort"></span></th>
+                                <th jh-sort-by="max"><span data-translate="hackatonApp.registry.field.max">Max</span> <span class="glyphicon glyphicon-sort"></span></th>
+                                <th jh-sort-by="max"><span data-translate="hackatonApp.registry.field.values">Values</span> <span class="glyphicon glyphicon-sort"></span></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody ui-sortable ng-model="fields">
+                            <tr ng-repeat="field in fields track by field.id">
+                                <td>{{field.name}}</td>
+                                <td>{{field.type}}</td>
+                                <td>{{field.required}}</td>
+                                <td>{{field.min}}</td>
+                                <td>{{field.max}}</td>
+                                <td>{{field.extValidation}}</td>
+                                <td class="text-right">
+                                    <div class="btn-group flex-btn-group-container">
+                                        <button type="button"
+                                                class="btn btn-info btn-sm">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                            <span class="hidden-sm-down" data-translate="entity.action.delete"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only" for="{{category}}_newFieldName">Field name</label>
+                                <input type="text" class="form-control" id="{{category}}_newFieldName" placeholder="Field name" ng-model="vm.newField[category].name">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="{{category}}_newFieldType">Field type</label>
+                                <select class="form-control" id="{{category}}_newFieldType" ng-model="vm.newField[category].type">
+                                    <option></option>
+                                    <option>TEXT</option>
+                                    <option>NUMBER</option>
+                                    <option>DATE</option>
+                                    <option>DROPDOWN</option>
+                                </select>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="vm.newField[category].required"> Required
+                                </label>
+                            </div>
+                            <div class="form-group" ng-if="vm.newField[category].type == 'NUMBER'">
+                                <label class="sr-only" for="{{category}}_newFieldMin">Min value</label>
+                                <input type="text" class="form-control" id="{{category}}_newFieldMin" placeholder="Min value" ng-model="vm.newField[category].min"  style="width:100px;">
+                            </div>
+                            <div class="form-group" ng-if="vm.newField[category].type == 'NUMBER'">
+                                <label class="sr-only" for="{{category}}_newFieldMax">Max value</label>
+                                <input type="text" class="form-control" id="{{category}}_newFieldMax" placeholder="Max value" ng-model="vm.newField[category].max" style="width:100px;">
+                            </div>
+                            <div class="form-group" ng-if="vm.newField[category].type == 'DROPDOWN'">
+                                <label class="sr-only" for="{{category}}_newFieldValues">Values</label>
+                                <input type="text" class="form-control" id="{{category}}_newFieldValues" placeholder="Values" ng-model="vm.newField[category].values">
+                            </div>
+                            <button type="button" class="btn btn-default pull-right" ng-click="vm.addNewField(category)">Add</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.newGroup()">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp;<span data-translate="entity.action.newGroup">New group</span>
+                </button>
+
 
     </div>
     <div class="modal-footer">
