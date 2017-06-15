@@ -1,0 +1,85 @@
+<div>
+    <h2 data-translate="hackatonApp.medicalCaseField.home.title">Medical Case Fields</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="medical-case-field.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs-down"  data-translate="hackatonApp.medicalCaseField.home.createLabel">
+                        Create new Medical Case Field
+                    </span>
+                </button>
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery" placeholder="{{ 'hackatonApp.medicalCaseField.home.search' | translate }}">
+                        <span  class="input-group-btn width-min" >
+                            <button class="btn btn-info" ng-click="vm.search(vm.searchQuery)">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn width-min" ng-if="vm.currentSearch">
+                            <button class="btn btn-info" ng-click="vm.clear()">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                    <th jh-sort-by="id"><span data-translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="value"><span data-translate="hackatonApp.medicalCaseField.value">Value</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="field.id"><span data-translate="hackatonApp.medicalCaseField.field">Field</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="medicalCase.id"><span data-translate="hackatonApp.medicalCaseField.medicalCase">Medical Case</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="medicalCaseField in vm.medicalCaseFields track by medicalCaseField.id">
+                    <td><a ui-sref="medical-case-field-detail({id:medicalCaseField.id})">{{medicalCaseField.id}}</a></td>
+                    <td>{{medicalCaseField.value}}</td>
+                    <td>
+                        <a ui-sref="field-detail({id:medicalCaseField.field.id})">{{medicalCaseField.field.id}}</a>
+                    </td>
+                    <td>
+                        <a ui-sref="medical-case-detail({id:medicalCaseField.medicalCase.id})">{{medicalCaseField.medicalCase.id}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="medical-case-field-detail({id:medicalCaseField.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-sm-down" data-translate="entity.action.view"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="medical-case-field.edit({id:medicalCaseField.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-sm-down" data-translate="entity.action.edit"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="medical-case-field.delete({id:medicalCaseField.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-sm-down" data-translate="entity.action.delete"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+    </div>
+</div>

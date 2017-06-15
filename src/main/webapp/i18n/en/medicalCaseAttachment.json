@@ -1,0 +1,24 @@
+{
+    "hackatonApp": {
+        "medicalCaseAttachment" : {
+            "home": {
+                "title": "Medical Case Attachments",
+                "createLabel": "Create a new Medical Case Attachment",
+                "createOrEditLabel": "Create or edit a Medical Case Attachment",
+                "search": "Search for Medical Case Attachment"
+            },
+            "created": "A new Medical Case Attachment is created with identifier {{ param }}",
+            "updated": "A Medical Case Attachment is updated with identifier {{ param }}",
+            "deleted": "A Medical Case Attachment is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Medical Case Attachment {{ id }}?"
+            },
+            "detail": {
+                "title": "Medical Case Attachment"
+            },
+            "title": "Title",
+            "location": "Location",
+            "medicalCase": "Medical Case"
+        }
+    }
+}

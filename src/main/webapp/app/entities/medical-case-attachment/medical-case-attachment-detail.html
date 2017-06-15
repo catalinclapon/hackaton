@@ -1,0 +1,31 @@
+
+<div>
+    <h2><span data-translate="hackatonApp.medicalCaseAttachment.detail.title">Medical Case Attachment</span> {{vm.medicalCaseAttachment.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="hackatonApp.medicalCaseAttachment.title">Title</span></dt>
+        <dd>
+            <span>{{vm.medicalCaseAttachment.title}}</span>
+        </dd>
+        <dt><span data-translate="hackatonApp.medicalCaseAttachment.location">Location</span></dt>
+        <dd>
+            <span>{{vm.medicalCaseAttachment.location}}</span>
+        </dd>
+        <dt><span data-translate="hackatonApp.medicalCaseAttachment.medicalCase">Medical Case</span></dt>
+        <dd>
+            <a ui-sref="medical-case-detail({id:vm.medicalCaseAttachment.medicalCase.id})">{{vm.medicalCaseAttachment.medicalCase.id}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="medical-case-attachment-detail.edit({id:vm.medicalCaseAttachment.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>
