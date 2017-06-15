@@ -1,19 +1,10 @@
 {
     "home": {
-        "title": "Welcome, Java Hipster!",
-        "subtitle": "This is your homepage",
+        "message": "Who we are and what we do?",
+        "info": " We are an association composed of patients, a non-governmental organization (NGO) with national representativeness born out of the desire to put people's interests first when it comes to human health. We are a group of nationally representative citizens with rapid growth who have decided not to let the way they are treated, the way we spend the money we pay for the snatches, and last but not least what we get for the money on we pay them.",
         "logged": {
             "message": "You are logged in as user \"{{username}}\"."
         },
-        "question": "If you have any question on JHipster:",
-        "link": {
-            "homepage": "JHipster homepage",
-            "stackoverflow": "JHipster on Stack Overflow",
-            "bugtracker": "JHipster bug tracker",
-            "chat": "JHipster public chat room",
-            "follow": "follow @java_hipster on Twitter"
-        },
-        "like": "If you like JHipster, don't forget to give us a star on",
-        "github": "GitHub"
+        "registries": "Open Registries"
     }
 }
