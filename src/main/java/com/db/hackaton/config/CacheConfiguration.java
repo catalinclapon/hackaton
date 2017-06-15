@@ -45,6 +45,7 @@ public class CacheConfiguration {
             cm.createCache(com.db.hackaton.domain.SocialUserConnection.class.getName(), jcacheConfiguration);
             cm.createCache(com.db.hackaton.domain.Registry.class.getName(), jcacheConfiguration);
             cm.createCache(com.db.hackaton.domain.Field.class.getName(), jcacheConfiguration);
+            cm.createCache(com.db.hackaton.domain.RegistryField.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

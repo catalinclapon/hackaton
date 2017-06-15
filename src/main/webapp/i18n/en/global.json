@@ -8,6 +8,7 @@
             "entities": {
                 "main": "Entities",
                 "registry": "Registry",
+                "registryField": "Registry Field",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

@@ -1,0 +1,32 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "registry",
+            "otherEntityName": "registry",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "field",
+            "otherEntityName": "field",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "order",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "category",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20170615110735",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "registry_field",
+    "pagination": "pagination"
+}
