@@ -188,9 +188,9 @@
                     });
                 }]
             })
-            .state('registry.bulk-upload', {
-                parent: 'registry',
-                url: '/bulk-upload',
+            .state('registry-detail.bulk-upload', {
+                parent: 'registry-detail',
+                url: '/detail/bulk-upload',
                 data: {
                     authorities: ['ROLE_USER']
                 },
@@ -212,10 +212,11 @@
                                 };
                             }
                         }
-                    }).result.then(function () {
-                        $state.go('registry', null, {reload: 'registry'});
+                    })
+                        .result.then(function () {
+                        $state.go('registry-detail', null, {reload: 'registry-detail'});
                     }, function () {
-                        $state.go('registry');
+                        $state.go('registry-detail');
                     });
                 }]
             });
