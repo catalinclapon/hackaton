@@ -16,6 +16,7 @@
         var unsubscribe = $rootScope.$on('hackatonApp:registryUpdate', function(event, result) {
             vm.registry = result;
         });
+
         $scope.$on('$destroy', unsubscribe);
     }
 })();

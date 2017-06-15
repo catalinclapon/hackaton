@@ -12,11 +12,11 @@
             <span class="hidden-xs-down" data-translate="hackatonApp.registry.home.bulkUpload"> Bulk upload </span>
         </button>
 
-        <button class="btn btn-primary" ui-sref="registry-detail.download-template">
+        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/template" download="template.xls">
             <span class="glyphicon glyphicon-download"></span>
             <span class="hidden-xs-down"
                   data-translate="hackatonApp.registry.home.downloadTemplate"> Download template </span>
-        </button>
+        </a>
 
     </div>
 </div>
