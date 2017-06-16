@@ -50,10 +50,10 @@ public class MedicalCaseService {
     }
 
     /**
-     *  Get all the medicalCases.
+     * Get all the medicalCases.
      *
-     *  @param pageable the pagination information
-     *  @return the list of entities
+     * @param pageable the pagination information
+     * @return the list of entities
      */
     @Transactional(readOnly = true)
     public Page<MedicalCase> findAll(Pageable pageable) {
@@ -63,10 +63,10 @@ public class MedicalCaseService {
     }
 
     /**
-     *  Get one medicalCase by id.
+     * Get one medicalCase by id.
      *
-     *  @param id the id of the entity
-     *  @return the entity
+     * @param id the id of the entity
+     * @return the entity
      */
     @Transactional(readOnly = true)
     public MedicalCase findOne(Long id) {
@@ -76,9 +76,9 @@ public class MedicalCaseService {
     }
 
     /**
-     *  Delete the  medicalCase by id.
+     * Delete the  medicalCase by id.
      *
-     *  @param id the id of the entity
+     * @param id the id of the entity
      */
     public void delete(Long id) {
         log.debug("Request to delete MedicalCase : {}", id);
@@ -89,9 +89,9 @@ public class MedicalCaseService {
     /**
      * Search for the medicalCase corresponding to the query.
      *
-     *  @param query the query of the search
-     *  @param pageable the pagination information
-     *  @return the list of entities
+     * @param query    the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
      */
     @Transactional(readOnly = true)
     public Page<MedicalCase> search(String query, Pageable pageable) {
@@ -104,13 +104,13 @@ public class MedicalCaseService {
     public List<Map<String, String>> findAll(String registryUuid, List<Long> fields) {
         List<Map<String, String>> result = new ArrayList<>();
         List<MedicalCase> cases = medicalCaseRepository.findByStatusAndRegistryUuid("LATEST", registryUuid);
-        for(MedicalCase medicalCase : cases) {
+        for (MedicalCase medicalCase : cases) {
             Map<String, String> row = new HashMap<>();
             row.put("CNP", medicalCase.getPatient() != null ? medicalCase.getPatient().getCnp() : "N/A");
             row.put("Name", medicalCase.getName() != null ? medicalCase.getName() : "N/A");
             Map<Long, MedicalCaseField> tempFields = new HashMap<>();
-            for(MedicalCaseField field : medicalCase.getFields()){
-                if(field.getField() != null && fields.contains(field.getField().getId())){
+            for (MedicalCaseField field : medicalCase.getFields()) {
+                if (field.getField() != null && fields.contains(field.getField().getId())) {
                     row.put(field.getField().getName(), field.getValue());
                 }
             }
@@ -118,5 +118,10 @@ public class MedicalCaseService {
         }
 
         return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<MedicalCase> findAllLatest(String registryUuid) {
+        return medicalCaseRepository.findByStatusAndRegistryUuid("LATEST", registryUuid);
     }
 }

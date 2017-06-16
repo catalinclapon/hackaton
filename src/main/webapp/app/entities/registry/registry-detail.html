@@ -18,6 +18,12 @@
                   data-translate="hackatonApp.registry.home.downloadTemplate"> Download template </span>
         </a>
 
+        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/pdfExport" download="{{vm.registry.name}}.pdf">
+            <span class="glyphicon glyphicon-download"></span>
+            <span class="hidden-xs-down"
+                  data-translate="hackatonApp.registry.home.exportPdf"> Export PDF </span>
+        </a>
+
     </div>
 </div>
 
