@@ -135,28 +135,29 @@
         function groupByKey(){
             var grouped = [], fields = entity.fields, index;
 
-            fields.sort(function(a,b) {return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0);} );
+            if(!angular.isUndefined(fields)){
+                fields.sort(function(a,b) {return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0);} );
 
-            for(var i = 0; i < fields.length; i++){
-                index = getCategoryIndex(fields[i].category);
-                if(index == -1){
-                    vm.groups.push({name: fields[i].category});
+                for(var i = 0; i < fields.length; i++){
                     index = getCategoryIndex(fields[i].category);
-                    vm.newField[index] = {
-                        name: '',
-                        type: '',
-                        required: '',
-                        min: '',
-                        max: '',
-                        values: ''
-                    };
-                    grouped[index] = [];
-                    groupCount++;
+                    if(index == -1){
+                        vm.groups.push({name: fields[i].category});
+                        index = getCategoryIndex(fields[i].category);
+                        vm.newField[index] = {
+                            name: '',
+                            type: '',
+                            required: '',
+                            min: '',
+                            max: '',
+                            values: ''
+                        };
+                        grouped[index] = [];
+                        groupCount++;
+                    }
+                    fields[i].field.regFieldId=fields[i].id;
+                    grouped[index].push(fields[i].field);
                 }
-                fields[i].field.regFieldId=fields[i].id;
-                grouped[index].push(fields[i].field);
             }
-
             return grouped;
         }
 

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -61,6 +62,8 @@ public class RegistryServiceImpl implements RegistryService{
                     return registry;
                 })
                 .get());
+        } else if(registryDTO.getUuid() == null) {
+            registryDTO.setUuid(UUID.randomUUID().toString());
         }
         // save as new version:
         Registry registry = registryRepository.save(Optional.of(registryDTO)
