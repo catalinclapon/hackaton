@@ -5,6 +5,7 @@ import com.db.hackaton.HackatonApp;
 import com.db.hackaton.config.ApplicationProperties;
 import com.db.hackaton.domain.Registry;
 import com.db.hackaton.repository.RegistryRepository;
+import com.db.hackaton.service.MedicalCaseService;
 import com.db.hackaton.service.RegistryService;
 import com.db.hackaton.repository.search.RegistrySearchRepository;
 import com.db.hackaton.service.dto.RegistryDTO;
@@ -75,6 +76,9 @@ public class RegistryResourceIntTest {
     private ExceptionTranslator exceptionTranslator;
 
     @Autowired
+    private MedicalCaseService medicalCaseService;
+
+    @Autowired
     private EntityManager em;
 
     private MockMvc restRegistryMockMvc;
@@ -84,7 +88,7 @@ public class RegistryResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        RegistryResource registryResource = new RegistryResource(registryService, applicationProperties);
+        RegistryResource registryResource = new RegistryResource(registryService, medicalCaseService, applicationProperties);
         this.restRegistryMockMvc = MockMvcBuilders.standaloneSetup(registryResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

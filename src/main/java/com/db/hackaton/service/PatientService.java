@@ -7,12 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Patient.
@@ -22,7 +20,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class PatientService {
 
     private final Logger log = LoggerFactory.getLogger(PatientService.class);
-    
+
     private final PatientRepository patientRepository;
 
     private final PatientSearchRepository patientSearchRepository;
@@ -47,7 +45,7 @@ public class PatientService {
 
     /**
      *  Get all the patients.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
@@ -68,6 +66,13 @@ public class PatientService {
     public Patient findOne(Long id) {
         log.debug("Request to get Patient : {}", id);
         Patient patient = patientRepository.findOne(id);
+        return patient;
+    }
+
+    @Transactional(readOnly = true)
+    public Patient findOneByCnp(String cnp) {
+        log.debug("Request to get Patient : {}", cnp);
+        Patient patient = patientRepository.findFirstByCnp(cnp);
         return patient;
     }
 

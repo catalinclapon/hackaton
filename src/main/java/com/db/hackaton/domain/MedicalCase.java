@@ -7,7 +7,9 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A MedicalCase.
@@ -32,12 +34,19 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     @Column(name = "uuid", nullable = false)
     private String uuid;
 
+    @NotNull
+    @Column(name = "registry_uuid", nullable = false)
+    private String registryUuid;
+
     @Column(name = "status")
     private String status;
 
     @ManyToOne(optional = false)
     @NotNull
     private Patient patient;
+
+    @OneToMany(mappedBy = "medicalCase", targetEntity = MedicalCaseField.class)
+    private Set<MedicalCaseField> fields = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -99,6 +108,19 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
         this.patient = patient;
     }
 
+    public Set<MedicalCaseField> getFields(){
+        return fields;
+    }
+
+    public MedicalCase fields(Set<MedicalCaseField> fields){
+        this.fields = fields;
+        return this;
+    }
+
+    public void setFields(Set<MedicalCaseField> fields){
+        this.fields = fields;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -127,5 +149,18 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
             ", uuid='" + getUuid() + "'" +
             ", status='" + getStatus() + "'" +
             "}";
+    }
+
+    public String getRegistryUuid() {
+        return registryUuid;
+    }
+
+    public MedicalCase registryUuid(String registryUuid) {
+        this.registryUuid = registryUuid;
+        return this;
+    }
+
+    public void setRegistryUuid(String registryUuid) {
+        this.registryUuid = registryUuid;
     }
 }

@@ -164,6 +164,39 @@
                     });
                 }]
             })
+            .state('registry-detail.medical-case-new', {
+                parent: 'registry-detail',
+                url: '/medical-case-new',
+                data: {
+                    authorities: ['ROLE_ADMIN','ROLE_DOCTOR','ROLE_PATIENT']
+                },
+                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'app/entities/medical-case/medical-case-dialog.html',
+                        controller: 'MedicalCaseDialogController',
+                        controllerAs: 'vm',
+                        backdrop: 'static',
+                        size: 'lg',
+                        resolve: {
+                            registry: ['Registry', function (Registry) {
+                                return Registry.get({id: $stateParams.id}).$promise;
+                            }],
+                            entity: function () {
+                                return {
+                                    name: null,
+                                    uuid: null,
+                                    status: null,
+                                    id: null
+                                };
+                            }
+                        }
+                    }).result.then(function () {
+                        $state.go('registry-detail', {id: $stateParams.id}, {reload: 'registry-detail'});
+                    }, function () {
+                        $state.go('registry-detail');
+                    });
+                }]
+            })
             .state('registry.delete', {
                 parent: 'registry',
                 url: '/{id}/delete',
@@ -202,15 +235,9 @@
                         backdrop: 'static',
                         size: 'lg',
                         resolve: {
-                            entity: function () {
-                                return {
-                                    /*name: null,
-                                    desc: null,
-                                    uuid: null,
-                                    status: null,
-                                    id: null*/
-                                };
-                            }
+                            entity: ['Registry', function (Registry) {
+                                return Registry.get({id: $stateParams.id}).$promise;
+                            }]
                         }
                     })
                         .result.then(function () {

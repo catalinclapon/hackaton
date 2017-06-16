@@ -17,7 +17,11 @@
             'infinite-scroll',
             // jhipster-needle-angularjs-add-module JHipster will add new module here
             'angular-loading-bar',
-            'ui'
+            'ui',
+            'ngTouch',
+            'ui.grid',
+            'ui.grid.exporter',
+            'ui.grid.selection'
         ])
         .run(run);
 

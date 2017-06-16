@@ -113,6 +113,6 @@ public class GroupsServiceImpl implements GroupsService{
     @Override
     public List<GroupsDTO> findAll() {
         log.debug("Request to search for all of GroupsDTO");
-        return groupsMapper.toDto(Lists.newArrayList(groupsSearchRepository.findAll()));
+        return groupsMapper.toDto(Lists.newArrayList(groupsRepository.findAll()));
     }
 }

@@ -18,6 +18,12 @@
                   data-translate="hackatonApp.registry.home.downloadTemplate"> Download template </span>
         </a>
 
+        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/pdfExport" download="{{vm.registry.name}}.pdf">
+            <span class="glyphicon glyphicon-download"></span>
+            <span class="hidden-xs-down"
+                  data-translate="hackatonApp.registry.home.exportPdf"> Export PDF </span>
+        </a>
+
     </div>
 </div>
 
@@ -25,8 +31,17 @@
     <small><span data-translate="hackatonApp.registry.admin">Admins</span>: <a>User admin 1</a>, <a>User admin 2</a> </small><!-- TODO: add user link //-->
     <hr>
     <jhi-alert-error></jhi-alert-error>
-    <p>{{vm.registry.desc}}</p>
+    <p>{{vm.registry.description}}</p>
 
+    <div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+
+    <hr>
+
+    <button type="submit"
+                ui-sref="registry-detail.medical-case-new"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-plus"></span>&nbsp;<span data-translate="entity.action.newMedicalCase"> New medical case</span>
+    </button>
     <button type="submit"
             ui-sref="{{ vm.previousState }}"
             class="btn btn-info">
