@@ -2,6 +2,7 @@ package com.db.hackaton.web.rest;
 
 import com.db.hackaton.HackatonApp;
 
+import com.db.hackaton.config.ApplicationProperties;
 import com.db.hackaton.domain.Registry;
 import com.db.hackaton.repository.RegistryRepository;
 import com.db.hackaton.service.RegistryService;
@@ -62,6 +63,9 @@ public class RegistryResourceIntTest {
     private RegistrySearchRepository registrySearchRepository;
 
     @Autowired
+    private ApplicationProperties applicationProperties;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -80,7 +84,7 @@ public class RegistryResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        RegistryResource registryResource = new RegistryResource(registryService);
+        RegistryResource registryResource = new RegistryResource(registryService, applicationProperties);
         this.restRegistryMockMvc = MockMvcBuilders.standaloneSetup(registryResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
