@@ -8,9 +8,11 @@ import com.db.hackaton.repository.PersistentTokenRepository;
 import com.db.hackaton.repository.UserRepository;
 import com.db.hackaton.security.SecurityUtils;
 import com.db.hackaton.service.MailService;
+import com.db.hackaton.service.UserPatientService;
 import com.db.hackaton.service.UserService;
 import com.db.hackaton.service.dto.UserDTO;
 import com.db.hackaton.web.rest.vm.KeyAndPasswordVM;
+import com.db.hackaton.web.rest.vm.ManagedUserPacientVM;
 import com.db.hackaton.web.rest.vm.ManagedUserVM;
 import com.db.hackaton.web.rest.util.HeaderUtil;
 
@@ -46,13 +48,16 @@ public class AccountResource {
 
     private final PersistentTokenRepository persistentTokenRepository;
 
+    private final UserPatientService userPatientService;
+
     public AccountResource(UserRepository userRepository, UserService userService,
-            MailService mailService, PersistentTokenRepository persistentTokenRepository) {
+                           MailService mailService, PersistentTokenRepository persistentTokenRepository, UserPatientService userPatientService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
         this.persistentTokenRepository = persistentTokenRepository;
+        this.userPatientService = userPatientService;
     }
 
     /**
@@ -129,26 +134,28 @@ public class AccountResource {
     /**
      * POST  /account : update the current user information.
      *
-     * @param userDTO the current user information
+     * @param managedUserPacientVM the current user information
      * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) or 500 (Internal Server Error) if the user couldn't be updated
      */
     @PostMapping("/account")
     @Timed
-    public ResponseEntity saveAccount(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity saveAccount(@Valid @RequestBody ManagedUserPacientVM managedUserPacientVM) {
         final String userLogin = SecurityUtils.getCurrentUserLogin();
-        Optional<User> existingUser = userRepository.findOneByEmail(userDTO.getEmail());
+        Optional<User> existingUser = userRepository.findOneByEmail(managedUserPacientVM.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use")).body(null);
         }
+
         return userRepository
             .findOneByLogin(userLogin)
             .map(u -> {
-                userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                    userDTO.getLangKey(), userDTO.getImageUrl());
-                return new ResponseEntity(HttpStatus.OK);
+                userPatientService.updateUserAndPatient(managedUserPacientVM.getFirstName(), managedUserPacientVM.getLastName(), managedUserPacientVM.getEmail(),
+                    managedUserPacientVM.getLangKey(), managedUserPacientVM.isPacient(), managedUserPacientVM.getCnp());
+                return new ResponseEntity(managedUserPacientVM, HttpStatus.OK);
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
+
 
     /**
      * POST  /account/change_password : changes the current user's password

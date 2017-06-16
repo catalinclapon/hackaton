@@ -2,7 +2,8 @@
     'use strict';
     angular
         .module('hackatonApp')
-        .factory('Registry', Registry);
+        .factory('Registry', Registry)
+        .factory('RegistryData', RegistryData);
 
     Registry.$inject = ['$resource'];
 
@@ -20,7 +21,18 @@
                     return data;
                 }
             },
+            'getData': { method: 'POST', isArray: true },
             'update': { method:'PUT' }
+        });
+    }
+
+    RegistryData.$inject = ['$resource'];
+
+    function RegistryData ($resource) {
+        var resourceUrl =  'api/registries/:id/data';
+
+        return $resource(resourceUrl, {}, {
+            'query': { method: 'GET', isArray: true}
         });
     }
 })();
