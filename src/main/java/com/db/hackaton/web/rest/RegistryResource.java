@@ -2,6 +2,8 @@ package com.db.hackaton.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.db.hackaton.config.ApplicationProperties;
+import com.db.hackaton.domain.MedicalCase;
+import com.db.hackaton.domain.MedicalCaseField;
 import com.db.hackaton.service.MedicalCaseService;
 import com.db.hackaton.service.RegistryService;
 import com.db.hackaton.service.dto.FieldDTO;
@@ -12,6 +14,11 @@ import com.db.hackaton.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.io.FileUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -200,6 +207,68 @@ public class RegistryResource {
         } catch (IOException ex) {
             log.info("Error writing file to output stream. Registry Id '{}'", id, ex);
             throw new RuntimeException("IOError writing file to output stream");
+        }
+    }
+
+
+
+    @GetMapping(produces = {MediaType.APPLICATION_PDF_VALUE}, value = "/registries/{id}/pdfExport")
+    @Timed
+    public void exportPdf(@PathVariable Long id,
+                          HttpServletResponse response) throws IOException {
+
+        RegistryDTO registry = registryService.findOne(id);
+        // Create a document and add a page to it
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage();
+        document.addPage(page);
+
+        // Create a new font object selecting one of the PDF base fonts
+        PDFont font = PDType1Font.HELVETICA_BOLD;
+
+        // Start a new content stream which will "hold" the to be created content
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        // Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
+        contentStream.beginText();
+        contentStream.setFont(font, 12);
+        contentStream.moveTextPositionByAmount(100, 700);
+        List<MedicalCase> cases = medicalCaseService.findAllLatest(registry.getUuid());
+        for (MedicalCase mc : cases) {
+            for (MedicalCaseField field : mc.getFields()) {
+                contentStream.drawString(field.getField().getName() + "    ");
+            }
+            break;
+        }
+        contentStream.newLine();
+        for (MedicalCase mc : cases) {
+            for (MedicalCaseField field : mc.getFields()) {
+                contentStream.drawString(field.getValue() + "    ");
+            }
+            contentStream.newLine();
+        }
+        contentStream.endText();
+
+        // Make sure that the content stream is closed:
+        contentStream.close();
+
+        // Save the results and ensure that the document is properly closed:
+        File file = new File(applicationProperties.getLocalStoragePath() + "/" + registry.getUuid() + ".pdf");
+        document.save(file);
+        document.close();
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bos.write(FileUtils.readFileToByteArray(file));
+
+            //byte[] -> InputStream
+            ByteArrayInputStream inStream = new ByteArrayInputStream(bos.toByteArray());
+
+            org.apache.commons.io.IOUtils.copy(inStream, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException ex) {
+            log.info("Error writing file to output stream. Registry Id '{}'", id, ex);
+            throw new RuntimeException("IOError writing file to output stream");
+
         }
     }
 }

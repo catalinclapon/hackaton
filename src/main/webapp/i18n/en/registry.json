@@ -8,7 +8,8 @@
                 "createOrEditLabel": "Create or edit a Registry",
                 "search": "Search for Registry",
                 "bulkUpload": "Bulk upload",
-                "downloadTemplate": "Download template"
+                "downloadTemplate": "Download template",
+                "exportPdf": "Export PDF"
             },
             "created": "A new Registry is created with identifier {{ param }}",
             "updated": "A Registry is updated with identifier {{ param }}",

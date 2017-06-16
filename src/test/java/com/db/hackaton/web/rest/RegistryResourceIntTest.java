@@ -5,6 +5,7 @@ import com.db.hackaton.HackatonApp;
 import com.db.hackaton.config.ApplicationProperties;
 import com.db.hackaton.domain.Registry;
 import com.db.hackaton.repository.RegistryRepository;
+import com.db.hackaton.service.MedicalCaseService;
 import com.db.hackaton.service.RegistryService;
 import com.db.hackaton.repository.search.RegistrySearchRepository;
 import com.db.hackaton.service.dto.RegistryDTO;
@@ -73,6 +74,9 @@ public class RegistryResourceIntTest {
 
     @Autowired
     private ExceptionTranslator exceptionTranslator;
+
+    @Autowired
+    private MedicalCaseService medicalCaseService;
 
     @Autowired
     private EntityManager em;
