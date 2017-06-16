@@ -44,9 +44,11 @@ public interface UserGroupService {
      * Search for the userGroup corresponding to the query.
      *
      *  @param query the query of the search
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
     Page<UserGroupDTO> search(String query, Pageable pageable);
+
+    UserGroupDTO findByUserIdGroupId(Long userId, Long groupId);
 }

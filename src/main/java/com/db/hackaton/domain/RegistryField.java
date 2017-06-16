@@ -1,5 +1,6 @@
 package com.db.hackaton.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.context.annotation.Lazy;
@@ -30,6 +31,7 @@ public class RegistryField implements Serializable {
     @Column(name = "category")
     private String category;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Registry registry;
 
