@@ -8,52 +8,25 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" ng-show="vm.medicalCase.id">
-            <label for="id" data-translate="global.field.id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                    ng-model="vm.medicalCase.id" readonly />
-        </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="hackatonApp.medicalCase.name" for="field_name">Name</label>
-            <input type="text" class="form-control" name="name" id="field_name"
-                    ng-model="vm.medicalCase.name"
-                    required/>
-            <div ng-show="editForm.name.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.name.$error.required" data-translate="entity.validation.required">
-                    This field is required.
-                </p>
+        <div ng-repeat="field in vm.fields">
+            <div class="form-group" ng-if="field.type == 'TEXT' || field.type == 'NUMBER'">
+                <label class="control-label" for="field_{{$index}}">{{field.name}}</label>
+                <input type="text" class="form-control" name="field_{{$index}}" id="field_{{$index}}"
+                       ng-model="fields[$index].value"
+                       />
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="hackatonApp.medicalCase.uuid" for="field_uuid">Uuid</label>
-            <input type="text" class="form-control" name="uuid" id="field_uuid"
-                    ng-model="vm.medicalCase.uuid"
-                    required/>
-            <div ng-show="editForm.uuid.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.uuid.$error.required" data-translate="entity.validation.required">
-                    This field is required.
-                </p>
+            <div class="form-group" ng-if="field.type == 'DROPDOWN'">
+                <label class="control-label" for="field_{{$index}}">{{field.name}}</label>
+                <select class="form-control" name="field_{{$index}}" id="field_{{$index}}"
+                       ng-model="fields[$index].value">
+                    <option ng-repeat="option in field.values" value="{{option}}">{{option}}</option>
+                </select>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="hackatonApp.medicalCase.status" for="field_status">Status</label>
-            <input type="text" class="form-control" name="status" id="field_status"
-                    ng-model="vm.medicalCase.status"
-                    />
-        </div>
-
-        <div class="form-group">
-            <label data-translate="hackatonApp.medicalCase.patient" for="field_patient">Patient</label>
-            <select class="form-control" id="field_patient" name="patient" ng-model="vm.medicalCase.patient" ng-options="patient as patient.id for patient in vm.patients track by patient.id" required>
-            </select>
-        </div>
-        <div ng-show="editForm.patient.$invalid">
-            <p class="help-block"
-                ng-show="editForm.patient.$error.required" data-translate="entity.validation.required">
-                This field is required.
-            </p>
+            <div class="form-group" ng-if="field.type == 'DATE'">
+                <label class="control-label" for="field_{{$index}}">{{field.name}}</label>
+                <input type="date" class="input-sm form-control" name="start"
+                       ng-model="fields[$index].value" ng-change="vm.onChangeDate(fields[$index])" />
+            </div>
         </div>
 
         <!--Attachments-->
