@@ -68,7 +68,7 @@
                         result.fields.push({
                             id: field.regFieldId,
                             category: item.name,
-                            order: index*10,
+                            order: findex*10,
                             field: field
                         });
                     });
@@ -134,6 +134,8 @@
 
         function groupByKey(){
             var grouped = [], fields = entity.fields, index;
+
+            fields.sort(function(a,b) {return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0);} );
 
             for(var i = 0; i < fields.length; i++){
                 index = getCategoryIndex(fields[i].category);
