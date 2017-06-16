@@ -53,6 +53,8 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    private PatientDTO patient;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
