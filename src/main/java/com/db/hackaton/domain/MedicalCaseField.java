@@ -1,5 +1,6 @@
 package com.db.hackaton.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -29,6 +30,7 @@ public class MedicalCaseField implements Serializable {
     @ManyToOne
     private Field field;
 
+    @JsonIgnore
     @ManyToOne
     private MedicalCase medicalCase;
 
