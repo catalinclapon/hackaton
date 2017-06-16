@@ -5,9 +5,9 @@
         .module('hackatonApp')
         .controller('UserGroupController', UserGroupController);
 
-    UserGroupController.$inject = ['$state', 'UserGroup', 'UserGroupSearch', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    UserGroupController.$inject = ['Principal','$state', 'UserGroup', 'UserGroupSearch', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
-    function UserGroupController($state, UserGroup, UserGroupSearch, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function UserGroupController(Principal, $state, UserGroup, UserGroupSearch, ParseLinks, AlertService, paginationConstants, pagingParams) {
 
         var vm = this;
 
@@ -21,8 +21,13 @@
         vm.loadAll = loadAll;
         vm.searchQuery = pagingParams.search;
         vm.currentSearch = pagingParams.search;
+        vm.currentAccount = null;
 
         loadAll();
+
+        Principal.identity().then(function(account) {
+            vm.currentAccount = account;
+        });
 
         function loadAll () {
             if (pagingParams.search) {
