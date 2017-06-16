@@ -1,9 +1,9 @@
 package com.db.hackaton.service.impl;
 
-import com.db.hackaton.service.UserGroupService;
 import com.db.hackaton.domain.UserGroup;
 import com.db.hackaton.repository.UserGroupRepository;
 import com.db.hackaton.repository.search.UserGroupSearchRepository;
+import com.db.hackaton.service.UserGroupService;
 import com.db.hackaton.service.dto.UserGroupDTO;
 import com.db.hackaton.service.mapper.UserGroupMapper;
 import org.slf4j.Logger;
@@ -13,8 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing UserGroup.
@@ -106,5 +105,10 @@ public class UserGroupServiceImpl implements UserGroupService{
         log.debug("Request to search for a page of UserGroups for query {}", query);
         Page<UserGroup> result = userGroupSearchRepository.search(queryStringQuery(query), pageable);
         return result.map(userGroupMapper::toDto);
+    }
+
+    @Override
+    public UserGroupDTO findByUserIdGroupId(Long userId, Long groupId) {
+        return userGroupMapper.toDto(userGroupRepository.findByUserIdAndGroupId(userId, groupId));
     }
 }
