@@ -5,7 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -45,7 +45,7 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     @NotNull
     private Patient patient;
 
-    @OneToMany(mappedBy = "medicalCase", targetEntity = MedicalCaseField.class)
+    @OneToMany(mappedBy = "medicalCase", targetEntity = MedicalCaseField.class, fetch = FetchType.EAGER)
     private Set<MedicalCaseField> fields = new HashSet<>();
 
     public Long getId() {

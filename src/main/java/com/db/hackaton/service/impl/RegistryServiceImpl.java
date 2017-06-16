@@ -1,24 +1,26 @@
 package com.db.hackaton.service.impl;
 
+import com.db.hackaton.domain.Registry;
 import com.db.hackaton.repository.FieldRepository;
 import com.db.hackaton.repository.RegistryFieldRepository;
-import com.db.hackaton.service.RegistryService;
-import com.db.hackaton.domain.Registry;
 import com.db.hackaton.repository.RegistryRepository;
 import com.db.hackaton.repository.search.RegistrySearchRepository;
+import com.db.hackaton.service.RegistryService;
 import com.db.hackaton.service.dto.RegistryDTO;
 import com.db.hackaton.service.dto.RegistryFieldDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Registry.
@@ -141,5 +143,18 @@ public class RegistryServiceImpl implements RegistryService{
         log.debug("Request to search for a page of Registries for query {}", query);
         return registrySearchRepository.search(queryStringQuery(query), pageable)
             .map(RegistryDTO::build);
+    }
+
+    @Override
+    public Map<String, Long> getFieldMapByUuid(String registryUuid) {
+        Registry r = registryRepository.findOneByStatusAndUuid("LATEST", registryUuid);
+
+        return r.getFields().stream()
+            .collect(Collectors.toMap(fieldRepository -> {
+                    return fieldRepository.getCategory() + "_" + fieldRepository.getField().getName();
+                },
+                fieldRepository -> {
+                    return fieldRepository.getField().getId();
+                }));
     }
 }

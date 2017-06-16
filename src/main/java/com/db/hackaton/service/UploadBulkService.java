@@ -41,6 +41,8 @@ public class UploadBulkService {
         medicalCase.setName(UUID.randomUUID().toString());
         medicalCase.setUuid(UUID.randomUUID().toString());
 
+        Map<String, Long> fieldMap = registryService.getFieldMapByUuid(registerUuid);
+
         String cnp = "";
         // Find Patient
         for(Map.Entry<Pair<String,String>, String> entry : categoryToFieldToValue.entrySet()) {
@@ -59,18 +61,20 @@ public class UploadBulkService {
             patient.setId(1L);
         }
 
-        // Populate Fields
+       // Populate Fields
         for(Map.Entry<Pair<String,String>,String> entry : categoryToFieldToValue.entrySet()) {
+
+            Field field = new Field();
+            field.setId(fieldMap.get(entry.getKey().getFirst()+"_"+entry.getKey().getSecond()));
+
             Pair<String,String> key = entry.getKey();
             String value = entry.getValue();
             log.info("Got getKey: {}", key);
             log.info("Got getValue: {}", value);
 
-            Field field = fieldService.findFirstByName(key.getSecond());
-            System.out.println(field);
-
             medicalCase.setPatient(patient);
             medicalCase.setRegistryUuid(registerUuid);
+            medicalCase.setStatus("LATEST");
 
             log.info("Got pre-save medicalCase {}", medicalCase);
             medicalCaseService.save(medicalCase);
