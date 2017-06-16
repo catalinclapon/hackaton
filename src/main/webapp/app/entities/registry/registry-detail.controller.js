@@ -52,7 +52,7 @@
             //        order: 210
             //    }
             //],
-            data: RegistryData.query({id: entity.id, fields: fieldIds}),
+            data: RegistryData.query({id: entity.id, uuid: entity.uuid, fields: fieldIds}),
             onRegisterApi: function( gridApi ){
                 $scope.gridApi = gridApi;
 

@@ -2,6 +2,7 @@ package com.db.hackaton.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.db.hackaton.config.ApplicationProperties;
+import com.db.hackaton.service.MedicalCaseService;
 import com.db.hackaton.service.RegistryService;
 import com.db.hackaton.service.dto.FieldDTO;
 import com.db.hackaton.service.dto.RegistryDTO;
@@ -30,10 +31,7 @@ import javax.validation.Valid;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * REST controller for managing Registry.
@@ -47,10 +45,12 @@ public class RegistryResource {
     private static final String ENTITY_NAME = "registry";
 
     private final RegistryService registryService;
+    private final MedicalCaseService medicalCaseService;
 
     private ApplicationProperties applicationProperties;
 
-    public RegistryResource(RegistryService registryService, ApplicationProperties applicationProperties) {
+    public RegistryResource(RegistryService registryService, MedicalCaseService medicalCaseService, ApplicationProperties applicationProperties) {
+        this.medicalCaseService = medicalCaseService;
         this.applicationProperties = applicationProperties;
         this.registryService = registryService;
     }
@@ -159,8 +159,9 @@ public class RegistryResource {
 
     @GetMapping("/registries/{id}/data")
     @Timed
-    public ResponseEntity<List<HashMap<String, String>>> getData(@Valid @RequestParam List<Long> fields) {
-        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+    public ResponseEntity<List<Map<String, String>>> getData(@RequestParam String uuid, @Valid @RequestParam List<Long> fields) {
+        medicalCaseService.findAll(uuid, fields);
+        return new ResponseEntity<>(medicalCaseService.findAll(uuid, fields), HttpStatus.OK);
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE}, value = "/registries/{id}/template")

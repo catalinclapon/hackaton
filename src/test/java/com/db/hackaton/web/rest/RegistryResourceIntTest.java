@@ -84,7 +84,7 @@ public class RegistryResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        RegistryResource registryResource = new RegistryResource(registryService, applicationProperties);
+        RegistryResource registryResource = new RegistryResource(registryService, medicalCaseService, applicationProperties);
         this.restRegistryMockMvc = MockMvcBuilders.standaloneSetup(registryResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

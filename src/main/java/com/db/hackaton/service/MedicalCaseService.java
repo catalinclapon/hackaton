@@ -1,6 +1,7 @@
 package com.db.hackaton.service;
 
 import com.db.hackaton.domain.MedicalCase;
+import com.db.hackaton.domain.MedicalCaseField;
 import com.db.hackaton.repository.MedicalCaseRepository;
 import com.db.hackaton.repository.search.MedicalCaseSearchRepository;
 import org.slf4j.Logger;
@@ -10,7 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -93,6 +97,26 @@ public class MedicalCaseService {
     public Page<MedicalCase> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of MedicalCases for query {}", query);
         Page<MedicalCase> result = medicalCaseSearchRepository.search(queryStringQuery(query), pageable);
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Map<String, String>> findAll(String registryUuid, List<Long> fields) {
+        List<Map<String, String>> result = new ArrayList<>();
+        List<MedicalCase> cases = medicalCaseRepository.findByStatusAndRegistryUuid("LATEST", registryUuid);
+        for(MedicalCase medicalCase : cases) {
+            Map<String, String> row = new HashMap<>();
+            row.put("CNP", medicalCase.getPatient() != null ? medicalCase.getPatient().getCnp() : "N/A");
+            row.put("Name", medicalCase.getName() != null ? medicalCase.getName() : "N/A");
+            Map<Long, MedicalCaseField> tempFields = new HashMap<>();
+            for(MedicalCaseField field : medicalCase.getFields()){
+                if(field.getField() != null && fields.contains(field.getField().getId())){
+                    row.put(field.getField().getName(), field.getValue());
+                }
+            }
+            result.add(row);
+        }
+
         return result;
     }
 }
