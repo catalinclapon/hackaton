@@ -5,3 +5,4 @@ id;login;password_hash;first_name;last_name;email;image_url;activated;lang_key;c
 4;medlife;$2a$04$VrhEWpbkdipr/vQnn6J0D.Y8sAJAjxv44IxZRhyHX/DNjzDw0gxz2;Provider;Medlife;medlife@localhost;;true;en;system;system
 5;patient;$2a$04$BlcCqsgF440HhmvNJvXFhOEUaHGUy0jCLERqxFOGDLOeRW1NqiqiW;An basic;Patient;patient@localhost;;true;en;system;system
 6;user;$2a$04$7Dec.j0bzzCL5vxAN7rBsOqeBkDKjl8UjyBAm4qzNm/6dKeD2rVpS;An basic;User;user@localhost;;true;en;system;system
+7;reginamaria;$2a$04$gtGvq3oRnTOpPqBZxp0AVeLGNehw5n.hv9rH6YK68q9D5DouyfW0y;Provider;Regina Maria;reginamaria@localhost;;true;en;system;system

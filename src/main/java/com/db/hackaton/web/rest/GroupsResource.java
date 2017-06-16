@@ -2,11 +2,11 @@ package com.db.hackaton.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.db.hackaton.service.GroupsService;
+import com.db.hackaton.service.dto.GroupsDTO;
 import com.db.hackaton.web.rest.util.HeaderUtil;
 import com.db.hackaton.web.rest.util.PaginationUtil;
-import com.db.hackaton.service.dto.GroupsDTO;
-import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -19,12 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Groups.
@@ -33,10 +29,8 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 @RequestMapping("/api")
 public class GroupsResource {
 
-    private final Logger log = LoggerFactory.getLogger(GroupsResource.class);
-
     private static final String ENTITY_NAME = "groups";
-
+    private final Logger log = LoggerFactory.getLogger(GroupsResource.class);
     private final GroupsService groupsService;
 
     public GroupsResource(GroupsService groupsService) {
@@ -52,12 +46,17 @@ public class GroupsResource {
      */
     @PostMapping("/groups")
     @Timed
-    public ResponseEntity<GroupsDTO> createGroups(@Valid @RequestBody GroupsDTO groupsDTO) throws URISyntaxException {
-        log.debug("REST request to save Groups : {}", groupsDTO);
-        if (groupsDTO.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new groups cannot already have an ID")).body(null);
+    public ResponseEntity<GroupsDTO> createGroups(@Valid @RequestBody GroupsDTO frontEndGroupDTO) throws URISyntaxException {
+        log.debug("REST request to save Groups : {}", frontEndGroupDTO);
+        if (frontEndGroupDTO.getId() != null) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "id-exists", "A new groups cannot already have an ID")).body(null);
         }
-        GroupsDTO result = groupsService.save(groupsDTO);
+        for (GroupsDTO odsGroupDTO : groupsService.findAll()) {
+            if (odsGroupDTO.getName().toUpperCase().equals(frontEndGroupDTO.getName().toUpperCase())) {
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "name-exists", "A group with same name already exists.")).body(null);
+            }
+        }
+        GroupsDTO result = groupsService.save(frontEndGroupDTO);
         return ResponseEntity.created(new URI("/api/groups/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -132,7 +131,7 @@ public class GroupsResource {
      * SEARCH  /_search/groups?query=:query : search for the groups corresponding
      * to the query.
      *
-     * @param query the query of the groups search
+     * @param query    the query of the groups search
      * @param pageable the pagination information
      * @return the result of the search
      */

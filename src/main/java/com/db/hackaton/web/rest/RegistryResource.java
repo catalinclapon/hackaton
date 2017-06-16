@@ -1,14 +1,19 @@
 package com.db.hackaton.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.db.hackaton.domain.Registry;
+import com.db.hackaton.config.ApplicationProperties;
 import com.db.hackaton.service.RegistryService;
 import com.db.hackaton.service.dto.RegistryDTO;
+import com.db.hackaton.service.dto.RegistryFieldDTO;
 import com.db.hackaton.web.rest.util.HeaderUtil;
 import com.db.hackaton.web.rest.util.PaginationUtil;
-import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
-import org.apache.commons.io.IOUtils;
+import io.swagger.annotations.ApiParam;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -21,16 +26,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.awt.*;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Registry.
@@ -45,7 +45,10 @@ public class RegistryResource {
 
     private final RegistryService registryService;
 
-    public RegistryResource(RegistryService registryService) {
+    private ApplicationProperties applicationProperties;
+
+    public RegistryResource(RegistryService registryService, ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
         this.registryService = registryService;
     }
 
@@ -138,7 +141,7 @@ public class RegistryResource {
      * SEARCH  /_search/registries?query=:query : search for the registry corresponding
      * to the query.
      *
-     * @param query the query of the registry search
+     * @param query    the query of the registry search
      * @param pageable the pagination information
      * @return the result of the search
      */
@@ -151,23 +154,42 @@ public class RegistryResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-    @GetMapping( produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE},value = "/registries/{id}/template")
+    @GetMapping(produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE}, value = "/registries/{id}/template")
     @Timed
     public void getTemplate(@PathVariable Long id,
                             HttpServletResponse response) throws IOException {
 
         try {
-            // get your file as InputStream
-            InputStream is = new FileInputStream("C:/Temp/uploads/Abonament-MEDLIFE-2015_2016..xls");
-            // copy it to response's OutputStream
-            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
+            //create xlsx file using the registry id
+            RegistryDTO registry = registryService.findOne(id);
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = workbook.createSheet(registry.getName());
+            //create header
+            Row row = sheet.createRow(0);
+
+            int columnCount = 0;
+            for (RegistryFieldDTO field : registry.getFields()) {
+                Cell cell = row.createCell(columnCount++);
+                cell.setCellValue(field.getCategory() + "_" + field.getField().getName());
+
+            }
+
+            File file = new File(applicationProperties.getLocalStoragePath() + "/" + registry.getUuid() + ".xlsx");
+            try (FileOutputStream os = new FileOutputStream(file)) {
+                workbook.write(os);
+
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bos.write(FileUtils.readFileToByteArray(file));
+
+                //byte[] -> InputStream
+                ByteArrayInputStream inStream = new ByteArrayInputStream(bos.toByteArray());
+
+                org.apache.commons.io.IOUtils.copy(inStream, response.getOutputStream());
+                response.flushBuffer();
+            }
         } catch (IOException ex) {
-            log.info("Error writing file to output stream. Filename was '{}'", id, ex);
+            log.info("Error writing file to output stream. Registry Id '{}'", id, ex);
             throw new RuntimeException("IOError writing file to output stream");
         }
-
     }
-
-
 }

@@ -46,11 +46,13 @@ public class FieldDTO {
             .min(field.getMin())
             .max(field.getMax())
             .type(field.getType())
+            .extValidation(field.getExtValidation())
             .build();
     }
 
     public static Field build(FieldDTO fieldDTO) {
         return new Field()
+            .id(fieldDTO.getId())
             .name(fieldDTO.getName())
             .desc(fieldDTO.getDescription())
             .required(fieldDTO.getRequired())

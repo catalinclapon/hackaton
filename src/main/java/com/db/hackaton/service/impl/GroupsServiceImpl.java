@@ -1,11 +1,12 @@
 package com.db.hackaton.service.impl;
 
-import com.db.hackaton.service.GroupsService;
 import com.db.hackaton.domain.Groups;
 import com.db.hackaton.repository.GroupsRepository;
 import com.db.hackaton.repository.search.GroupsSearchRepository;
+import com.db.hackaton.service.GroupsService;
 import com.db.hackaton.service.dto.GroupsDTO;
 import com.db.hackaton.service.mapper.GroupsMapper;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -13,8 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Groups.
@@ -106,5 +108,11 @@ public class GroupsServiceImpl implements GroupsService{
         log.debug("Request to search for a page of Groups for query {}", query);
         Page<Groups> result = groupsSearchRepository.search(queryStringQuery(query), pageable);
         return result.map(groupsMapper::toDto);
+    }
+
+    @Override
+    public List<GroupsDTO> findAll() {
+        log.debug("Request to search for all of GroupsDTO");
+        return groupsMapper.toDto(Lists.newArrayList(groupsSearchRepository.findAll()));
     }
 }

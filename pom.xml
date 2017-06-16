@@ -405,6 +405,12 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.15</version>
+        </dependency>
     </dependencies>
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>

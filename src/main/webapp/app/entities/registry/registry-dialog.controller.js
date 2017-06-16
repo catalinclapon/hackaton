@@ -57,7 +57,7 @@
             result.id = vm.registry.id;
             result.uuid = vm.registry.uuid;
             result.name = vm.registry.name;
-            result.desc = vm.registry.desc;
+            result.description = vm.registry.description;
 
             result.fields = [];
 
@@ -66,8 +66,9 @@
                 if(angular.isDefined(fields)){
                     fields.forEach(function(field, findex){
                         result.fields.push({
+                            id: field.regFieldId,
                             category: item.name,
-                            order: index*10,
+                            order: findex*10,
                             field: field
                         });
                     });
@@ -89,7 +90,7 @@
 
         function removeCategory(index) {
             var cat = vm.groups[index];
-            delete vm.groupedFields[cat]
+            delete vm.groupedFields[cat];
             vm.groups.remove(cat);
         }
 
@@ -116,8 +117,8 @@
                     name: field.name,
                     type: field.type,
                     required: field.required ? 'y' : '',
-                    min: field.min,
-                    max: field.max,
+                    min: field.type == 'NUMBER' ? validateInt(field.min) : null,
+                    max: field.type == 'NUMBER' ? validateInt(field.max) : null,
                     extValidation: field.values
                 });
                 vm.newField[index] = {
@@ -134,26 +135,34 @@
         function groupByKey(){
             var grouped = [], fields = entity.fields, index;
 
-            for(var i = 0; i < fields.length; i++){
-                index = getCategoryIndex(fields[i].category);
-                if(index == -1){
-                    vm.groups.push({name: fields[i].category});
-                    index = getCategoryIndex(fields[i].category);
-                    vm.newField[index] = {
-                        name: '',
-                        type: '',
-                        required: '',
-                        min: '',
-                        max: '',
-                        values: ''
-                    };
-                    grouped[index] = [];
-                    groupCount++;
-                }
-                grouped[index].push(fields[i].field);
-            }
+            if(!angular.isUndefined(fields)){
+                fields.sort(function(a,b) {return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0);} );
 
+                for(var i = 0; i < fields.length; i++){
+                    index = getCategoryIndex(fields[i].category);
+                    if(index == -1){
+                        vm.groups.push({name: fields[i].category});
+                        index = getCategoryIndex(fields[i].category);
+                        vm.newField[index] = {
+                            name: '',
+                            type: '',
+                            required: '',
+                            min: '',
+                            max: '',
+                            values: ''
+                        };
+                        grouped[index] = [];
+                        groupCount++;
+                    }
+                    fields[i].field.regFieldId=fields[i].id;
+                    grouped[index].push(fields[i].field);
+                }
+            }
             return grouped;
+        }
+
+        function validateInt(stringNumber) {
+            return !isNaN(stringNumber) ? parseInt(stringNumber) : 0;
         }
 
         function getCategoryIndex(category) {
