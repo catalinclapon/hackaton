@@ -46,6 +46,7 @@ public class FieldDTO {
             .min(field.getMin())
             .max(field.getMax())
             .type(field.getType())
+            .extValidation(field.getExtValidation())
             .build();
     }
 
