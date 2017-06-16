@@ -51,6 +51,7 @@ public class FieldDTO {
 
     public static Field build(FieldDTO fieldDTO) {
         return new Field()
+            .id(fieldDTO.getId())
             .name(fieldDTO.getName())
             .desc(fieldDTO.getDescription())
             .required(fieldDTO.getRequired())
