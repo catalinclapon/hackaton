@@ -5,9 +5,9 @@
         .module('hackatonApp')
         .controller('RegistryDetailController', RegistryDetailController);
 
-    RegistryDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Registry', 'RegistryData', '$interval'];
+    RegistryDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Registry', 'RegistryData', '$translate', '$interval'];
 
-    function RegistryDetailController($scope, $rootScope, $stateParams, previousState, entity, Registry, RegistryData, $interval) {
+    function RegistryDetailController($scope, $rootScope, $stateParams, previousState, entity, Registry, RegistryData, $translate, $interval) {
         var vm = this, fields = entity.fields, fieldIds = [];
 
         vm.registry = entity;
@@ -17,16 +17,10 @@
             vm.registry = result;
         });
 
-        var fakeI18n = function( title ){
-            var deferred = $q.defer();
-            $interval( function() {
-                deferred.resolve( 'col: ' + title );
-            }, 1000, 1);
-            return deferred.promise;
-        };
-
         var columnDefs = [{
             name: 'CNP', enableHiding: false
+        }, {
+            name: 'Name'
         }];
 
 
@@ -47,25 +41,25 @@
         $scope.gridOptions = {
             exporterMenuCsv: false,
             enableGridMenu: true,
-            gridMenuTitleFilter: fakeI18n,
+            gridMenuTitleFilter: $translate,
             columnDefs: columnDefs,
-            gridMenuCustomItems: [
-                {
-                    title: entity.name,
-                    action: function ($event) {
-                        this.grid.element.toggleClass('rotated');
-                    },
-                    order: 210
-                }
-            ],
+            //gridMenuCustomItems: [
+            //    {
+            //        title: entity.name,
+            //        action: function ($event) {
+            //            this.grid.element.toggleClass('rotated');
+            //        },
+            //        order: 210
+            //    }
+            //],
             data: RegistryData.query({id: entity.id, fields: fieldIds}),
             onRegisterApi: function( gridApi ){
                 $scope.gridApi = gridApi;
 
                 // interval of zero just to allow the directive to have initialized
-                $interval( function() {
-                    gridApi.core.addToGridMenu( gridApi.grid, [{ title: 'Dynamic item', order: 100}]);
-                }, 0, 1);
+                //$interval( function() {
+                //    gridApi.core.addToGridMenu( gridApi.grid, [{ title: 'Dynamic item', order: 100}]);
+                //}, 0, 1);
 
                 gridApi.core.on.columnVisibilityChanged( $scope, function( changedColumn ){
                     $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
