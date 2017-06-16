@@ -25,7 +25,9 @@
     <small><span data-translate="hackatonApp.registry.admin">Admins</span>: <a>User admin 1</a>, <a>User admin 2</a> </small><!-- TODO: add user link //-->
     <hr>
     <jhi-alert-error></jhi-alert-error>
-    <p>{{vm.registry.desc}}</p>
+    <p>{{vm.registry.description}}</p>
+
+    <div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>
 
     <button type="submit"
             ui-sref="{{ vm.previousState }}"

@@ -3,6 +3,7 @@ package com.db.hackaton.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.db.hackaton.config.ApplicationProperties;
 import com.db.hackaton.service.RegistryService;
+import com.db.hackaton.service.dto.FieldDTO;
 import com.db.hackaton.service.dto.RegistryDTO;
 import com.db.hackaton.service.dto.RegistryFieldDTO;
 import com.db.hackaton.web.rest.util.HeaderUtil;
@@ -29,6 +30,8 @@ import javax.validation.Valid;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -152,6 +155,12 @@ public class RegistryResource {
         Page<RegistryDTO> page = registryService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/registries");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/registries/{id}/data")
+    @Timed
+    public ResponseEntity<List<HashMap<String, String>>> getData(@Valid @RequestParam List<Long> fields) {
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE}, value = "/registries/{id}/template")
