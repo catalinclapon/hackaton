@@ -22,7 +22,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class MedicalCaseService {
 
     private final Logger log = LoggerFactory.getLogger(MedicalCaseService.class);
-    
+
     private final MedicalCaseRepository medicalCaseRepository;
 
     private final MedicalCaseSearchRepository medicalCaseSearchRepository;
@@ -47,7 +47,7 @@ public class MedicalCaseService {
 
     /**
      *  Get all the medicalCases.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */

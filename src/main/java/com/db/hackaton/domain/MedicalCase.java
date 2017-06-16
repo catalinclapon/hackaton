@@ -34,6 +34,10 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     @Column(name = "uuid", nullable = false)
     private String uuid;
 
+    @NotNull
+    @Column(name = "registry_uuid", nullable = false)
+    private String registryUuid;
+
     @Column(name = "status")
     private String status;
 
@@ -145,5 +149,18 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
             ", uuid='" + getUuid() + "'" +
             ", status='" + getStatus() + "'" +
             "}";
+    }
+
+    public String getRegistryUuid() {
+        return registryUuid;
+    }
+
+    public MedicalCase registryUuid(String registryUuid) {
+        this.registryUuid = registryUuid;
+        return this;
+    }
+
+    public void setRegistryUuid(String registryUuid) {
+        this.registryUuid = registryUuid;
     }
 }
