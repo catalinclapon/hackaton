@@ -77,6 +77,33 @@
                     <select id="langKey" name="langKey" class="form-control" ng-model="vm.settingsAccount.langKey" ng-controller="JhiLanguageController as languageVm" ng-options="code as (code | findLanguageFromKey) for code in languageVm.languages"></select>
                 </div>
 
+                <div class="form-group">
+                    {{vm.patientInfo.patientFlag}}
+                    <label for="isPatient" data-translate="settings.form.isPatient">I am patient</label> <input type="checkbox" name="flag" ng-checked-value="1" ng-unchecked-value="0" ng-checked="vm.patientInfo.flag == 1" ng-model="vm.patientInfo.flag">
+                </div>
+
+                <span ng-show="vm.patientInfo.flag == 1">
+                <div class="form-group">
+                    <label class="control-label" for="cnp" data-translate="settings.form.cnp">CNP</label>
+                    <input type="text" class="form-control" id="cnp" name="cnp" placeholder="{{'settings.form.cnp.placeholder' | translate}}"
+                           ng-model="vm.patientInfo.cnp" ng-minlength=13 ng-maxlength=13 required maxlength="13">
+                    <div ng-show="form.cnp.$dirty && form.cnp.$invalid">
+                        <p class="help-block"
+                           ng-show="form.cnp.$error.required" data-translate="settings.messages.validate.cnp.required">
+                            CNP is required for a patient.
+                        </p>
+                        <p class="help-block"
+                           ng-show="form.firstName.$error.minlength" data-translate="settings.messages.validate.cnp.minlength">
+                            CNP is required to have 13 characters.
+                        </p>
+                        <p class="help-block"
+                           ng-show="form.firstName.$error.maxlength" data-translate="settings.messages.validate.cnp.maxlength">
+                            CNP is required to have 13 characters.
+                        </p>
+                    </div>
+                </div>
+                </span>
+
                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" data-translate="settings.form.button">Save</button>
             </form>
         </div>

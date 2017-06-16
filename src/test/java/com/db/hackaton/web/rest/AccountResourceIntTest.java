@@ -9,6 +9,7 @@ import com.db.hackaton.repository.PersistentTokenRepository;
 import com.db.hackaton.repository.UserRepository;
 import com.db.hackaton.security.AuthoritiesConstants;
 import com.db.hackaton.service.MailService;
+import com.db.hackaton.service.UserPatientService;
 import com.db.hackaton.service.UserService;
 import com.db.hackaton.service.dto.UserDTO;
 import com.db.hackaton.web.rest.vm.KeyAndPasswordVM;
@@ -63,6 +64,9 @@ public class AccountResourceIntTest {
     private UserService userService;
 
     @Autowired
+    private UserPatientService userPatientService;
+
+    @Autowired
     private PersistentTokenRepository persistentTokenRepository;
 
     @Autowired
@@ -73,6 +77,9 @@ public class AccountResourceIntTest {
 
     @Mock
     private UserService mockUserService;
+
+    @Mock
+    private UserPatientService mockUserPatientService;
 
     @Mock
     private MailService mockMailService;
@@ -87,10 +94,10 @@ public class AccountResourceIntTest {
         doNothing().when(mockMailService).sendActivationEmail(anyObject());
 
         AccountResource accountResource =
-            new AccountResource(userRepository, userService, mockMailService, persistentTokenRepository);
+            new AccountResource(userRepository, userService, mockMailService, persistentTokenRepository, userPatientService);
 
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService, mockMailService, persistentTokenRepository);
+            new AccountResource(userRepository, mockUserService, mockMailService, persistentTokenRepository, mockUserPatientService);
 
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
