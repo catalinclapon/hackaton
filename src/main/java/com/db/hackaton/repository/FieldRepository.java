@@ -1,9 +1,8 @@
 package com.db.hackaton.repository;
 
 import com.db.hackaton.domain.Field;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import org.springframework.data.jpa.repository.*;
 
 
 /**
@@ -12,5 +11,6 @@ import org.springframework.data.jpa.repository.*;
 @SuppressWarnings("unused")
 @Repository
 public interface FieldRepository extends JpaRepository<Field,Long> {
+    Field findFirstByName(String name);
 
 }

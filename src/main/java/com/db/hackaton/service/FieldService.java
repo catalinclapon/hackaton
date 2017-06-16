@@ -7,12 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Field.
@@ -22,7 +20,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class FieldService {
 
     private final Logger log = LoggerFactory.getLogger(FieldService.class);
-    
+
     private final FieldRepository fieldRepository;
 
     private final FieldSearchRepository fieldSearchRepository;
@@ -47,7 +45,7 @@ public class FieldService {
 
     /**
      *  Get all the fields.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
@@ -94,5 +92,10 @@ public class FieldService {
         log.debug("Request to search for a page of Fields for query {}", query);
         Page<Field> result = fieldSearchRepository.search(queryStringQuery(query), pageable);
         return result;
+    }
+
+    @Transactional(readOnly = true)
+    public Field findFirstByName(String name) {
+        return fieldRepository.findFirstByName(name);
     }
 }

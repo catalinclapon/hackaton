@@ -20,10 +20,9 @@
         }
 
         function bulkUpload(filePath) {
-            UploadBulk.save(filePath);
+            UploadBulk.get({ "filePath" : filePath, "registerUuid" : vm.registry.uuid});
             /*get the file and send it to post*/
             $uibModalInstance.close(true);
-
         }
 
         vm.uploadFile = function (file) {

@@ -235,15 +235,9 @@
                         backdrop: 'static',
                         size: 'lg',
                         resolve: {
-                            entity: function () {
-                                return {
-                                    /*name: null,
-                                    desc: null,
-                                    uuid: null,
-                                    status: null,
-                                    id: null*/
-                                };
-                            }
+                            entity: ['Registry', function (Registry) {
+                                return Registry.get({id: $stateParams.id}).$promise;
+                            }]
                         }
                     })
                         .result.then(function () {
