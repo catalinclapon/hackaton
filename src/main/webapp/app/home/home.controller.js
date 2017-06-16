@@ -5,9 +5,9 @@
         .module('hackatonApp')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state'];
+    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state','Registry'];
 
-    function HomeController ($scope, Principal, LoginService, $state) {
+    function HomeController ($scope, Principal, LoginService, $state, Registry) {
         var vm = this;
 
         vm.account = null;
@@ -29,5 +29,7 @@
         function register () {
             $state.go('register');
         }
+
+        vm.registries = Registry.query();
     }
 })();
