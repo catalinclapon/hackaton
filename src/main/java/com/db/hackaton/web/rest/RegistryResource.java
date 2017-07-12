@@ -167,7 +167,6 @@ public class RegistryResource {
     @GetMapping("/registries/{id}/data")
     @Timed
     public ResponseEntity<List<Map<String, String>>> getData(@RequestParam String uuid, @Valid @RequestParam List<Long> fields) {
-        medicalCaseService.findAll(uuid, fields);
         return new ResponseEntity<>(medicalCaseService.findAll(uuid, fields), HttpStatus.OK);
     }
 

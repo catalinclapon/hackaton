@@ -5,14 +5,23 @@ import com.db.hackaton.domain.Field;
 import com.db.hackaton.domain.MedicalCase;
 import com.db.hackaton.domain.MedicalCaseField;
 import com.db.hackaton.domain.Patient;
+import com.db.hackaton.service.dto.FieldDTO;
+import com.db.hackaton.service.dto.MedicalCaseDTO;
+import com.db.hackaton.service.dto.MedicalCaseFieldDTO;
+import com.db.hackaton.service.dto.PatientDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Service
 @Transactional
@@ -26,7 +35,7 @@ public class UploadBulkService {
     private MedicalCaseFieldService medicalCaseFieldService;
     private RegistryService registryService;
 
-    public UploadBulkService(ApplicationProperties applicationProperties, RegistryService registryService , MedicalCaseService medicalCaseService, PatientService patientService, FieldService fieldService, MedicalCaseFieldService medicalCaseFieldService) {
+    public UploadBulkService(ApplicationProperties applicationProperties, RegistryService registryService, MedicalCaseService medicalCaseService, PatientService patientService, FieldService fieldService, MedicalCaseFieldService medicalCaseFieldService) {
         this.applicationProperties = applicationProperties;
         this.medicalCaseService = medicalCaseService;
         this.patientService = patientService;
@@ -37,53 +46,62 @@ public class UploadBulkService {
 
     public void save(Map<Pair<String, String>, String> categoryToFieldToValue, String registerUuid) {
         // Build Medical Case
-        MedicalCase medicalCase = new MedicalCase();
-        medicalCase.setName(UUID.randomUUID().toString());
+        MedicalCaseDTO medicalCase = new MedicalCaseDTO();
         medicalCase.setUuid(UUID.randomUUID().toString());
 
         Map<String, Long> fieldMap = registryService.getFieldMapByUuid(registerUuid);
 
         String cnp = "";
         // Find Patient
-        for(Map.Entry<Pair<String,String>, String> entry : categoryToFieldToValue.entrySet()) {
-            if(entry.getKey().getSecond().toUpperCase().equals("CNP")) {
-                cnp = entry.getValue();
+        for (Map.Entry<Pair<String, String>, String> entry : categoryToFieldToValue.entrySet()) {
+            if (entry.getKey().getSecond().toUpperCase().equals("CNP")) {
+                cnp = Optional.ofNullable(entry.getValue())
+                    .map(val -> val.replaceAll("\"", ""))
+                    .orElse(null);
                 log.info("Got cnp {}", cnp);
+                break;
             }
         }
-
-        Patient patient = patientService.findOneByCnp(cnp.replaceAll("\"",""));
-        log.info("Got patient {}", patient);
-        if(patient == null) {
-            // Admin
-            log.info("Using ADMIN");
-            patient = new Patient();
-            patient.setId(1L);
+        if(StringUtils.isBlank(cnp)){
+            log.warn("Cannot save Medical case without CNP {}", categoryToFieldToValue.toString());
+            return;
         }
 
-       // Populate Fields
-        for(Map.Entry<Pair<String,String>,String> entry : categoryToFieldToValue.entrySet()) {
+        Patient patient = Optional.ofNullable(patientService.findOneByCnp(cnp))
+            .orElse(new Patient()
+                .cnp(cnp));
+        log.info("Got patient {}", patient);
 
-            Field field = new Field();
-            field.setId(fieldMap.get(entry.getKey().getFirst()+"_"+entry.getKey().getSecond()));
+        medicalCase.setPatient(PatientDTO.build(patient));
+        medicalCase.setRegistryUuid(registerUuid);
+        medicalCase.setFields(new ArrayList<>());
 
-            Pair<String,String> key = entry.getKey();
+        categoryToFieldToValue.entrySet().forEach(addFieldValueToMedicalCase(medicalCase, fieldMap));
+
+        medicalCaseService.save(medicalCase);
+    }
+
+    private Consumer<? super Map.Entry<Pair<String, String>, String>> addFieldValueToMedicalCase(MedicalCaseDTO medicalCaseDTO, Map<String, Long> fieldMap) {
+        return entry -> {
+            String fieldKey = entry.getKey().getFirst() + "_" + entry.getKey().getSecond();
+            Optional<Long> fieldId = Optional.ofNullable(fieldMap.get(fieldKey));
+            if (!fieldId.isPresent()) {
+                log.warn("No field for key {} in registry {}", fieldKey, medicalCaseDTO.getRegistryUuid());
+                return;
+            }
+
+            Pair<String, String> key = entry.getKey();
             String value = entry.getValue();
             log.info("Got getKey: {}", key);
             log.info("Got getValue: {}", value);
 
-            medicalCase.setPatient(patient);
-            medicalCase.setRegistryUuid(registerUuid);
-            medicalCase.setStatus("LATEST");
-
-            log.info("Got pre-save medicalCase {}", medicalCase);
-            medicalCaseService.save(medicalCase);
-
-            MedicalCaseField medicalCaseField = new MedicalCaseField();
-            medicalCaseField.setField(field);
-            medicalCaseField.setMedicalCase(medicalCase);
-            medicalCaseField.setValue(value);
-            medicalCaseFieldService.save(medicalCaseField);
-        }
+            medicalCaseDTO.getFields()
+                .add(MedicalCaseFieldDTO.builder()
+                    .field(FieldDTO.builder()
+                        .id(fieldId.get())
+                        .build())
+                    .value(value)
+                    .build());
+        };
     }
 }

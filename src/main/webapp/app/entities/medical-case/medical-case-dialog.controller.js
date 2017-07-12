@@ -38,7 +38,7 @@
 
         function save () {
             vm.isSaving = true;
-            if (vm.medicalCase.id !== null) {
+            if (vm.medicalCase.uuid !== null) {
                 MedicalCase.update(vm.medicalCase, onSaveSuccess, onSaveError);
             } else {
                 MedicalCase.save(vm.medicalCase, onSaveSuccess, onSaveError);
