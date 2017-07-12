@@ -1,26 +1,29 @@
 package com.db.hackaton.service.dto;
 
-/**
- * Created by Ungureanu Adrian on 16/06/2017.
- */
+import com.db.hackaton.domain.Patient;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class PatientDTO {
     private Integer flag;
 
     private String cnp;
 
-    public int getFlag() {
-        return flag;
+    public static PatientDTO build(Patient patient) {
+        return builder()
+            .cnp(patient.getCnp())
+            .flag(1)
+            .build();
     }
 
-    public String getCnp() {
-        return cnp;
-    }
-
-    public void setFlag(Integer flag) {
-        this.flag = flag;
-    }
-
-    public void setCnp(String cnp) {
-        this.cnp = cnp;
+    public static Patient build(PatientDTO patientDTO){
+        return new Patient()
+            .cnp(patientDTO.getCnp());
     }
 }

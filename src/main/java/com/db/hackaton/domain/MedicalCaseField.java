@@ -38,6 +38,11 @@ public class MedicalCaseField implements Serializable {
         return id;
     }
 
+    public MedicalCaseField id(Long id) {
+        setId(id);
+        return this;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

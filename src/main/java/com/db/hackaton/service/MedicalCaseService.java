@@ -2,8 +2,12 @@ package com.db.hackaton.service;
 
 import com.db.hackaton.domain.MedicalCase;
 import com.db.hackaton.domain.MedicalCaseField;
+import com.db.hackaton.repository.FieldRepository;
+import com.db.hackaton.repository.MedicalCaseFieldRepository;
 import com.db.hackaton.repository.MedicalCaseRepository;
 import com.db.hackaton.repository.search.MedicalCaseSearchRepository;
+import com.db.hackaton.service.dto.MedicalCaseDTO;
+import com.db.hackaton.service.dto.MedicalCaseFieldDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -11,10 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
@@ -28,10 +29,14 @@ public class MedicalCaseService {
     private final Logger log = LoggerFactory.getLogger(MedicalCaseService.class);
 
     private final MedicalCaseRepository medicalCaseRepository;
+    private final MedicalCaseFieldRepository medicalCaseFieldRepository;
 
     private final MedicalCaseSearchRepository medicalCaseSearchRepository;
 
-    public MedicalCaseService(MedicalCaseRepository medicalCaseRepository, MedicalCaseSearchRepository medicalCaseSearchRepository) {
+    public MedicalCaseService(MedicalCaseRepository medicalCaseRepository,
+                              MedicalCaseFieldRepository medicalCaseFieldRepository,
+                              MedicalCaseSearchRepository medicalCaseSearchRepository) {
+        this.medicalCaseFieldRepository = medicalCaseFieldRepository;
         this.medicalCaseRepository = medicalCaseRepository;
         this.medicalCaseSearchRepository = medicalCaseSearchRepository;
     }
@@ -39,27 +44,42 @@ public class MedicalCaseService {
     /**
      * Save a medicalCase.
      *
-     * @param medicalCase the entity to save
+     * @param medicalCaseDTO the entity to save
      * @return the persisted entity
      */
-    public MedicalCase save(MedicalCase medicalCase) {
-        log.debug("Request to save MedicalCase : {}", medicalCase);
-        MedicalCase result = medicalCaseRepository.save(medicalCase);
-        //medicalCaseSearchRepository.save(result);
-        return result;
-    }
+    @SuppressWarnings("Duplicates")
+    public MedicalCaseDTO save(MedicalCaseDTO medicalCaseDTO) {
+        log.debug("Request to save MedicalCase : {}", medicalCaseDTO);
+        if (medicalCaseDTO.getId() != null) {
+            medicalCaseRepository.save(Optional.of(medicalCaseDTO)
+                .map(MedicalCaseDTO::build)
+                .map(mc -> {
+                    mc.setStatus("SUPERSEDED");
+                    medicalCaseSearchRepository.delete(mc);
+                    return mc;
+                }).get());
+        } else //noinspection Duplicates
+            if(medicalCaseDTO.getUuid() == null) {
+            medicalCaseDTO.setUuid(UUID.randomUUID().toString());
+        }
 
-    /**
-     * Get all the medicalCases.
-     *
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    @Transactional(readOnly = true)
-    public Page<MedicalCase> findAll(Pageable pageable) {
-        log.debug("Request to get all MedicalCases");
-        Page<MedicalCase> result = medicalCaseRepository.findAll(pageable);
-        return result;
+        MedicalCase medicalCase = medicalCaseRepository.save(Optional.of(medicalCaseDTO)
+            .map(MedicalCaseDTO::build)
+            .map(mc -> mc.id(null)
+                .status("LATEST"))
+            .get());
+
+        medicalCaseDTO.setId(medicalCase.getId());
+
+        medicalCaseDTO.getFields().stream()
+            .map(MedicalCaseFieldDTO::build)
+            .map(mc -> mc.id(null)
+                .medicalCase(medicalCase))
+            .forEach(medicalCaseFieldRepository::saveAndFlush);
+
+        medicalCaseSearchRepository.save(medicalCase);
+        //medicalCaseSearchRepository.save(result);
+        return medicalCaseDTO;
     }
 
     /**
@@ -69,10 +89,10 @@ public class MedicalCaseService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public MedicalCase findOne(Long id) {
+    public MedicalCaseDTO findOne(Long id) {
         log.debug("Request to get MedicalCase : {}", id);
         MedicalCase medicalCase = medicalCaseRepository.findOne(id);
-        return medicalCase;
+        return MedicalCaseDTO.build(medicalCase);
     }
 
     /**
@@ -84,20 +104,6 @@ public class MedicalCaseService {
         log.debug("Request to delete MedicalCase : {}", id);
         medicalCaseRepository.delete(id);
         medicalCaseSearchRepository.delete(id);
-    }
-
-    /**
-     * Search for the medicalCase corresponding to the query.
-     *
-     * @param query    the query of the search
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    @Transactional(readOnly = true)
-    public Page<MedicalCase> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of MedicalCases for query {}", query);
-        Page<MedicalCase> result = medicalCaseSearchRepository.search(queryStringQuery(query), pageable);
-        return result;
     }
 
     @Transactional(readOnly = true)
