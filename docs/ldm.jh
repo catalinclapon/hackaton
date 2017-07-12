@@ -1,0 +1,115 @@
+entity Registry {
+	id Number // 1
+    name String // Alzheimers Prevention Registry
+    jhi_desc String // Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget leo ornare, mattis nisi ut, pharetra quam. Etiam euismod dui at felis iaculis, nec tincidunt nulla tempor
+    uuid String // 55714226-6600-4038-946f-8c33d2bf8414
+    status String // SUPERSEDED
+    created_by String
+    created_date Date
+    last_modified_by String
+    last_modified_date Date
+}
+
+
+entity Field {
+	id Number // 1 
+    name String // Gender
+    jhi_desc String // Select user gender
+    jhi_type String // SELECTION
+    jhi_min Number // 0
+    required String // y
+    jhi_max Number // 100
+    ext_validation String // Male, Female
+    created_by String
+    created_date Date
+    last_modified_by String
+    last_modified_date Date    
+}
+
+entity RegistryField {
+	id Number // 1
+    jhi_order Number // 10
+    category String // Patient administrative data
+    registry_id Registry // 1 (FK) - Alzheimers Prevention Registry
+    field_id Field // 1 (FK) - Gender
+    created_by String
+    created_date Date
+    last_modified_by String
+    last_modified_date Date
+}
+
+entity Group {
+	id Number // 1
+    name String // Doctors
+    created_by String
+    created_date Date
+    last_modified_by String
+    last_modified_date Date
+}
+
+entity JhiUser {
+	id Number // 1
+    login String // admin
+    firstName String // Admin
+    lastName String // Admin
+    email String // admin@gmail.com
+    imageUrl String
+    activated Number // 1
+    langKey String // en
+    activationKey String
+    resetKey String 
+    resetDate Date
+    created_by String
+    created_date Date
+    last_modified_by String
+    last_modified_date Date
+}
+
+entity UserGroup {
+	id Number // 1
+    userId User // 1 (FK) - admin
+    groupId Group // 1 (FK) - Doctors
+    created_by String
+    created_date Date
+    last_modified_by String
+    last_modified_date Date
+}
+
+entity Patient {
+	id Number // 1
+    first_name String // Manoliu
+    last_name String // Cristian
+    cnp String // 1870220abcdef
+    user_id User // 1 (FK) - admin
+    created_by String
+    created_date Date
+    last_modified_by String
+    last_modified_date Date
+}
+
+entity MedicalCase {
+	id Long
+    name String
+    uuid String
+    registry_uuid String
+    status String
+    patient_id Patient
+    created_by String
+    created_date Date
+    last_modified_by String
+    last_modified_date Date
+}
+
+entity MedicalCaseField {
+	id Number
+    jhi_value String
+    field_id Field
+    medical_case_id Number    
+}
+
+entity MedicalCaseAttachment {
+	id Number
+    title String
+    location String
+    medical_case_id MedicalCase
+}

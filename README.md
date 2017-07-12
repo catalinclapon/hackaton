@@ -1,3 +1,17 @@
+# Good to know
+
+## Connect to infiniti@technobium.com
+1. ssh infiniti@technobium.com
+2. infiniti/infiniti
+3. bash
+
+## Update/Build/Deploy/Start application
+/app.sh update && ./app.sh build && ./app.sh deploy && ./app.sh start
+
+## Connect to database via mysql
+1. mysql -p
+2. infiniti
+
 # hackaton
 This application was generated using JHipster 4.5.1, you can find documentation and help at [https://jhipster.github.io/documentation-archive/v4.5.1](https://jhipster.github.io/documentation-archive/v4.5.1).
 
