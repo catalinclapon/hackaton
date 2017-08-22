@@ -5,17 +5,21 @@
         .module('hackatonApp')
         .controller('MedicalCaseDialogController', MedicalCaseDialogController);
 
-    MedicalCaseDialogController.$inject = ['$filter', '$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'registry', 'MedicalCase', 'Patient'];
+    MedicalCaseDialogController.$inject = ['$filter', '$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'registry', 'MedicalCase', 'Patient', 'Upload'];
 
-    function MedicalCaseDialogController ($filter, $timeout, $scope, $stateParams, $uibModalInstance, entity, registry, MedicalCase, Patient) {
+    function MedicalCaseDialogController ($filter, $timeout, $scope, $stateParams, $uibModalInstance, entity, registry, MedicalCase, Patient, Upload) {
         var vm = this;
 
         vm.medicalCase = entity;
         vm.registry = registry;
         vm.fields = [];
+        vm.values = [];
         vm.clear = clear;
         vm.save = save;
         vm.patients = Patient.query();
+
+        vm.files = [];
+        vm.errFiles = [];
 
         registry.fields.forEach(function(item, index) {
             vm.fields.push({
@@ -43,6 +47,29 @@
             } else {
                 MedicalCase.save(vm.medicalCase, onSaveSuccess, onSaveError);
             }
+
+            // TODO while uploading the files,
+            //      - pass the id of the medical case
+            //      - if we get errors while saving/updating don't proceed with the file uplaod
+
+            angular.forEach(vm.files, function (file) {
+                file.upload = Upload.upload({
+                    url: 'api/upload',
+                    data: {file: file}
+                });
+
+                file.upload.then(function (response) {
+                    $timeout(function () {
+                        file.result = response.data;
+                    });
+                }, function (response) {
+                    if (response.status > 0)
+                        $scope.errorMsg = response.status + ': ' + response.data;
+                }, function (evt) {
+                    file.progress = Math.min(100, parseInt(100.0 *
+                        evt.loaded / evt.total));
+                });
+            });
         }
 
         function onSaveSuccess (result) {
@@ -59,5 +86,16 @@
             //$filter('date')(field.value, dateFormat);
         }
 
+        function onSelectFiles(files, errFiles) {
+            vm.files = files;
+            vm.errFiles = errFiles;
+        }
+
+        $scope.uploadFiles = function (files, errFiles) {
+            vm.files = files;
+            vm.errFiles = errFiles;
+
+            // TODO update dialog to show the name of the files that will be uplaoded
+        }
     }
 })();
