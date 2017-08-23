@@ -81,6 +81,11 @@ public class Patient extends AbstractAuditingEntity implements Serializable {
         return this;
     }
 
+    public Patient id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public void setCnp(String cnp) {
         this.cnp = cnp;
     }

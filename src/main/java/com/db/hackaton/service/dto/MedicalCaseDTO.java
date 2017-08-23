@@ -1,15 +1,11 @@
 package com.db.hackaton.service.dto;
 
 import com.db.hackaton.domain.MedicalCase;
-import com.db.hackaton.domain.MedicalCaseField;
-import com.db.hackaton.domain.Patient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Size;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +57,7 @@ public class MedicalCaseDTO {
                 .orElse(null))
             .uuid(mcDTO.getUuid())
             .registryUuid(mcDTO.getRegistryUuid())
-            .status(mcDTO.getStatus());
+            .status(mcDTO.getStatus())
+            .name("");
     }
 }

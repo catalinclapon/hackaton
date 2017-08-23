@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -7,7 +7,7 @@
 
     MedicalCaseDialogController.$inject = ['$filter', '$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'registry', 'MedicalCase', 'Patient', 'Upload'];
 
-    function MedicalCaseDialogController ($filter, $timeout, $scope, $stateParams, $uibModalInstance, entity, registry, MedicalCase, Patient, Upload) {
+    function MedicalCaseDialogController($filter, $timeout, $scope, $stateParams, $uibModalInstance, entity, registry, MedicalCase, Patient, Upload) {
         var vm = this;
 
         vm.medicalCase = entity;
@@ -21,7 +21,7 @@
         vm.files = [];
         vm.errFiles = [];
 
-        registry.fields.forEach(function(item, index) {
+        registry.fields.forEach(function (item, index) {
             vm.fields.push({
                 id: item.field.id,
                 category: item.category,
@@ -32,20 +32,21 @@
             });
         });
 
-        $timeout(function (){
+        $timeout(function () {
             angular.element('.form-group:eq(1)>input').focus();
         });
 
-        function clear () {
+        function clear() {
             $uibModalInstance.dismiss('cancel');
         }
 
-        function save () {
+        function save() {
             vm.isSaving = true;
+            var medicalCase = recreateMedicalCase();
             if (vm.medicalCase.uuid !== null) {
                 MedicalCase.update(vm.medicalCase, onSaveSuccess, onSaveError);
             } else {
-                MedicalCase.save(vm.medicalCase, onSaveSuccess, onSaveError);
+                MedicalCase.save(medicalCase, onSaveSuccess, onSaveError);
             }
 
             // TODO while uploading the files,
@@ -67,18 +68,37 @@
                         $scope.errorMsg = response.status + ': ' + response.data;
                 }, function (evt) {
                     file.progress = Math.min(100, parseInt(100.0 *
-                        evt.loaded / evt.total));
+                    evt.loaded / evt.total));
                 });
             });
         }
 
-        function onSaveSuccess (result) {
+        function recreateMedicalCase() {
+            var result = {};
+            result.name = '';
+            result.registryUuid = vm.registry.uuid;
+
+            result.fields = [];
+
+            vm.fields.forEach(function (item, index) {
+                    result.fields.push({
+                        id: item.id,
+                        field: item,
+                        value: item.value
+                    });
+                }
+            );
+
+            return result;
+        }
+
+        function onSaveSuccess(result) {
             $scope.$emit('hackatonApp:medicalCaseUpdate', result);
             $uibModalInstance.close(result);
             vm.isSaving = false;
         }
 
-        function onSaveError () {
+        function onSaveError() {
             vm.isSaving = false;
         }
 

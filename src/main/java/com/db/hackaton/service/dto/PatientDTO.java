@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class PatientDTO {
+    private Long id;
+
     private Integer flag;
 
     private String cnp;
@@ -18,12 +20,14 @@ public class PatientDTO {
     public static PatientDTO build(Patient patient) {
         return builder()
             .cnp(patient.getCnp())
+            .id(patient.getId())
             .flag(1)
             .build();
     }
 
-    public static Patient build(PatientDTO patientDTO){
+    public static Patient build(PatientDTO patientDTO) {
         return new Patient()
-            .cnp(patientDTO.getCnp());
+            .cnp(patientDTO.getCnp())
+            .id(patientDTO.getId());
     }
 }

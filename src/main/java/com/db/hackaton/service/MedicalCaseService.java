@@ -2,22 +2,19 @@ package com.db.hackaton.service;
 
 import com.db.hackaton.domain.MedicalCase;
 import com.db.hackaton.domain.MedicalCaseField;
-import com.db.hackaton.repository.FieldRepository;
 import com.db.hackaton.repository.MedicalCaseFieldRepository;
 import com.db.hackaton.repository.MedicalCaseRepository;
+import com.db.hackaton.repository.PatientRepository;
 import com.db.hackaton.repository.search.MedicalCaseSearchRepository;
 import com.db.hackaton.service.dto.MedicalCaseDTO;
 import com.db.hackaton.service.dto.MedicalCaseFieldDTO;
+import com.db.hackaton.service.dto.PatientDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing MedicalCase.
@@ -32,13 +29,13 @@ public class MedicalCaseService {
     private final MedicalCaseFieldRepository medicalCaseFieldRepository;
 
     private final MedicalCaseSearchRepository medicalCaseSearchRepository;
+    private final PatientRepository patientRepository;
 
-    public MedicalCaseService(MedicalCaseRepository medicalCaseRepository,
-                              MedicalCaseFieldRepository medicalCaseFieldRepository,
-                              MedicalCaseSearchRepository medicalCaseSearchRepository) {
-        this.medicalCaseFieldRepository = medicalCaseFieldRepository;
+    public MedicalCaseService(MedicalCaseRepository medicalCaseRepository, MedicalCaseFieldRepository medicalCaseFieldRepository, MedicalCaseSearchRepository medicalCaseSearchRepository, PatientRepository patientRepository) {
         this.medicalCaseRepository = medicalCaseRepository;
+        this.medicalCaseFieldRepository = medicalCaseFieldRepository;
         this.medicalCaseSearchRepository = medicalCaseSearchRepository;
+        this.patientRepository = patientRepository;
     }
 
     /**
@@ -62,6 +59,8 @@ public class MedicalCaseService {
             if(medicalCaseDTO.getUuid() == null) {
             medicalCaseDTO.setUuid(UUID.randomUUID().toString());
         }
+
+        medicalCaseDTO.setPatient(PatientDTO.build(patientRepository.findByUserIsCurrentUser().get(0)));
 
         MedicalCase medicalCase = medicalCaseRepository.save(Optional.of(medicalCaseDTO)
             .map(MedicalCaseDTO::build)

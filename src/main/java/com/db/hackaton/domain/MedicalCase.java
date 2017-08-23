@@ -41,7 +41,7 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     @Column(name = "status")
     private String status;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @NotNull
     private Patient patient;
 
