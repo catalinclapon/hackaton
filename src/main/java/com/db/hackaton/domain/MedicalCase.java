@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,12 +30,12 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotNull
-    @Column(name = "uuid", nullable = false)
+    //@NotNull
+    @Column(name = "uuid", nullable = true)
     private String uuid;
 
-    @NotNull
-    @Column(name = "registry_uuid", nullable = false)
+    //@NotNull
+    @Column(name = "registry_uuid", nullable = true)
     private String registryUuid;
 
     @Column(name = "status")
@@ -46,7 +46,7 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     private Patient patient;
 
     @OneToMany(mappedBy = "medicalCase", targetEntity = MedicalCaseField.class, fetch = FetchType.EAGER)
-    private Set<MedicalCaseField> fields = new HashSet<>();
+    private Set<MedicalCaseField> fields = new TreeSet<>();
 
     public Long getId() {
         return id;

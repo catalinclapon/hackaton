@@ -35,10 +35,6 @@ id,jhi_order,category,registry_id,field_id
 34,10,"Patient administrative data",8,2
 35,30,"Patient administrative data",8,16
 36,0,"Patient administrative data",8,1
-37,0,"Patient Clinical Data",9,17
-38,10,"Patient administrative data",9,2
-39,0,"Patient administrative data",9,1
-40,10,"Patient Clinical Data",9,18
 41,10,"Administrative Data",10,19
 42,0,"Administrative Data",10,20
 43,20,"Administrative Data",10,21

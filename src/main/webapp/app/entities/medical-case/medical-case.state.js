@@ -98,7 +98,7 @@
                     size: 'lg',
                     resolve: {
                         entity: ['MedicalCase', function(MedicalCase) {
-                            return MedicalCase.get({id : $stateParams.id}).$promise;
+                            return MedicalCase.get({cnp : $stateParams.cnp}).$promise;
                         }]
                     }
                 }).result.then(function() {

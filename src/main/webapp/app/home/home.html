@@ -1,4 +1,6 @@
 <div ng-cloak>
+
+
     <div class="row">
         <div class="col-md-4">
             <span class="hipster img-responsive img-rounded"></span>
@@ -16,6 +18,9 @@
                 <div class="alert alert-warning" ng-switch-when="false" data-translate="global.messages.info.register" translate-compile>
                     You don't have an account yet? <a class="alert-link" ui-sref="register">Register a new account</a>
                 </div>
+                <div class="alert alert-warning" ng-switch-when="true" has-any-authority="ROLE_USER">
+                    <a href="#/settings" style="color: darkorange;"><b>You must set your CNP in order to become a patient</b></a>
+                </div>
             </div>
             <div>
                 <h1 data-translate="home.message">Who we are and what we do?</h1>
@@ -32,4 +37,35 @@
 
         </div>
     </div>
+    <!-- Facebook comments -->
+
+    <div class="fb-comments" data-href="http://localhost:8080/#/" data-width="150" data-numposts="3"></div>
+
+</div>
+</div>
+<!-- Facebook like button -->
+<div class="fb-like"  data-href="https://colegiulpacientilor.org/" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+
+<!-- Facebook root for like button -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ro_RO/sdk.js#xfbml=1&version=v2.10&appId=746878965507854";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- --------------------------------------------- -->
+
+<!-- Facebook root fot comments -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ro_RO/sdk.js#xfbml=1&version=v2.10&appId=1887959448131958";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
 </div>

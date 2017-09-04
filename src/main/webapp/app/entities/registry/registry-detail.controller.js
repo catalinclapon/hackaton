@@ -12,6 +12,7 @@
 
         vm.registry = entity;
         vm.previousState = previousState.name;
+        vm.selectedCnp = '';
 
         var unsubscribe = $rootScope.$on('hackatonApp:registryUpdate', function(event, result) {
             vm.registry = result;
@@ -55,18 +56,32 @@
             data: RegistryData.query({id: entity.id, uuid: entity.uuid, fields: fieldIds}),
             onRegisterApi: function( gridApi ){
                 $scope.gridApi = gridApi;
-
+                console.log('grid menu');
                 // interval of zero just to allow the directive to have initialized
                 //$interval( function() {
                 //    gridApi.core.addToGridMenu( gridApi.grid, [{ title: 'Dynamic item', order: 100}]);
                 //}, 0, 1);
 
-                gridApi.core.on.columnVisibilityChanged( $scope, function( changedColumn ){
-                    $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
+                gridApi.core.on.columnVisibilityChanged( $scope, function( changedColumn ) {
+                    $scope.columnChanged = {name: changedColumn.colDef.name, visible: changedColumn.colDef.visible};
+
                 });
             }
         };
 
+        $scope.gridOptions.onRegisterApi = function(gridApi) {
+            //set gridApi on scope
+            $scope.gridApi = gridApi;
+            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                var msg = 'row selected ' + row.isSelected;
+                if (row.isSelected) {
+                    vm.selectedCnp = row.entity.CNP;
+                } else {
+                    vm.selectedCnp = '';
+                }
+                console.log(msg);
+            });
+        }
 
 
         $scope.$on('$destroy', unsubscribe);

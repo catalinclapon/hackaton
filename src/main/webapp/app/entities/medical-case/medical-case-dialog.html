@@ -3,12 +3,18 @@
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title" id="myMedicalCaseLabel" data-translate="hackatonApp.medicalCase.home.createOrEditLabel">Create or edit a Medical Case</h4>
+                ng-click="vm.clear()">&times</button>
+        <h4 class="modal-title" id="myMedicalCaseLabel" data-translate="Create or edit a Medical Case">Create or edit a Medical Case</h4>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div ng-repeat="field in vm.fields">
+        <div class="form-group" has-any-authority="ROLE_DOCTOR, ROLE_ADMIN">
+            <label class="control-label" >CNP</label>
+            <input type="text" class="form-control" name="CNP"
+                   ng-model="vm.patientCnp" ng-minlength=13 ng-maxlength=13 maxlength="13" has-any-authority="ROLE_DOCTOR, ROLE_ADMIN"
+            />
+        </div>
+      <div ng-repeat="field in vm.fields">
             <div class="form-group" ng-if="field.type == 'TEXT' || field.type == 'NUMBER'">
                 <label class="control-label" for="field_{{$index}}">{{field.name}}</label>
                 <input type="text" class="form-control" name="field_{{$index}}" id="field_{{$index}}"

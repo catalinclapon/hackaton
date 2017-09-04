@@ -125,9 +125,18 @@ public class RegistryServiceImpl implements RegistryService{
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Registry : {}", id);
-        // TODO: Logical delete
-        //registryRepository.delete(id);
-        //registrySearchRepository.delete(id);
+        RegistryDTO auxRegDTO = RegistryDTO.build(registryRepository.findOne(id));
+
+
+        registryRepository.save(Optional.of(auxRegDTO)
+            .map(RegistryDTO::build)
+            .map(registry -> {
+                registry.setStatus("SUPERSEDED");
+                // remove registry
+                registrySearchRepository.delete(registry);
+                return registry;
+            })
+            .get());
     }
 
     /**

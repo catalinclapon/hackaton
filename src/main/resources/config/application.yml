@@ -53,8 +53,8 @@ spring:
 
         # see https://developers.facebook.com/docs/facebook-login/v2.2
         facebook:
-            client-id: xxx
-            client-secret: xxx
+            client-id: 1887959448131958
+            client-secret: c91a259e19efd8144a20cbaec96d0648
 
         # see https://apps.twitter.com/app/
         twitter:
@@ -110,6 +110,7 @@ jhipster:
         license-url:
     social:
         redirect-after-sign-in: "/#/"
+
     ribbon:
         display-on-active-profiles: dev
 

@@ -2,14 +2,21 @@
     <h2 data-translate="userManagement.home.title">Users</h2>
     <jhi-alert></jhi-alert>
     <div class="row">
-      <div class="col-md-4">
-          <button class="btn btn-primary" ui-sref="user-management.new">
-              <span class="glyphicon glyphicon-flash"></span> <span data-translate="userManagement.home.createLabel">Create a new User</span>
-          </button>
-      </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary" ui-sref="user-management.new">
+                <span class="glyphicon glyphicon-flash"></span> <span data-translate="userManagement.home.createLabel">Create a new User</span>
+            </button>
+        </div>
+        <div class="col-xs-8 no-padding-right">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group pull-right" >
+                    <input type="text" class="form-control" ng-model="vm.searchQuery"  id="search" onkeyup="searchUserGroup()" placeholder="Search...">
+                </div>
+            </form>
+        </div>
     </div>
     <div class="table-responsive">
-        <table class="jh-table table table-striped">
+        <table class="jh-table table table-striped" id="usersTable">
             <thead>
             <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
                 <th jh-sort-by="id"><span data-translate="global.field.id">ID</span><span class="glyphicon glyphicon-sort"></span></th>
@@ -72,4 +79,29 @@
         <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
         <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
+
+    <script>
+        function searchUserGroup() {
+            // Declare variables
+            var input, filter, table, tr, tdUsers, i, tdGroups;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("usersTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                tdUsers = tr[i].getElementsByTagName("td")[1];
+                tdGroups=tr[i].getElementsByTagName("td")[2];
+                if (tdUsers && tdGroups ) {
+                    if ( (tdUsers.innerHTML.toUpperCase().indexOf(filter) > -1) || (tdGroups.innerHTML.toUpperCase().indexOf(filter) > -1)) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
 </div>

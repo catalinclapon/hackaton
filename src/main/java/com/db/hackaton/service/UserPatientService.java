@@ -1,33 +1,20 @@
 package com.db.hackaton.service;
 
-import com.db.hackaton.config.Constants;
 import com.db.hackaton.domain.Authority;
 import com.db.hackaton.domain.Patient;
-import com.db.hackaton.domain.User;
-import com.db.hackaton.repository.AuthorityRepository;
 import com.db.hackaton.repository.PatientRepository;
-import com.db.hackaton.repository.PersistentTokenRepository;
 import com.db.hackaton.repository.UserRepository;
-import com.db.hackaton.repository.search.PatientSearchRepository;
 import com.db.hackaton.repository.search.UserSearchRepository;
 import com.db.hackaton.security.AuthoritiesConstants;
 import com.db.hackaton.security.SecurityUtils;
-import com.db.hackaton.service.dto.UserDTO;
-import com.db.hackaton.service.util.RandomUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
+import com.db.hackaton.service.util.RandomUtil;
+
 
 /**
  * Service class for managing users and patients.
@@ -44,20 +31,33 @@ public class UserPatientService {
 
     private final PatientRepository patientRepository;
 
-    public UserPatientService(UserRepository userRepository, UserSearchRepository userSearchRepository, PatientRepository patientRepository) {
+    private final MailService mailService;
+
+    public UserPatientService(UserRepository userRepository, UserSearchRepository userSearchRepository,
+                              PatientRepository patientRepository, MailService mailService) {
         this.userRepository = userRepository;
         this.userSearchRepository = userSearchRepository;
         this.patientRepository = patientRepository;
+        this.mailService = mailService;
     }
 
     public void updateUserAndPatient(String firstName, String lastName, String email, String langKey, boolean isPatient, String cnp) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
+            boolean isEmailChange = !user.getEmail().equals(email);
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);
             user.setLangKey(langKey);
             userSearchRepository.save(user);
 
+            if (!StringUtils.isBlank(cnp)) {
+                Set<Authority> authorities = new HashSet<>();
+                Authority authority = new Authority();
+                authority.setName(AuthoritiesConstants.PATIENT);
+                authorities.add(authority);
+                user.setAuthorities(authorities);
+            }
+            userSearchRepository.save(user);
             List<Patient> listPatients = patientRepository.findByUserIsCurrentUser();
             if (listPatients.size() > 0) {
                 Patient patient = listPatients.get(0);
@@ -72,6 +72,12 @@ public class UserPatientService {
                 patientRepository.save(Collections.singletonList(patient));
             }
 
+            if (isEmailChange) {
+
+                user.setActivationKey(RandomUtil.generateActivationKey());
+                mailService.sendActivationEmail(user);
+
+            }
             log.debug("Changed Information for User and Patient: {}", user);
         });
     }

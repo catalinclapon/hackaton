@@ -76,14 +76,14 @@ public class MedicalCaseResource {
     /**
      * GET  /medical-cases/:id : get the "id" medicalCase.
      *
-     * @param id the id of the medicalCase to retrieve
+     * @param cnp the id of the medicalCase to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the medicalCase, or with status 404 (Not Found)
      */
-    @GetMapping("/medical-cases/{id}")
+    @GetMapping("/medical-cases/{registryId}/{cnp}")
     @Timed
-    public ResponseEntity<MedicalCaseDTO> getMedicalCase(@PathVariable Long id) {
-        log.debug("REST request to get MedicalCase : {}", id);
-        MedicalCaseDTO medicalCase = medicalCaseService.findOne(id);
+    public ResponseEntity<MedicalCaseDTO> getMedicalCase(@PathVariable Long registryId, @PathVariable String cnp) {
+        log.debug("REST request to get MedicalCase : {}", cnp);
+        MedicalCaseDTO medicalCase = medicalCaseService.findByRegistryIdAndCNP(registryId, cnp);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(medicalCase));
     }
 
@@ -99,4 +99,21 @@ public class MedicalCaseResource {
         System.out.println(String.format("receive %s", file.getOriginalFilename()));
     }
 
+    /**
+     * POST  /edit-case : Update an existing medicalCase.
+     *
+     * @param medicalCase the medicalCase to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new medicalCase, or with status 400 (Bad Request) if the medicalCase has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/edit-case")
+    @Timed
+    public ResponseEntity<MedicalCaseDTO> updateMedicalCase(@Valid @RequestBody MedicalCaseDTO medicalCase) throws URISyntaxException {
+        log.debug("REST request to update MedicalCase : {}", medicalCase);
+
+        MedicalCaseDTO result = medicalCaseService.update(medicalCase);
+        return ResponseEntity.created(new URI("/api/medical-cases/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
 }

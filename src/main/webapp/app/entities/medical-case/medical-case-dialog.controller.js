@@ -17,9 +17,16 @@
         vm.clear = clear;
         vm.save = save;
         vm.patients = Patient.query();
+        vm.patientCnp = $stateParams.cnp;
 
         vm.files = [];
         vm.errFiles = [];
+
+        if (entity.fields !== undefined) {
+            entity.fields.forEach(function (item, index) {
+                vm.values['' + item.field.id] = item.value;
+            });
+        }
 
         registry.fields.forEach(function (item, index) {
             vm.fields.push({
@@ -28,7 +35,8 @@
                 type: item.field.type,
                 order: item.order,
                 name: item.field.name,
-                values: angular.isDefined(item.field.extValidation) && item.field.extValidation ? item.field.extValidation.split(',') : []
+                values: angular.isDefined(item.field.extValidation) && item.field.extValidation ? item.field.extValidation.split(',') : [],
+                value: vm.values['' + item.field.id]
             });
         });
 
@@ -77,6 +85,9 @@
             var result = {};
             result.name = '';
             result.registryUuid = vm.registry.uuid;
+
+            result.patient = {};
+            result.patient.cnp = vm.patientCnp;
 
             result.fields = [];
 

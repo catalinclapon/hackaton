@@ -1,13 +1,58 @@
+<head>
+    <style>
+        .adminBtn {
+            display: inline-block;
+            border-radius: 4px;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+            border: none;
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 14px;
+            padding: 7px;
+            width: 120px;
+            transition: all 0.5s;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .adminBtn span {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            transition: 0.5s;
+        }
+
+        .adminBtn span:after {
+            content: '\00bb';
+            position: absolute;
+            opacity: 0;
+            top: 0;
+            right: -20px;
+            transition: 0.5s;
+        }
+
+        .adminBtn:hover span {
+            padding-right: 25px;
+        }
+
+        .adminBtn:hover span:after {
+            opacity: 1;
+            right: 0;
+        }
+    </style>
+</head>
+
 <div>
 
     <div class="btn-toolbar pull-right row">
 
-        <button type="button" ui-sref="registry-detail.edit({id:vm.registry.id})" class="btn btn-primary">
+        <button type="button" ui-sref="registry-detail.edit({id:vm.registry.id})" class="btn btn-primary" has-any-authority="ROLE_ADMIN">
             <span class="glyphicon glyphicon-pencil"></span>
-            <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
+            <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit </span>
         </button>
 
-        <button class="btn btn-primary" ui-sref="registry-detail.bulk-upload">
+        <button class="btn btn-primary" ui-sref="registry-detail.bulk-upload" has-any-authority="ROLE_DOCTOR">
             <span class="glyphicon glyphicon-upload"></span>
             <span class="hidden-xs-down" data-translate="hackatonApp.registry.home.bulkUpload"> Bulk upload </span>
         </button>
@@ -25,22 +70,56 @@
         </a>
 
     </div>
-</div>
-
+    </div>
     <h2>{{vm.registry.name}}</h2>
-    <small><span data-translate="hackatonApp.registry.admin">Admins</span>: <a>User admin 1</a>, <a>User admin 2</a> </small><!-- TODO: add user link //-->
+    <a class="adminBtn" style="vertical-align:middle" href="/app/entities/registry/adminpage.html">
+        <span>Admin list </span></a>
+    <a class="adminBtn"  style="vertical-align:middle" href="/app/entities/registry/userpage.html">
+        <span>User list </span></a>
     <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <p>{{vm.registry.description}}</p>
 
-    <div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>
 
+<tbody>
+
+<div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+
+   <!-- <p>{{vm.registry.description}}</p> -->
+
+    <div class="btn-group flex-btn-group-container">
+        <button type="submit"
+                ui-sref="registry-detail.medical-case-edit({cnp:vm.selectedCnp})"
+                class="btn btn-primary btn-sm"
+                ng-disabled="vm.selectedCnp == ''">
+            <span class="glyphicon glyphicon-pencil"></span>
+            <span class="hidden-sm-down" data-translate="entity.action.edit"></span>
+        </button>
+    </div>
+</tbody>
+<!-- MEDICAL CASE BUTTONS -->
+<!--<div class="btn-group flex-btn-group-container" style="float: right; top: 10px;">
+    <button has-any-authority="ROLE_DOCTOR, ROLE_ADMIN" type="submit" ui-sref="registry-detail.medical-case-approve({id:medical-case.id})"
+              class="btn btn-info btn-sm" href="#/user-group-management/user-group-management/1">
+        <span class="glyphicon glyphicon-flag"></span>
+        <span class="hidden-sm-down ng-scope" data-translate="Approve">Approve</span>
+    </button>
+    <button has-any-authority="ROLE_DOCTOR, ROLE_PATIENT, ROLE_ADMIN" type="submit" ui-sref="registry-detail.medical-case-edit({id:medical-case.id})"
+              class="btn btn-primary btn-sm" href="#/user-group-management/1/edit">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down ng-scope" data-translate="entity.action.edit">Edit</span>
+    </button>
+    <button has-any-authority="ROLE_DOCTOR, ROLE_PATIENT, ROLE_ADMIN" type="submit" ui-sref="registry-detail.medical-case-delete({id:medical-case.id})"
+              class="btn btn-danger btn-sm" href="#/user-group-management/1/delete">
+        <span class="glyphicon glyphicon-remove-circle"></span>
+        <span class="hidden-sm-down ng-scope" data-translate="entity.action.delete">Delete</span>
+    </button>
+</div>
+ -->
     <hr>
 
     <button type="submit"
                 ui-sref="registry-detail.medical-case-new"
             class="btn btn-info">
-        <span class="glyphicon glyphicon-plus"></span>&nbsp;<span data-translate="entity.action.newMedicalCase"> New medical case</span>
+        <span class="glyphicon glyphicon-plus"></span>&nbsp;<span data-translate="New medical case"> New medical case</span>
     </button>
     <button type="submit"
             ui-sref="{{ vm.previousState }}"

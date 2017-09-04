@@ -166,8 +166,8 @@ public class RegistryResource {
 
     @GetMapping("/registries/{id}/data")
     @Timed
-    public ResponseEntity<List<Map<String, String>>> getData(@RequestParam String uuid, @Valid @RequestParam List<Long> fields) {
-        return new ResponseEntity<>(medicalCaseService.findAll(uuid, fields), HttpStatus.OK);
+    public ResponseEntity<List<Map<String, String>>> getData(@RequestParam String uuid, @Valid @RequestParam List<Long> fields) throws Exception {
+        return new ResponseEntity<>(medicalCaseService.findCases(uuid, fields), HttpStatus.OK);
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE}, value = "/registries/{id}/template")

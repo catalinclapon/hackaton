@@ -1,20 +1,21 @@
 package com.db.hackaton.service;
 
-import com.db.hackaton.domain.MedicalCase;
-import com.db.hackaton.domain.MedicalCaseField;
-import com.db.hackaton.repository.MedicalCaseFieldRepository;
-import com.db.hackaton.repository.MedicalCaseRepository;
-import com.db.hackaton.repository.PatientRepository;
+import com.db.hackaton.domain.*;
+import com.db.hackaton.repository.*;
 import com.db.hackaton.repository.search.MedicalCaseSearchRepository;
+import com.db.hackaton.security.AuthoritiesConstants;
 import com.db.hackaton.service.dto.MedicalCaseDTO;
 import com.db.hackaton.service.dto.MedicalCaseFieldDTO;
 import com.db.hackaton.service.dto.PatientDTO;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing MedicalCase.
@@ -30,12 +31,14 @@ public class MedicalCaseService {
 
     private final MedicalCaseSearchRepository medicalCaseSearchRepository;
     private final PatientRepository patientRepository;
+    private final UserGroupRepository userGroupRepository;
 
-    public MedicalCaseService(MedicalCaseRepository medicalCaseRepository, MedicalCaseFieldRepository medicalCaseFieldRepository, MedicalCaseSearchRepository medicalCaseSearchRepository, PatientRepository patientRepository) {
+    public MedicalCaseService(MedicalCaseRepository medicalCaseRepository, MedicalCaseFieldRepository medicalCaseFieldRepository, MedicalCaseSearchRepository medicalCaseSearchRepository, PatientRepository patientRepository, UserGroupRepository userGroupRepository) {
         this.medicalCaseRepository = medicalCaseRepository;
         this.medicalCaseFieldRepository = medicalCaseFieldRepository;
         this.medicalCaseSearchRepository = medicalCaseSearchRepository;
         this.patientRepository = patientRepository;
+        this.userGroupRepository = userGroupRepository;
     }
 
     /**
@@ -57,10 +60,13 @@ public class MedicalCaseService {
                 }).get());
         } else //noinspection Duplicates
             if(medicalCaseDTO.getUuid() == null) {
-            medicalCaseDTO.setUuid(UUID.randomUUID().toString());
-        }
+                medicalCaseDTO.setUuid(UUID.randomUUID().toString());
+            }
 
-        medicalCaseDTO.setPatient(PatientDTO.build(patientRepository.findByUserIsCurrentUser().get(0)));
+        if (StringUtils.isBlank(medicalCaseDTO.getPatient().getCnp()))
+            medicalCaseDTO.setPatient(PatientDTO.build(patientRepository.findByUserIsCurrentUser().get(0)));
+        else
+            medicalCaseDTO.setPatient(new PatientDTO().build(patientRepository.findFirstByCnp(medicalCaseDTO.getPatient().getCnp())));
 
         MedicalCase medicalCase = medicalCaseRepository.save(Optional.of(medicalCaseDTO)
             .map(MedicalCaseDTO::build)
@@ -101,32 +107,132 @@ public class MedicalCaseService {
      */
     public void delete(Long id) {
         log.debug("Request to delete MedicalCase : {}", id);
+        MedicalCaseDTO medicalCaseDTO = MedicalCaseDTO.build(medicalCaseRepository.findOne(id));
         medicalCaseRepository.delete(id);
         medicalCaseSearchRepository.delete(id);
+
+        medicalCaseRepository.save(Optional.of(medicalCaseDTO)
+            .map(MedicalCaseDTO::build)
+            .map(mc -> {
+                mc.setStatus("DELETED");
+                medicalCaseSearchRepository.delete(mc);
+                return mc;
+            }).get());
+
     }
 
-    @Transactional(readOnly = true)
-    public List<Map<String, String>> findAll(String registryUuid, List<Long> fields) {
-        List<Map<String, String>> result = new ArrayList<>();
-        List<MedicalCase> cases = medicalCaseRepository.findByStatusAndRegistryUuid("LATEST", registryUuid);
-        for (MedicalCase medicalCase : cases) {
-            Map<String, String> row = new HashMap<>();
-            row.put("CNP", medicalCase.getPatient() != null ? medicalCase.getPatient().getCnp() : "N/A");
-            row.put("Name", medicalCase.getName() != null ? medicalCase.getName() : "N/A");
-            Map<Long, MedicalCaseField> tempFields = new HashMap<>();
-            for (MedicalCaseField field : medicalCase.getFields()) {
-                if (field.getField() != null && fields.contains(field.getField().getId())) {
-                    row.put(field.getField().getName(), field.getValue());
-                }
+    private Map<String, String> createFields(MedicalCase medicalCase, List<MedicalCase> cases, List<Long> fields) {
+        Map<String, String> row = new HashMap<>();
+
+        row.put("CNP", medicalCase.getPatient() != null ? medicalCase.getPatient().getCnp() : "N/A");
+        row.put("Name", medicalCase.getName() != null ? medicalCase.getName() : "N/A");
+        for (MedicalCaseField field : medicalCase.getFields()) {
+            if (field.getField() != null && fields.contains(field.getField().getId())) {
+                row.put(field.getField().getName(), field.getValue());
             }
-            result.add(row);
+        }
+
+        return row;
+    }
+
+
+    private List<Map<String, String>> findAllCases(List<MedicalCase> cases, List<Long> fields) {
+        List<Map<String, String>> result = new ArrayList<>();
+
+        for (MedicalCase medicalCase : cases) {
+            result.add(createFields(medicalCase, cases, fields));
         }
 
         return result;
     }
 
+
+    private List<Map<String, String>> findCasesByPatient(List<MedicalCase> cases, List<Long> fields, Patient patient) {
+        List<Map<String, String>> result = new ArrayList<>();
+
+        for (MedicalCase medicalCase : cases) {
+            if (medicalCase.getPatient().getId() == patient.getId()) {
+                result.add(createFields(medicalCase, cases, fields));
+            }
+        }
+
+        return result;
+    }
+
+
+    private List<Map<String, String>> findCasesByGroup(List<MedicalCase> cases, List<Long> fields, List<UserGroup> currentUserGroupList) {
+        List<Map<String, String>> result = new ArrayList<>();
+
+        for(UserGroup userGroup : currentUserGroupList)
+            for (Patient patient : patientRepository.findAllByGroupId(userGroup.getGroup().getId()))
+                result.addAll(findCasesByPatient(cases, fields, patient));
+
+        return result;
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<Map<String, String>> findCases(String registryUuid, List<Long> fields) throws Exception {
+        List<MedicalCase> cases = medicalCaseRepository.findByStatusAndRegistryUuid("LATEST", registryUuid);
+
+        if (CollectionUtils.isEmpty(userGroupRepository.findByUserIsCurrentUser())) {
+            if (CollectionUtils.isEmpty(patientRepository.findByUserIsCurrentUser())) {
+                throw new Exception("No users logged in!");
+            }
+            else {
+                Patient patient = patientRepository.findByUserIsCurrentUser().get(0);
+                return findCasesByPatient(cases, fields, patient);
+            }
+        } else {
+            List<UserGroup> currentUserGroupList = userGroupRepository.findByUserIsCurrentUser();
+            Set<Authority> authorities = currentUserGroupList.get(0).getUser().getAuthorities();
+            Authority authority = (Authority) authorities.toArray()[0];
+            if (authority.getName().equals(AuthoritiesConstants.ADMIN)) {
+                return findAllCases(cases, fields);
+            }
+            else if (authority.getName().equals(AuthoritiesConstants.DOCTOR) || authority.getName().equals(AuthoritiesConstants.PROVIDER)) {
+                return findCasesByGroup(cases, fields, currentUserGroupList);
+            }
+            else if (authority.getName().equals(AuthoritiesConstants.PATIENT)) {
+                return findCasesByPatient(cases, fields, patientRepository.findByUserIsCurrentUser().get(0));
+            }
+            else {
+                return null;
+            }
+        }
+    }
+
     @Transactional(readOnly = true)
     public List<MedicalCase> findAllLatest(String registryUuid) {
         return medicalCaseRepository.findByStatusAndRegistryUuid("LATEST", registryUuid);
+    }
+    @Transactional
+    public MedicalCaseDTO update(MedicalCaseDTO medicalCaseDTO) {
+        //MedicalCase medicalCase = medicalCaseRepository.findByCNP(medicalCaseDTO.getFields().get(2).getValue());
+        String cnp = medicalCaseDTO.getFields().stream() // MedicalCaseFieldDTO stream
+                                                .filter(mcf -> mcf.getField().getName().equals("CNP"))
+                                                .map(mcf -> mcf.getValue())
+                                                .collect(Collectors.toList())
+                                                .get(0);
+        MedicalCase medicalCase = medicalCaseRepository.findByCNP(cnp);
+        Set<MedicalCaseField> managedFields = medicalCase.getFields();
+        List<MedicalCaseFieldDTO> dtoFields = medicalCaseDTO.getFields();
+        int i = 0;
+
+        for (MedicalCaseField medicalCaseField : managedFields) {
+            medicalCaseField.value(dtoFields.get(i).getValue())
+                            .medicalCase(medicalCase);
+            i++;
+        }
+        medicalCase.status("LATEST")
+                   .setPatient(patientRepository.findByUserIsCurrentUser().get(0));
+        //when transaction is completed, all the changes made to the managed medicalCase should be flushed
+        return MedicalCaseDTO.build(medicalCase);
+    }
+
+    public MedicalCaseDTO findByRegistryIdAndCNP(Long registryId, String cnp){
+        List<MedicalCase> medicalCaseList = medicalCaseRepository.findByRegistryIdAndCNP(registryId, cnp);
+
+        return MedicalCaseDTO.build(medicalCaseList.get(0));
     }
 }

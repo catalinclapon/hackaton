@@ -197,6 +197,58 @@
                     });
                 }]
             })
+            .state('registry-detail.medical-case-edit', {
+                parent: 'registry-detail',
+                url: '/medical-case/{cnp}/edit',
+                data: {
+                    authorities: ['ROLE_ADMIN','ROLE_DOCTOR','ROLE_PROVIDER','ROLE_PATIENT']
+                },
+                /*onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'app/entities/medical-case/medical-case-dialog.html',
+                        controller: 'MedicalCaseDialogController',
+                        controllerAs: 'vm',
+                        backdrop: 'static',
+                        size: 'lg',
+                        resolve: {
+                            entity: ['MedicalCase', function(MedicalCase) {
+                                //return MedicalCase.get({cnp : $stateParams.cnp}).$promise;
+                                return {
+                                    name: null,
+                                    uuid: null,
+                                    status: null,
+                                    id: null
+                                };
+                            }]
+                        }
+                    }).result.then(function() {
+                        $state.go('registry-detail', {id: $stateParams.id}, {reload: 'registry-detail'});
+                    }, function() {
+                        $state.go('registry-detail');
+                    });
+                }]*/
+                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'app/entities/medical-case/medical-case-dialog.html',
+                        controller: 'MedicalCaseDialogController',
+                        controllerAs: 'vm',
+                        backdrop: 'static',
+                        size: 'lg',
+                        resolve: {
+                            registry: ['Registry', function (Registry) {
+                                return Registry.get({id: $stateParams.id}).$promise;
+                            }],
+                            entity: ['MedicalCase', function(MedicalCase) {
+                                return MedicalCase.get({registryId: $stateParams.id, cnp : $stateParams.cnp}).$promise;
+                            }]
+                        }
+                    }).result.then(function () {
+                        $state.go('registry-detail', {id: $stateParams.id}, {reload: 'registry-detail'});
+                    }, function () {
+                        $state.go('registry-detail');
+                    });
+                }]
+            })
             .state('registry.delete', {
                 parent: 'registry',
                 url: '/{id}/delete',

@@ -35,7 +35,11 @@
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
+            <!-- TODO CHECK SYNTAX <column name="is_admin" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column> -->
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+
         </createTable>
 
         <loadData encoding="UTF-8"
@@ -43,5 +47,25 @@
                   separator=";"
                   tableName="user_group"/>
 
+    </changeSet>
+    <!--TODO: changeSet not functioning properly -->
+    <changeSet id="add is_admin column to user_group" author="CC">
+
+        <addColumn tableName="user_group">
+            <column name="is_admin" type="int" defaultValueNumeric="0">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <!--
+            2nd option:
+                <changeSet id="add is_admin column to user_group" author="CC">
+                    <sql>alter table user_group add is_admin int NOT NULL DEFAULT(0)</sql>
+                </changeSet>
+
+                <loadData encoding="UTF-8"
+                          file="config/liquibase/user_group.csv"
+                          separator=";"
+                          tableName="user_group"/>
+        -->
     </changeSet>
 </databaseChangeLog>

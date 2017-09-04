@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html ng-app="adminApp">
+    <head>
+        <meta charset="utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script>
+            var adminApp = angular.module('adminApp', []);
+            adminApp.controller('UserCtrl', ['$scope', '$http', function (scope, http){
+                http.get('/api/users').success(function(data) {
+                    scope.users = data;
+                });
+            }]);
+        </script>
+    </head>
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
+        .adminBtn {
+            display: inline-block;
+            border-radius: 4px;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+            border: none;
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 14px;
+            padding: 7px;
+            width: 120px;
+            transition: all 0.5s;
+            cursor: pointer;
+            margin: 5px;
+            left: 49.6%;
+        }
+
+        .adminBtn span {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            transition: 0.5s;
+        }
+
+
+
+
+        .adminBtn:hover span:after {
+            opacity: 1;
+            right: 0;
+        }
+        body {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            background-color: #ffffff;
+            font-family: "Roboto", helvetica, arial, sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            text-rendering: optimizeLegibility;
+        }
+
+        div.table-title {
+            display: block;
+            margin: auto;
+            max-width: 600px;
+            padding:5px;
+            width: 100%;
+        }
+
+        .table-title h3 {
+            color: #fafafa;
+            padding-top: 30px;
+            font-size: 30px;
+            font-weight: 400;
+            font-style:normal;
+            font-family: "Roboto", helvetica, arial, sans-serif;
+            text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+            text-transform:uppercase;
+        }
+
+
+        /*** Table Styles **/
+
+        .table-fill {
+            background: white;
+            border-radius:3px;
+            border-collapse: collapse;
+            height: 320px;
+            margin: auto;
+            max-width: 600px;
+            padding:5px;
+            width: 100%;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            animation: float 5s infinite;
+        }
+
+        th {
+            color:#ffffff;;
+            background:#a4bee8;
+            border-bottom:4px solid #9ea7af;
+            border-right: 1px solid #343a45;
+            font-size:23px;
+            font-weight: 100;
+            padding:24px;
+            text-align:center;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            vertical-align:middle;
+        }
+
+        th:first-child {
+            border-top-left-radius:3px;
+        }
+
+        th:last-child {
+            border-top-right-radius:3px;
+            border-right:none;
+        }
+
+        tr {
+            border-top: 1px solid #C1C3D1;
+            border-bottom-: 1px solid #C1C3D1;
+            color:#666B85;
+            font-size:16px;
+            font-weight:normal;
+            text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+        }
+
+        tr:hover td {
+            background:#d6d4d4;
+            color:#FFFFFF;
+            border-top: 1px solid #b5d0fc;
+            border-bottom: 1px solid #b5d0fc;
+        }
+
+        tr:first-child {
+            border-top:none;
+        }
+
+        tr:last-child {
+            border-bottom:none;
+        }
+
+        tr:nth-child(odd) td {
+            background:#EBEBEB;
+        }
+
+        tr:nth-child(odd):hover td {
+            background:#d6d4d4;
+        }
+
+        tr:last-child td:first-child {
+            border-bottom-left-radius:3px;
+        }
+
+        tr:last-child td:last-child {
+            border-bottom-right-radius:3px;
+        }
+
+        td {
+            background:#FFFFFF;
+            padding:20px;
+            text-align:center;
+            vertical-align:middle;
+            font-weight:300;
+            font-size:18px;
+            text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #C1C3D1;
+        }
+
+        td:last-child {
+            border-right: 0px;
+        }
+
+        th.text-left {
+            text-align: left;
+        }
+
+        th.text-center {
+            text-align: center;
+        }
+
+        th.text-right {
+            text-align: right;
+        }
+
+        td.text-left {
+            text-align: left;
+        }
+
+        td.text-center {
+            text-align: center;
+        }
+
+        td.text-right {
+            text-align: right;
+        }
+
+        .search {
+            width: 100%;
+            position: relative
+        }
+
+        .searchTerm {
+            float: left;
+            width: 100%;
+            border: 3px solid #b5d0fc;
+            padding: 5px;
+            height: 20px;
+            border-radius: 5px;
+            outline: none;
+            color: #9DBFAF;
+        }
+
+        .searchTerm:focus{
+            color: #666B85;
+        }
+
+        /*Resize the wrap to see the search bar change!*/
+        .wrap{
+            top: -10px;
+            width: 760px;
+            position: absolute;
+            left: 49.6%;
+            transform: translate(-50%, -50%);
+        }
+
+
+    </style>
+    <body ng-controller="UserCtrl">
+    <button type="submit"
+
+            class="adminBtn" style="left:49.6%;">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> <a href="http://127.0.0.1:8080" style="color: white; text-decoration: none; left:49.6%; align: center">Back</a></span>
+    </button>
+        <div class="wrap">
+            <div class="search">
+                <input ng-model="query" type="text" class="searchTerm" placeholder="Enter admin name">
+            </div>
+        </div>
+        <table align="center">
+            <tr>
+                <th>User</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Photo</th
+            </tr>
+            <tr ng-repeat="user in users | filter: { login: 'admin' } | filter: query">
+                <td>{{user.login}}</td>
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+                <td> <a style="text-decoration: none; color: dodgerblue" href="mailto:{{user.email}}">{{user.email}}</a></td>
+                <td> <img src ="{{user.imageUrl}}" height="50" width="50"> </td>
+            </tr>
+        </table>
+
+    </body>
+</html>
