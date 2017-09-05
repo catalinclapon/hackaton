@@ -13,9 +13,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A Registry.
@@ -48,7 +46,7 @@ public class Registry extends AbstractAuditingEntity implements Serializable {
     private String status;
 
     @OneToMany(mappedBy = "registry", targetEntity = RegistryField.class)
-    private Set<RegistryField> fields = new HashSet<>();
+    private List<RegistryField> fields = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -115,16 +113,16 @@ public class Registry extends AbstractAuditingEntity implements Serializable {
         this.status = status;
     }
 
-    public Set<RegistryField> getFields() {
+    public List<RegistryField> getFields() {
         return fields;
     }
 
-    public Registry fields(Set<RegistryField> fields) {
+    public Registry fields(List<RegistryField> fields) {
         this.fields = fields;
         return this;
     }
 
-    public void setFields(Set<RegistryField> fields) {
+    public void setFields(List<RegistryField> fields) {
         this.fields = fields;
     }
 

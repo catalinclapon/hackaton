@@ -6,8 +6,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +31,7 @@ public class RegistryDTO {
 
     private String status;
 
-    private Set<RegistryFieldDTO> fields = new HashSet<>();
+    private List<RegistryFieldDTO> fields = new ArrayList<>();
 
     public static Registry build(RegistryDTO registry) {
         return new Registry()
@@ -43,7 +42,7 @@ public class RegistryDTO {
             .uuid(registry.getUuid())
             .fields(registry.getFields().stream()
                 .map(RegistryFieldDTO::build)
-                .collect(Collectors.toSet())
+                .collect(Collectors.toList())
             );
     }
 
@@ -56,7 +55,7 @@ public class RegistryDTO {
             .id(registry.getId())
             .fields(registry.getFields().stream()
                 .map(RegistryFieldDTO::build)
-                .collect(Collectors.toSet()))
+                .collect(Collectors.toList()))
             .build();
     }
 }
