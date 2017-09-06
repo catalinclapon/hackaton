@@ -16,7 +16,7 @@
         vm.values = [];
         vm.clear = clear;
         vm.save = save;
-        vm.patients = Patient.query();
+        //vm.patients = Patient.query();
         vm.patientCnp = $stateParams.cnp;
 
         vm.files = [];
@@ -86,8 +86,7 @@
             result.name = '';
             result.registryUuid = vm.registry.uuid;
 
-            result.patient = {};
-            result.patient.cnp = vm.patientCnp;
+            result.patientCnp = vm.patientCnp;
 
             result.fields = [];
 

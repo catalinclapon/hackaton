@@ -22,7 +22,7 @@ public class MedicalCaseDTO {
 
     private String registryUuid;
 
-    private PatientDTO patient;
+    private String patientCnp;
 
     private String status;
 
@@ -38,9 +38,7 @@ public class MedicalCaseDTO {
             .uuid(mc.getUuid())
             .status(mc.getStatus())
             .registryUuid(mc.getRegistryUuid())
-            .patient(Optional.ofNullable(mc.getPatient())
-                .map(PatientDTO::build)
-                .orElse(null))
+            .patientCnp(mc.getPatientCnp())
             .build();
     }
 
@@ -52,9 +50,7 @@ public class MedicalCaseDTO {
                 .stream()
                 .map(MedicalCaseFieldDTO::build)
                 .collect(Collectors.toSet()))
-            .patient(Optional.ofNullable(mcDTO.getPatient())
-                .map(PatientDTO::build)
-                .orElse(null))
+            .patientCnp(mcDTO.getPatientCnp())
             .uuid(mcDTO.getUuid())
             .registryUuid(mcDTO.getRegistryUuid())
             .status(mcDTO.getStatus())
