@@ -1,8 +1,6 @@
 package com.db.hackaton.repository;
 
 import com.db.hackaton.domain.MedicalCase;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -25,4 +23,10 @@ public interface MedicalCaseRepository extends JpaRepository<MedicalCase,Long> {
     List<MedicalCase> findByRegistryIdAndCNP(@Param("registryId") Long registryId, @Param("cnp") String cnp);
 
     List<MedicalCase> findByStatusAndRegistryUuid(String status, String registryUuid);
+
+    @Query("select medicalCase from MedicalCase medicalCase JOIN Registry r ON r.uuid = medicalCase.registryUuid " +
+        "WHERE medicalCase.lastModifiedDate = " +
+        "(select MAX(mc.lastModifiedDate) from MedicalCase mc WHERE medicalCase.patientCnp = mc.patientCnp)" +
+        "AND medicalCase.registryUuid = :registryUuid")
+    List<MedicalCase> findByLatestModifiedDateAndRegistryUuid(@Param("registryUuid") String registryUuid);
 }
