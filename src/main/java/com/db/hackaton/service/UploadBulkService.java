@@ -72,7 +72,7 @@ public class UploadBulkService {
                 .cnp(cnp));
         log.info("Got patient {}", patient);
 
-        medicalCase.setPatient(PatientDTO.build(patient));
+        medicalCase.setPatientCnp(patient.getCnp());
         medicalCase.setRegistryUuid(registerUuid);
         medicalCase.setFields(new ArrayList<>());
 

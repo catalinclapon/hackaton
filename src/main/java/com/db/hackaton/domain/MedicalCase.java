@@ -41,9 +41,9 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     @Column(name = "status")
     private String status;
 
-    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @NotNull
-    private Patient patient;
+    @Column(name = "patient_cnp")
+    private String patientCnp;
 
     @OneToMany(mappedBy = "medicalCase", targetEntity = MedicalCaseField.class, fetch = FetchType.EAGER)
     private Set<MedicalCaseField> fields = new TreeSet<>();
@@ -100,17 +100,17 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
         this.status = status;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public String getPatientCnp() {
+        return patientCnp;
     }
 
-    public MedicalCase patient(Patient patient) {
-        this.patient = patient;
+    public MedicalCase patientCnp(String patientCnp) {
+        this.patientCnp = patientCnp;
         return this;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPatientCnp(String patientCnp) {
+        this.patientCnp = patientCnp;
     }
 
     public Set<MedicalCaseField> getFields(){

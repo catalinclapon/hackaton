@@ -63,10 +63,12 @@ public class MedicalCaseService {
                 medicalCaseDTO.setUuid(UUID.randomUUID().toString());
             }
 
-        if (StringUtils.isBlank(medicalCaseDTO.getPatient().getCnp()))
-            medicalCaseDTO.setPatient(PatientDTO.build(patientRepository.findByUserIsCurrentUser().get(0)));
-        else
-            medicalCaseDTO.setPatient(new PatientDTO().build(patientRepository.findFirstByCnp(medicalCaseDTO.getPatient().getCnp())));
+        if(CollectionUtils.isNotEmpty(patientRepository.findByUserIsCurrentUser())) {
+            medicalCaseDTO.setPatientCnp(patientRepository.findByUserIsCurrentUser().get(0).getCnp());
+        }
+        else if(StringUtils.isBlank(medicalCaseDTO.getPatientCnp())) {
+            // throw new Exception("no cnp");  // already verified in frontend
+        }
 
         MedicalCase medicalCase = medicalCaseRepository.save(Optional.of(medicalCaseDTO)
             .map(MedicalCaseDTO::build)
@@ -124,7 +126,7 @@ public class MedicalCaseService {
     private Map<String, String> createFields(MedicalCase medicalCase, List<MedicalCase> cases, List<Long> fields) {
         Map<String, String> row = new HashMap<>();
 
-        row.put("CNP", medicalCase.getPatient() != null ? medicalCase.getPatient().getCnp() : "N/A");
+        row.put("CNP", medicalCase.getPatientCnp() != null ? medicalCase.getPatientCnp() : "N/A");
         row.put("Name", medicalCase.getName() != null ? medicalCase.getName() : "N/A");
         for (MedicalCaseField field : medicalCase.getFields()) {
             if (field.getField() != null && fields.contains(field.getField().getId())) {
@@ -151,7 +153,7 @@ public class MedicalCaseService {
         List<Map<String, String>> result = new ArrayList<>();
 
         for (MedicalCase medicalCase : cases) {
-            if (medicalCase.getPatient().getId() == patient.getId()) {
+            if (medicalCase.getPatientCnp().equals(patient.getCnp())) {
                 result.add(createFields(medicalCase, cases, fields));
             }
         }
@@ -163,9 +165,11 @@ public class MedicalCaseService {
     private List<Map<String, String>> findCasesByGroup(List<MedicalCase> cases, List<Long> fields, List<UserGroup> currentUserGroupList) {
         List<Map<String, String>> result = new ArrayList<>();
 
-        for(UserGroup userGroup : currentUserGroupList)
-            for (Patient patient : patientRepository.findAllByGroupId(userGroup.getGroup().getId()))
+        for(UserGroup userGroup : currentUserGroupList) {
+            for (Patient patient : patientRepository.findAllByGroupId(userGroup.getGroup().getId())) {
                 result.addAll(findCasesByPatient(cases, fields, patient));
+            }
+        }
 
         return result;
     }
@@ -178,8 +182,7 @@ public class MedicalCaseService {
         if (CollectionUtils.isEmpty(userGroupRepository.findByUserIsCurrentUser())) {
             if (CollectionUtils.isEmpty(patientRepository.findByUserIsCurrentUser())) {
                 throw new Exception("No users logged in!");
-            }
-            else {
+            } else {
                 Patient patient = patientRepository.findByUserIsCurrentUser().get(0);
                 return findCasesByPatient(cases, fields, patient);
             }
@@ -189,15 +192,10 @@ public class MedicalCaseService {
             Authority authority = (Authority) authorities.toArray()[0];
             if (authority.getName().equals(AuthoritiesConstants.ADMIN)) {
                 return findAllCases(cases, fields);
-            }
-            else if (authority.getName().equals(AuthoritiesConstants.DOCTOR) || authority.getName().equals(AuthoritiesConstants.PROVIDER)) {
+            } else if (authority.getName().equals(AuthoritiesConstants.DOCTOR) || authority.getName().equals(AuthoritiesConstants.PROVIDER)) {
                 return findCasesByGroup(cases, fields, currentUserGroupList);
-            }
-            else if (authority.getName().equals(AuthoritiesConstants.PATIENT)) {
-                return findCasesByPatient(cases, fields, patientRepository.findByUserIsCurrentUser().get(0));
-            }
-            else {
-                return null;
+            } else {
+                throw new Exception("Wrong authority");
             }
         }
     }
@@ -206,6 +204,8 @@ public class MedicalCaseService {
     public List<MedicalCase> findAllLatest(String registryUuid) {
         return medicalCaseRepository.findByStatusAndRegistryUuid("LATEST", registryUuid);
     }
+
+
     @Transactional
     public MedicalCaseDTO update(MedicalCaseDTO medicalCaseDTO) {
         //MedicalCase medicalCase = medicalCaseRepository.findByCNP(medicalCaseDTO.getFields().get(2).getValue());
@@ -225,7 +225,7 @@ public class MedicalCaseService {
             i++;
         }
         medicalCase.status("LATEST")
-                   .setPatient(patientRepository.findByUserIsCurrentUser().get(0));
+                   .setPatientCnp(patientRepository.findByUserIsCurrentUser().get(0).getCnp());
         //when transaction is completed, all the changes made to the managed medicalCase should be flushed
         return MedicalCaseDTO.build(medicalCase);
     }
