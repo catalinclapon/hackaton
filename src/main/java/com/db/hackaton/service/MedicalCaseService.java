@@ -178,14 +178,13 @@ public class MedicalCaseService {
 
     @Transactional(readOnly = true)
     public List<Map<String, String>> findCases(String registryUuid, List<Long> fields) throws Exception {
-        List<MedicalCase> cases = medicalCaseRepository.findByStatusAndRegistryUuid("LATEST", registryUuid);
+        List<MedicalCase> cases = medicalCaseRepository.findByLatestModifiedDateAndRegistryUuid(registryUuid);
 
         if (CollectionUtils.isEmpty(userGroupRepository.findByUserIsCurrentUser())) {
             if (CollectionUtils.isEmpty(patientRepository.findByUserIsCurrentUser())) {
                 throw new Exception("No users logged in!");
             } else {
-                Patient patient = patientRepository.findByUserIsCurrentUser().get(0);
-                return findCasesByPatient(cases, fields, patient);
+                return findCasesByPatient(cases, fields, patientRepository.findByUserIsCurrentUser().get(0));
             }
         } else {
             List<UserGroup> currentUserGroupList = userGroupRepository.findByUserIsCurrentUser();
