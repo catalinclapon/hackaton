@@ -1,20 +1,21 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('hackatonApp')
         .controller('RegistryDetailController', RegistryDetailController);
 
-    RegistryDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Registry', 'RegistryData', '$translate', '$interval'];
+    RegistryDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Registry', 'RegistryData', '$translate', '$interval', 'AlertService'];
 
-    function RegistryDetailController($scope, $rootScope, $stateParams, previousState, entity, Registry, RegistryData, $translate, $interval) {
+    function RegistryDetailController($scope, $rootScope, $stateParams, previousState, entity, Registry, RegistryData, $translate, $interval, AlertService) {
         var vm = this, fields = entity.fields, fieldIds = [];
 
         vm.registry = entity;
+        vm.getSpecificMedicalCases = [];
         vm.previousState = previousState.name;
         vm.selectedCnp = '';
 
-        var unsubscribe = $rootScope.$on('hackatonApp:registryUpdate', function(event, result) {
+        var unsubscribe = $rootScope.$on('hackatonApp:registryUpdate', function (event, result) {
             vm.registry = result;
         });
 
@@ -24,13 +25,37 @@
             name: 'Name'
         }];
 
+        getMedicalCases();
 
-        if(angular.isDefined(entity.fields)){
+        function getMedicalCases() {
+            RegistryData.query({
+                                id: entity.id,
+                                uuid: entity.uuid,
+                                fields: fieldIds
+                    }, onSuccess, onError);
 
-            fields.sort(function(a,b) {return (a.category > b.category) ? 1 : ((b.category > a.category) ? -1 :
-                ( (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0) ) );
+            function onSuccess(data, headers) {
+                vm.getSpecificMedicalCases = data;
+
+                /*vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItems = headers('X-Total-Count');
+                vm.queryCount = vm.totalItems;
+                vm.registries = data;
+                vm.page = pagingParams.page;*/
+            }
+
+            function onError(error) {
+                AlertService.error(error.data.message);
+            }
+        }
+
+        if (angular.isDefined(entity.fields)) {
+
+            fields.sort(function (a, b) {
+                return (a.category > b.category) ? 1 : ((b.category > a.category) ? -1 :
+                    ( (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0) ) );
             });
-            fields.forEach(function(item, index) {
+            fields.forEach(function (item, index) {
                 columnDefs.push({
                     name: item.field.name
                 });
@@ -54,7 +79,7 @@
             //    }
             //],
             data: RegistryData.query({id: entity.id, uuid: entity.uuid, fields: fieldIds}),
-            onRegisterApi: function( gridApi ){
+            onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
                 console.log('grid menu');
                 // interval of zero just to allow the directive to have initialized
@@ -62,14 +87,14 @@
                 //    gridApi.core.addToGridMenu( gridApi.grid, [{ title: 'Dynamic item', order: 100}]);
                 //}, 0, 1);
 
-                gridApi.core.on.columnVisibilityChanged( $scope, function( changedColumn ) {
+                gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
                     $scope.columnChanged = {name: changedColumn.colDef.name, visible: changedColumn.colDef.visible};
 
                 });
             }
         };
 
-        $scope.gridOptions.onRegisterApi = function(gridApi) {
+        $scope.gridOptions.onRegisterApi = function (gridApi) {
             //set gridApi on scope
             $scope.gridApi = gridApi;
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {

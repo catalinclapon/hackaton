@@ -127,7 +127,8 @@ public class MedicalCaseService {
         Map<String, String> row = new HashMap<>();
 
         row.put("CNP", medicalCase.getPatientCnp() != null ? medicalCase.getPatientCnp() : "N/A");
-        row.put("Name", medicalCase.getName() != null ? medicalCase.getName() : "N/A");
+//        row.put("Name", patientRepository.findFirstByCnp(medicalCase.getPatientCnp()).getLastName());
+        row.put("Name", "TEST DATA");
         for (MedicalCaseField field : medicalCase.getFields()) {
             if (field.getField() != null && fields.contains(field.getField().getId())) {
                 row.put(field.getField().getName(), field.getValue());
@@ -194,7 +195,11 @@ public class MedicalCaseService {
                 return findAllCases(cases, fields);
             } else if (authority.getName().equals(AuthoritiesConstants.DOCTOR) || authority.getName().equals(AuthoritiesConstants.PROVIDER)) {
                 return findCasesByGroup(cases, fields, currentUserGroupList);
-            } else {
+            } else if (authority.getName().equals(AuthoritiesConstants.PATIENT)){
+                Patient patient = patientRepository.findByUserIsCurrentUser().get(0);
+                return findCasesByPatient(cases, fields, patient);
+            }
+            else {
                 throw new Exception("Wrong authority");
             }
         }
