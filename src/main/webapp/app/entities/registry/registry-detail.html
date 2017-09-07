@@ -78,23 +78,92 @@
         <span>User list </span></a>
     <hr>
 
+<div class="table-responsive">
+    <table class="jh-table table table-striped" id="registryTable">
+        <thead>
+        <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+            <th jh-sort-by="name"><span>CNP</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="desc"><span>Descriere</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="status" has-any-authority="ROLE_ADMIN"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
+        </tr>
+        </thead>
 
-<tbody>
+        <tbody>
+        <tr ng-repeat="medicalCase in vm.getSpecificMedicalCases">
+            <td>{{medicalCase.CNP}}</a></td>
+            <td>{{medicalCase.Name}}</td>
+            <td>{{medicalCase.status}}</td>
+            <td class="text-right">
+                <div class="btn-group flex-btn-group-container">
 
-<div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+                    <button type="submit"
+                            ui-sref="registry-detail.medical-case-view({id:medical-case.id})"
+                            class="btn btn-info btn-sm">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                        <span class="hidden-sm-down"
+                              data-translate="entity.action.view"></span>
+                    </button>
 
-   <!-- <p>{{vm.registry.description}}</p> -->
+                    <button has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                            type="submit"
+                            ui-sref="registry-detail.medical-case-approve({id:medical-case.id})"
+                            class="btn btn-success btn-sm">
+                            <!--href="#/user-group-management/user-group-management/1">-->
+                        <span class="glyphicon glyphicon-flag"></span>
+                        <span class="hidden-sm-down ng-scope" data-translate="Approve">Approve</span>
+                    </button>
 
-    <div class="btn-group flex-btn-group-container">
-        <button type="submit"
-                ui-sref="registry-detail.medical-case-edit({cnp:vm.selectedCnp})"
-                class="btn btn-primary btn-sm"
-                ng-disabled="vm.selectedCnp == ''">
-            <span class="glyphicon glyphicon-pencil"></span>
-            <span class="hidden-sm-down" data-translate="entity.action.edit"></span>
-        </button>
-    </div>
+                    <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                            type="submit"
+                            ui-sref="registry-detail.medical-case-edit({id:medical-case.id})"
+                            class="btn btn-warning btn-sm">
+                        <!--href="#/user-group-management/user-group-management/1">-->
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        <span class="hidden-sm-down ng-scope" data-translate="Update">Update</span>
+                    </button>
+
+                    <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                            type="submit"
+                            ui-sref="registry-detail.medical-case-archive({id:medical-case.id})"
+                            class="btn btn-success btn-sm">
+                        <!--href="#/user-group-management/user-group-management/1">-->
+                        <span class="glyphicon glyphicon-paperclip"></span>
+                        <span class="hidden-sm-down ng-scope" data-translate="Archive">Archive</span>
+                    </button>
+
+                    <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                            type="submit"
+                            ui-sref="registry-detail.medical-case-export({id:medical-case.id})"
+                            class="btn btn-info btn-sm">
+                        <!--href="#/user-group-management/user-group-management/1">-->
+                        <span class="glyphicon glyphicon-floppy-disk"></span>
+                        <span class="hidden-sm-down ng-scope" data-translate="Export">Export</span>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="text-center">
+    <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+    <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+</div>
+
 </tbody>
+
+<!--<div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>-->
+
+    <!--<div class="btn-group flex-btn-group-container">-->
+        <!--<button type="submit"-->
+                <!--ui-sref="registry-detail.medical-case-edit({cnp:vm.selectedCnp})"-->
+                <!--class="btn btn-primary btn-sm"-->
+                <!--ng-disabled="vm.selectedCnp == ''">-->
+            <!--<span class="glyphicon glyphicon-pencil"></span>-->
+            <!--<span class="hidden-sm-down" data-translate="entity.action.edit"></span>-->
+        <!--</button>-->
+    <!--</div>-->
+<!--</tbody>-->
 <!-- MEDICAL CASE BUTTONS -->
 <!--<div class="btn-group flex-btn-group-container" style="float: right; top: 10px;">
     <button has-any-authority="ROLE_DOCTOR, ROLE_ADMIN" type="submit" ui-sref="registry-detail.medical-case-approve({id:medical-case.id})"
