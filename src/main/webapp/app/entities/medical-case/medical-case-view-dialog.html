@@ -1,0 +1,63 @@
+
+<form name="viewForm" role="form" novalidate>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times</button>
+        <h4 class="modal-title" id="myMedicalCaseLabel" data-translate="View a Medical Case">View a Medical Case</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" has-any-authority="ROLE_DOCTOR, ROLE_ADMIN">
+            <label class="control-label" >CNP</label>
+            <input type="text" class="form-control" name="CNP" ng-disabled=true
+                   ng-model="vm.patientCnp" ng-minlength=13 ng-maxlength=13 maxlength="13" has-any-authority="ROLE_DOCTOR, ROLE_ADMIN"
+            />
+        </div>
+        <div ng-repeat="field in vm.fields">
+            <div class="form-group" ng-if="field.type == 'TEXT' || field.type == 'NUMBER'">
+                <label class="control-label" for="field_{{$index}}">{{field.name}}</label>
+                <input type="text" class="form-control" name="field_{{$index}}" id="field_{{$index}}"
+                       ng-model="vm.fields[$index].value" ng-disabled=true
+                />
+            </div>
+            <div class="form-group" ng-if="field.type == 'DROPDOWN'">
+                <label class="control-label" for="field_{{$index}}">{{field.name}}</label>
+                <select class="form-control" name="field_{{$index}}" id="field_{{$index}}"
+                        ng-model="vm.fields[$index].value" disabled>
+                    <option ng-repeat="option in field.values" value="{{option}}">{{option}}</option>
+                </select>
+            </div>
+            <div class="form-group" ng-if="field.type == 'DATE'">
+                <label class="control-label" for="field_{{$index}}">{{field.name}}</label>
+                <input type="date" class="input-sm form-control" name="start"
+                       ng-model="vm.fields[$index].value" ng-disabled=true />
+            </div>
+        </div>
+
+        <!--Attachments-->
+        <div class="form-group">
+            <!--<button ngf-select="uploadFiles($files, $invalidFiles)" multiple ngf-max-size="2MB">-->
+                <!--Select attachments-->
+            <!--</button>-->
+            <br><br>
+            Files:
+            <ul>
+                <li ng-repeat="f in files">{{f.name}} {{f.$errorParam}}
+                    <span class="progress" ng-show="f.progress >= 0">
+                    <div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div>
+                </span>
+                </li>
+                <li ng-repeat="f in errFiles">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                </li>
+            </ul>
+            {{errorMsg}}
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</form>

@@ -235,7 +235,7 @@ public class MedicalCaseService {
     }
 
     public MedicalCaseDTO findByRegistryIdAndCNP(Long registryId, String cnp){
-        List<MedicalCase> medicalCaseList = medicalCaseRepository.findByRegistryIdAndCNP(registryId, cnp);
+        List<MedicalCase> medicalCaseList = medicalCaseRepository.findByLatestModifiedDateAndRegistryIdAndCnp(registryId, cnp);
 
         return MedicalCaseDTO.build(medicalCaseList.get(0));
     }
