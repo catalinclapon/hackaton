@@ -18,7 +18,7 @@
         vm.save = save;
         //vm.patients = Patient.query();
         vm.patientCnp = $stateParams.cnp;
-        vm.name = $stateParams.name;
+        vm.name = vm.medicalCase.name;
 
         vm.files = [];
         vm.errFiles = [];
