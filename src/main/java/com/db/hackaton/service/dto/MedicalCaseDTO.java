@@ -24,6 +24,8 @@ public class MedicalCaseDTO {
 
     private String patientCnp;
 
+    private String name;
+
     private String status;
 
     private List<MedicalCaseFieldDTO> fields;
@@ -39,6 +41,7 @@ public class MedicalCaseDTO {
             .status(mc.getStatus())
             .registryUuid(mc.getRegistryUuid())
             .patientCnp(mc.getPatientCnp())
+            .name(mc.getName())
             .build();
     }
 
@@ -54,6 +57,6 @@ public class MedicalCaseDTO {
             .uuid(mcDTO.getUuid())
             .registryUuid(mcDTO.getRegistryUuid())
             .status(mcDTO.getStatus())
-            .name("");
+            .name(mcDTO.getName());
     }
 }

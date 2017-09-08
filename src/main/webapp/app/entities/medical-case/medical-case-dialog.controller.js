@@ -18,6 +18,7 @@
         vm.save = save;
         //vm.patients = Patient.query();
         vm.patientCnp = $stateParams.cnp;
+        vm.name = vm.medicalCase.name;
 
         vm.files = [];
         vm.errFiles = [];
@@ -85,7 +86,7 @@
 
         function recreateMedicalCase() {
             var result = {};
-            result.name = '';
+            result.name = vm.name;
             result.registryUuid = vm.registry.uuid;
 
             result.patientCnp = vm.patientCnp;

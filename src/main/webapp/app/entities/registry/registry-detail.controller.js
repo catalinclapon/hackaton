@@ -51,10 +51,10 @@
 
         if (angular.isDefined(entity.fields)) {
 
-            fields.sort(function (a, b) {
-                return (a.category > b.category) ? 1 : ((b.category > a.category) ? -1 :
-                    ( (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0) ) );
-            });
+            // fields.sort(function (a, b) {
+            //     return (a.category > b.category) ? 1 : ((b.category > a.category) ? -1 :
+            //         ( (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0) ) );
+            // });
             fields.forEach(function (item, index) {
                 columnDefs.push({
                     name: item.field.name
