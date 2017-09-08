@@ -19,6 +19,10 @@ public interface RegistryRepository extends JpaRepository<Registry,Long> {
     int setStatusForRegistries(String status, String uuid);
 
     Page<Registry> findByStatus(Pageable var1, String status);
+    
+    Page<Registry> findAll(Pageable var1);
 
     Registry findOneByStatusAndUuid(String status, String uuid);
+    
+    Registry findOneById(long id);
 }
