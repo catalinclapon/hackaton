@@ -67,60 +67,49 @@ public class RegistryServiceImpl implements RegistryService {
 	 * @return the persisted entity
 	 */
 	@Override
-    public RegistryDTO save(RegistryDTO registryDTO) {
-        log.debug("Request to save Registry : {}", registryDTO);
-        // set status superseded to current registry
-        if(registryDTO.getId() != null) {
-            registryRepository.save(Optional.of(registryDTO)
-                .map(RegistryDTO::build)
-                .map(registry -> {
-                    registry.setStatus("CLOSED");
-                    // remove registry
-                    registrySearchRepository.delete(registry);
-                    return registry;
-                })
-                .get());
-        } else if(registryDTO.getUuid() == null) {
-            registryDTO.setUuid(UUID.randomUUID().toString());
-        }
-        // save as new version:
-        Registry registry = registryRepository.save(Optional.of(registryDTO)
-            .map(RegistryDTO::build)
-            .map(registry1 -> registry1.id(null)
-                .status("DRAFT")).get());
+	public RegistryDTO save(RegistryDTO registryDTO) {
+		log.debug("Request to save Registry : {}", registryDTO);
+		// set status superseded to current registry
+		if (registryDTO.getId() != null) {
+			registryRepository.save(Optional.of(registryDTO).map(RegistryDTO::build).map(registry -> {
+				registry.setStatus("CLOSED");
+				// remove registry
+				registrySearchRepository.delete(registry);
+				return registry;
+			}).get());
+		} else if (registryDTO.getUuid() == null) {
+			registryDTO.setUuid(UUID.randomUUID().toString());
+		}
+		// save as new version:
+		Registry registry = registryRepository.save(Optional.of(registryDTO).map(RegistryDTO::build)
+				.map(registry1 -> registry1.id(null).status("DRAFT")).get());
 
-        // set new ID on DTO
-        registryDTO.setId(registry.getId());
+		// set new ID on DTO
+		registryDTO.setId(registry.getId());
 
-        // store fields as new fields
-        registryDTO.getFields().stream()
-            .map(RegistryFieldDTO::build)
-            .map(registryField -> {
-                return registryField.id(null)
-                    .registry(registry)
-                    .field(fieldRepository.saveAndFlush(registryField.getField()));
-            })
-            .forEach(registryFieldRepository::saveAndFlush);
+		// store fields as new fields
+		registryDTO.getFields().stream().map(RegistryFieldDTO::build).map(registryField -> {
+			return registryField.id(null).registry(registry)
+					.field(fieldRepository.saveAndFlush(registryField.getField()));
+		}).forEach(registryFieldRepository::saveAndFlush);
 
-        registrySearchRepository.save(registry);
-        return registryDTO;
-    }
-	
+		registrySearchRepository.save(registry);
+		return registryDTO;
+	}
+
 	/**
 	 * Update a registry
 	 * 
 	 */
-	
-	
+
 	@Override
 	public RegistryDTO updateRegistry(RegistryDTO registryDTO) {
 		log.debug("Request to update Registry: {} ", registryDTO);
-		
+
 		registryRepository.setStatusForRegistries(registryDTO.getStatus(), registryDTO.getUuid());
-		
+
 		return registryDTO;
 	}
-	
 
 	/**
 	 * Get all the registries.
@@ -139,11 +128,9 @@ public class RegistryServiceImpl implements RegistryService {
 
 		Optional<User> existingUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
 		boolean isAdmin = existingUser.get().getAuthorities().toString().equals("[Authority{name='ROLE_ADMIN'}]");
-		log.debug("Utilizatorul curent este admin? : '{}'", isAdmin);
 
 		if (isAdmin) {
-			// return registryRepository.findByStatus(pageable,
-			// "SUPERSEDED").map(RegistryDTO::build);
+
 			return registryRepository.findAll(pageable).map(RegistryDTO::build);
 		} else {
 			return registryRepository.findByStatus(pageable, "ACTIVATED").map(RegistryDTO::build);
@@ -177,7 +164,7 @@ public class RegistryServiceImpl implements RegistryService {
 		RegistryDTO auxRegDTO = RegistryDTO.build(registryRepository.findOne(id));
 
 		registryRepository.save(Optional.of(auxRegDTO).map(RegistryDTO::build).map(registry -> {
-			registry.setStatus("SUPERSEDED");
+			registry.setStatus("CLOSED");
 			// remove registry
 			registrySearchRepository.delete(registry);
 			return registry;
@@ -202,7 +189,7 @@ public class RegistryServiceImpl implements RegistryService {
 
 	@Override
 	public Map<String, Long> getFieldMapByUuid(String registryUuid) {
-		Registry r = registryRepository.findOneByStatusAndUuid("LATEST", registryUuid);
+		Registry r = registryRepository.findOneByStatusAndUuid("ACTIVATED", registryUuid);
 
 		return r.getFields().stream().collect(Collectors.toMap(fieldRepository -> {
 			return fieldRepository.getCategory() + "_" + fieldRepository.getField().getName();
@@ -211,5 +198,4 @@ public class RegistryServiceImpl implements RegistryService {
 		}));
 	}
 
-	
 }
