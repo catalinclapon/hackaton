@@ -127,8 +127,7 @@ public class MedicalCaseService {
         Map<String, String> row = new HashMap<>();
 
         row.put("CNP", medicalCase.getPatientCnp() != null ? medicalCase.getPatientCnp() : "N/A");
-//        row.put("Name", patientRepository.findFirstByCnp(medicalCase.getPatientCnp()).getLastName());
-        row.put("Name", "TEST DATA");
+        row.put("Name", medicalCase.getName());
         for (MedicalCaseField field : medicalCase.getFields()) {
             if (field.getField() != null && fields.contains(field.getField().getId())) {
                 row.put(field.getField().getName(), field.getValue());
