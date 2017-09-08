@@ -51,11 +51,13 @@
         function save() {
             vm.isSaving = true;
             var medicalCase = recreateMedicalCase();
-            if (vm.medicalCase.uuid !== null) {
-                MedicalCase.update(vm.medicalCase, onSaveSuccess, onSaveError);
-            } else {
-                MedicalCase.save(medicalCase, onSaveSuccess, onSaveError);
-            }
+            // if (vm.medicalCase.uuid !== null) {
+            //     MedicalCase.update(vm.medicalCase, onSaveSuccess, onSaveError);
+            // } else {
+            //     MedicalCase.save(medicalCase, onSaveSuccess, onSaveError);
+            // }
+
+            MedicalCase.save(medicalCase, onSaveSuccess, onSaveError);
 
             // TODO while uploading the files,
             //      - pass the id of the medical case

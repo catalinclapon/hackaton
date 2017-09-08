@@ -97,45 +97,42 @@
                 <div class="btn-group flex-btn-group-container">
 
                     <button type="submit"
-                            ui-sref="registry-detail.medical-case-view({id:medical-case.id})"
+                            ui-sref="registry-detail.medical-case-view({cnp:medicalCase.CNP})"
                             class="btn btn-info btn-sm">
                         <span class="glyphicon glyphicon-eye-open"></span>
                         <span class="hidden-sm-down"
-                              data-translate="entity.action.view"></span>
+                              data-translate="View">View</span>
                     </button>
 
                     <button has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
-                            ui-sref="registry-detail.medical-case-approve({id:medical-case.id})"
+                            ui-sref="registry-detail.medical-case-approve({cnp:medicalCase.CNP})"
                             class="btn btn-success btn-sm">
-                            <!--href="#/user-group-management/user-group-management/1">-->
                         <span class="glyphicon glyphicon-flag"></span>
-                        <span class="hidden-sm-down ng-scope" data-translate="Approve">Approve</span>
+                        <span class="hidden-sm-down ng-scope"
+                              data-translate="Approve">Approve</span>
                     </button>
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
-                            ui-sref="registry-detail.medical-case-edit({id:medical-case.id})"
+                            ui-sref="registry-detail.medical-case-edit({cnp:medicalCase.CNP})"
                             class="btn btn-warning btn-sm">
-                        <!--href="#/user-group-management/user-group-management/1">-->
                         <span class="glyphicon glyphicon-pencil"></span>
                         <span class="hidden-sm-down ng-scope" data-translate="Update">Update</span>
                     </button>
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
-                            ui-sref="registry-detail.medical-case-archive({id:medical-case.id})"
+                            ui-sref="registry-detail.medical-case-archive({cnp:medicalCase.CNP})"
                             class="btn btn-success btn-sm">
-                        <!--href="#/user-group-management/user-group-management/1">-->
                         <span class="glyphicon glyphicon-paperclip"></span>
                         <span class="hidden-sm-down ng-scope" data-translate="Archive">Archive</span>
                     </button>
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
-                            ui-sref="registry-detail.medical-case-export({id:medical-case.id})"
+                            ui-sref="registry-detail.medical-case-export({cnp:medicalCase.CNP})"
                             class="btn btn-info btn-sm">
-                        <!--href="#/user-group-management/user-group-management/1">-->
                         <span class="glyphicon glyphicon-floppy-disk"></span>
                         <span class="hidden-sm-down ng-scope" data-translate="Export">Export</span>
                     </button>
@@ -152,37 +149,6 @@
 
 </tbody>
 
-<!--<div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>-->
-
-    <!--<div class="btn-group flex-btn-group-container">-->
-        <!--<button type="submit"-->
-                <!--ui-sref="registry-detail.medical-case-edit({cnp:vm.selectedCnp})"-->
-                <!--class="btn btn-primary btn-sm"-->
-                <!--ng-disabled="vm.selectedCnp == ''">-->
-            <!--<span class="glyphicon glyphicon-pencil"></span>-->
-            <!--<span class="hidden-sm-down" data-translate="entity.action.edit"></span>-->
-        <!--</button>-->
-    <!--</div>-->
-<!--</tbody>-->
-<!-- MEDICAL CASE BUTTONS -->
-<!--<div class="btn-group flex-btn-group-container" style="float: right; top: 10px;">
-    <button has-any-authority="ROLE_DOCTOR, ROLE_ADMIN" type="submit" ui-sref="registry-detail.medical-case-approve({id:medical-case.id})"
-              class="btn btn-info btn-sm" href="#/user-group-management/user-group-management/1">
-        <span class="glyphicon glyphicon-flag"></span>
-        <span class="hidden-sm-down ng-scope" data-translate="Approve">Approve</span>
-    </button>
-    <button has-any-authority="ROLE_DOCTOR, ROLE_PATIENT, ROLE_ADMIN" type="submit" ui-sref="registry-detail.medical-case-edit({id:medical-case.id})"
-              class="btn btn-primary btn-sm" href="#/user-group-management/1/edit">
-        <span class="glyphicon glyphicon-pencil"></span>
-        <span class="hidden-sm-down ng-scope" data-translate="entity.action.edit">Edit</span>
-    </button>
-    <button has-any-authority="ROLE_DOCTOR, ROLE_PATIENT, ROLE_ADMIN" type="submit" ui-sref="registry-detail.medical-case-delete({id:medical-case.id})"
-              class="btn btn-danger btn-sm" href="#/user-group-management/1/delete">
-        <span class="glyphicon glyphicon-remove-circle"></span>
-        <span class="hidden-sm-down ng-scope" data-translate="entity.action.delete">Delete</span>
-    </button>
-</div>
- -->
     <hr>
 
     <button type="submit"
