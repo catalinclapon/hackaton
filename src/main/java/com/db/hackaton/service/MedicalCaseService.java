@@ -49,12 +49,13 @@ public class MedicalCaseService {
      */
     @SuppressWarnings("Duplicates")
     public MedicalCaseDTO save(MedicalCaseDTO medicalCaseDTO) {
+
         log.debug("Request to save MedicalCase : {}", medicalCaseDTO);
         if (medicalCaseDTO.getId() != null) {
             medicalCaseRepository.save(Optional.of(medicalCaseDTO)
                 .map(MedicalCaseDTO::build)
                 .map(mc -> {
-                    mc.setStatus("SUPERSEDED");
+//                    mc.setStatus("SUPERSEDED");
                     medicalCaseSearchRepository.delete(mc);
                     return mc;
                 }).get());
@@ -65,15 +66,26 @@ public class MedicalCaseService {
 
         if(CollectionUtils.isNotEmpty(patientRepository.findByUserIsCurrentUser())) {
             medicalCaseDTO.setPatientCnp(patientRepository.findByUserIsCurrentUser().get(0).getCnp());
-        }
-        else if(StringUtils.isBlank(medicalCaseDTO.getPatientCnp())) {
+        } else if(StringUtils.isBlank(medicalCaseDTO.getPatientCnp())) {
             // throw new Exception("no cnp");  // already verified in frontend
         }
 
+        String medicalCaseStatus = "PENDING_APPROVAL";
+
+        if(CollectionUtils.isNotEmpty(userGroupRepository.findByUserIsCurrentUser())) {
+            List<UserGroup> currentUserGroupList = userGroupRepository.findByUserIsCurrentUser();
+            Set<Authority> authorities = currentUserGroupList.get(0).getUser().getAuthorities();
+            Authority authority = (Authority) authorities.toArray()[0];
+            if(!authority.getName().equals(AuthoritiesConstants.PATIENT)) {
+                medicalCaseStatus = "APPROVED";
+            }
+        }
+
+        String finalMedicalCaseStatus = medicalCaseStatus;
         MedicalCase medicalCase = medicalCaseRepository.save(Optional.of(medicalCaseDTO)
             .map(MedicalCaseDTO::build)
             .map(mc -> mc.id(null)
-                .status("LATEST"))
+                .status(finalMedicalCaseStatus))
             .get());
 
         medicalCaseDTO.setId(medicalCase.getId());
