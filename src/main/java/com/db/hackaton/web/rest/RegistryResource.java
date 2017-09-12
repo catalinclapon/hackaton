@@ -186,7 +186,9 @@ public class RegistryResource {
 
             int columnCount = 0;
             Cell cellCnp = row.createCell(columnCount++);
-            cellCnp.setCellValue("CNP");
+            cellCnp.setCellValue("Patient_CNP");
+            Cell cellDesc = row.createCell(columnCount++);
+            cellDesc.setCellValue("MedicalCase_Name");
             for (RegistryFieldDTO field : registry.getFields()) {
                 Cell cell = row.createCell(columnCount++);
                 cell.setCellValue(field.getCategory() + "_" + field.getField().getName());

@@ -13,4 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface FieldRepository extends JpaRepository<Field,Long> {
     Field findFirstByName(String name);
 
+    Field findById(Long id);
+
 }
