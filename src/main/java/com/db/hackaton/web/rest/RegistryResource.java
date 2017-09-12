@@ -99,7 +99,7 @@ public class RegistryResource {
         if (registry.getId() == null) {
             return createRegistry(registry);
         }
-        RegistryDTO result = registryService.save(registry);
+        RegistryDTO result = registryService.updateRegistry(registry);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, registry.getId().toString()))
             .body(result);
