@@ -220,6 +220,10 @@ public class MedicalCaseService {
         return medicalCaseRepository.findByStatusAndRegistryUuid("LATEST", registryUuid);
     }
 
+    @Transactional(readOnly = true)
+    public List<MedicalCase> findByRegistryUuid(String registryUuid) {
+        return medicalCaseRepository.findByRegistryUuid(registryUuid);
+    }
 
     @Transactional
     public MedicalCaseDTO update(MedicalCaseDTO medicalCaseDTO) {

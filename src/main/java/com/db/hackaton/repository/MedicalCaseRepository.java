@@ -38,4 +38,6 @@ public interface MedicalCaseRepository extends JpaRepository<MedicalCase,Long> {
         "(select MAX(mc.lastModifiedDate) from MedicalCase mc WHERE medicalCase.patientCnp = mc.patientCnp)" +
         "AND r.id = :registryId AND medicalCase.patientCnp = :cnp")
     List<MedicalCase> findByLatestModifiedDateAndRegistryIdAndCnp(@Param("registryId") Long registryId, @Param("cnp") String cnp);
+
+    List<MedicalCase> findByRegistryUuid(String registryUuid);
 }
