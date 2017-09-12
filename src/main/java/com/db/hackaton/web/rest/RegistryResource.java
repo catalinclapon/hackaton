@@ -185,6 +185,8 @@ public class RegistryResource {
             Row row = sheet.createRow(0);
 
             int columnCount = 0;
+            Cell cellCnp = row.createCell(columnCount++);
+            cellCnp.setCellValue("CNP");
             for (RegistryFieldDTO field : registry.getFields()) {
                 Cell cell = row.createCell(columnCount++);
                 cell.setCellValue(field.getCategory() + "_" + field.getField().getName());
@@ -220,37 +222,38 @@ public class RegistryResource {
         RegistryDTO registry = registryService.findOne(id);
         // Create a document and add a page to it
         PDDocument document = new PDDocument();
-        PDPage page = new PDPage();
-        document.addPage(page);
 
         // Create a new font object selecting one of the PDF base fonts
         PDFont font = PDType1Font.HELVETICA_BOLD;
 
-        // Start a new content stream which will "hold" the to be created content
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        List<MedicalCase> cases = medicalCaseService.findByRegistryUuid(registry.getUuid());
+        for (MedicalCase mc : cases) {
+            PDPage page = new PDPage();
+            document.addPage(page);
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-        // Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
-        contentStream.beginText();
-        contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(100, 700);
-        List<MedicalCase> cases = medicalCaseService.findAllLatest(registry.getUuid());
-        for (MedicalCase mc : cases) {
-            for (MedicalCaseField field : mc.getFields()) {
-                contentStream.drawString(field.getField().getName() + "    ");
-            }
-            break;
-        }
-        contentStream.newLine();
-        for (MedicalCase mc : cases) {
-            for (MedicalCaseField field : mc.getFields()) {
-                contentStream.drawString(field.getValue() + "    ");
-            }
+            contentStream.beginText();
+            contentStream.setFont(font, 12);
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(100, 700);
+
+            contentStream.showText("CNP: " + mc.getPatientCnp());
             contentStream.newLine();
-        }
-        contentStream.endText();
+            contentStream.showText("Medical case description: " + mc.getName());
+            contentStream.newLine();
+            contentStream.showText("Medical case status: " + mc.getStatus());
+            contentStream.newLine();
+            contentStream.showText("Last modified date:" + mc.getLastModifiedDate());
+            contentStream.newLine();
 
-        // Make sure that the content stream is closed:
-        contentStream.close();
+            for (MedicalCaseField field : mc.getFields()) {
+                contentStream.showText(field.getField().getName() + ": "+ field.getValue());
+                contentStream.newLine();
+            }
+            contentStream.endText();
+            contentStream.close();
+        }
+
 
         // Save the results and ensure that the document is properly closed:
         File file = new File(applicationProperties.getLocalStoragePath() + "/" + registry.getUuid() + ".pdf");
