@@ -1,11 +1,5 @@
 id,name,jhi_desc,uuid,status,created_by,last_modified_by
-1,"Alzheimers Prevention Registry","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget leo ornare, mattis nisi ut, pharetra quam. Etiam euismod dui at felis iaculis, nec tincidunt nulla tempor",55714226-6600-4038-946f-8c33d2bf8414,SUPERSEDED,system,admin
-2,Diabetes Type 1,Diabetes Type 1,b73d1465-3db5-4923-8df2-49428eb26bce,SUPERSEDED,admin,admin
-3,Diabetes Type 1,Diabetes Type 1,b73d1465-3db5-4923-8df2-49428eb26bce,SUPERSEDED,admin,admin
-4,Diabetes Type 1 Registry,Diabetes Type 1 Registry,b73d1465-3db5-4923-8df2-49428eb26bce,SUPERSEDED,admin,admin
-5,Autism Registry,Autism Registry,396ed127-c3bb-483c-a410-82f3c2bdc0f8,SUPERSEDED,admin,admin
-6,Diabetes Type 1 Registry,Diabetes Type 1 Registry,b73d1465-3db5-4923-8df2-49428eb26bce,LATEST,admin,admin
-7,Autism Registry,Autism Registry,396ed127-c3bb-483c-a410-82f3c2bdc0f8,SUPERSEDED,admin,admin
-8,"Alzheimers Prevention Registry","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget leo ornare, mattis nisi ut, pharetra quam. Etiam euismod dui at felis iaculis, nec tincidunt nulla tempor",55714226-6600-4038-946f-8c33d2bf8414,LATEST,admin,admin
-10,Breast Cancel Family Registry,Breast Cancel Family Registry,9067e87e-ff69-4cc0-b5d7-69478fc98952,LATEST,admin,admin
-11,Autism Registry,Autism Registry,396ed127-c3bb-483c-a410-82f3c2bdc0f8,LATEST,admin,admin
+6,Diabetes Type 1 Registry,Diabetes Type 1 Registry,b73d1465-3db5-4923-8df2-49428eb26bce,ACTIVATED,admin,admin
+8,"Alzheimers Prevention Registry","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget leo ornare, mattis nisi ut, pharetra quam. Etiam euismod dui at felis iaculis, nec tincidunt nulla tempor",55714226-6600-4038-946f-8c33d2bf8414,ACTIVATED,admin,admin
+10,Breast Cancel Family Registry,Breast Cancel Family Registry,9067e87e-ff69-4cc0-b5d7-69478fc98952,ACTIVATED,admin,admin
+11,Autism Registry,Autism Registry,396ed127-c3bb-483c-a410-82f3c2bdc0f8,ACTIVATED,admin,admin
