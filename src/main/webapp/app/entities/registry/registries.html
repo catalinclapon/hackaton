@@ -29,6 +29,8 @@
             <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
                 <th jh-sort-by="name"><span data-translate="hackatonApp.registry.name">Name</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <th jh-sort-by="desc"><span data-translate="hackatonApp.registry.desc">Desc</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <!-- Add the status column -->
+                <th jh-sort-by="status" has-any-authority="ROLE_ADMIN"><span data-translate="hackatonApp.registry.status">Status</span><span class="glyphicon glyphicon-sort"></span></th>
                 <th></th>
             </tr>
             </thead>
@@ -36,8 +38,16 @@
             <tr ng-repeat="registry in vm.registries track by registry.id">
                 <td><a ui-sref="registry-detail({id:registry.id})">{{registry.name}}</a></td>
                 <td>{{registry.desc}}</td>
+                <!-- Add the status column -->
+                <td has-any-authority="ROLE_ADMIN">{{registry.status}}</td>
+               
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
+                    <!-- Add the activate and close buttons -->
+                    <button has-any-authority="ROLE_ADMIN" class="btn btn-info btn-sm" ng-click="vm.setStatus(registry, 'CLOSED')" ng-show="registry.status=='ACTIVATED'"
+                            data-translate="">Deactivated</button>
+                    <button has-any-authority="ROLE_ADMIN" class="btn btn-info btn-sm" ng-click="vm.setStatus(registry, 'ACTIVATED')" ng-show="registry.status=='CLOSED' || registry.status=='DRAFT'"
+                             data-translate="">Activated</button>
                         <button type="submit"
                                 ui-sref="registry-detail({id:registry.id})"
                                 class="btn btn-info btn-sm" has-any-authority="ROLE_DOCTOR">
@@ -50,12 +60,7 @@
                             <span class="glyphicon glyphicon-pencil"></span>
                             <span class="hidden-sm-down" data-translate="entity.action.edit"></span>
                         </button>
-                        <button type="submit"
-                                ui-sref="registry.delete({id:registry.id})"
-                                class="btn btn-danger btn-sm" has-any-authority="ROLE_ADMIN">
-                            <span class="glyphicon glyphicon-remove-circle"></span>
-                            <span class="hidden-sm-down" data-translate="entity.action.delete"></span>
-                        </button>
+                        
                     </div>
                 </td>
             </tr>
