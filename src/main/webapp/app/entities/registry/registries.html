@@ -40,14 +40,14 @@
                 <td>{{registry.desc}}</td>
                 <!-- Add the status column -->
                 <td has-any-authority="ROLE_ADMIN">{{registry.status}}</td>
-               
+
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                     <!-- Add the activate and close buttons -->
                     <button has-any-authority="ROLE_ADMIN" class="btn btn-info btn-sm" ng-click="vm.setStatus(registry, 'CLOSED')" ng-show="registry.status=='ACTIVATED'"
-                            data-translate="">Deactivated</button>
+                            data-translate="">Close</button>
                     <button has-any-authority="ROLE_ADMIN" class="btn btn-info btn-sm" ng-click="vm.setStatus(registry, 'ACTIVATED')" ng-show="registry.status=='CLOSED' || registry.status=='DRAFT'"
-                             data-translate="">Activated</button>
+                             data-translate="">Activate</button>
                         <button type="submit"
                                 ui-sref="registry-detail({id:registry.id})"
                                 class="btn btn-info btn-sm" has-any-authority="ROLE_DOCTOR">
@@ -60,7 +60,7 @@
                             <span class="glyphicon glyphicon-pencil"></span>
                             <span class="hidden-sm-down" data-translate="entity.action.edit"></span>
                         </button>
-                        
+
                     </div>
                 </td>
             </tr>
