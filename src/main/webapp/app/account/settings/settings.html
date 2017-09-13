@@ -82,7 +82,7 @@
                     <label for="isPatient" data-translate="settings.form.isPatient">I am patient</label> <input type="checkbox" name="flag" ng-checked-value="1" ng-unchecked-value="0" ng-checked="vm.patientInfo.flag == 1" ng-model="vm.patientInfo.flag">
                 </div>
 
-                <span ng-show="vm.patientInfo.flag == 1">
+                <span ng-show="vm.patientInfo.flag == 1" has-any-authority="ROLE_USER">
                 <div class="form-group">
                     <label class="control-label" for="cnp" data-translate="settings.form.cnp">CNP</label>
                     <input type="text" class="form-control" id="cnp" name="cnp" placeholder="{{'settings.form.cnp.placeholder' | translate}}"

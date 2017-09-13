@@ -57,13 +57,15 @@
             <span class="hidden-xs-down" data-translate="hackatonApp.registry.home.bulkUpload"> Bulk upload </span>
         </button>
 
-        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/template" download="{{vm.registry.name}}.xlsx">
+        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/template"
+           has-any-authority="ROLE_DOCTOR" download="{{vm.registry.name}}.xlsx">
             <span class="glyphicon glyphicon-download"></span>
             <span class="hidden-xs-down"
                   data-translate="hackatonApp.registry.home.downloadTemplate"> Download template </span>
         </a>
 
-        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/pdfExport" download="{{vm.registry.name}}.pdf">
+        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/pdfExport"
+           has-any-authority="ROLE_DOCTOR" download="{{vm.registry.name}}.pdf">
             <span class="glyphicon glyphicon-download"></span>
             <span class="hidden-xs-down"
                   data-translate="hackatonApp.registry.home.exportPdf"> Export PDF </span>
@@ -72,10 +74,10 @@
     </div>
     </div>
     <h2>{{vm.registry.name}}</h2>
-    <a class="adminBtn" style="vertical-align:middle" href="/app/entities/registry/adminpage.html">
-        <span>Admin list </span></a>
-    <a class="adminBtn"  style="vertical-align:middle" href="/app/entities/registry/userpage.html">
-        <span>User list </span></a>
+    <!--<a class="adminBtn" style="vertical-align:middle" href="/app/entities/registry/adminpage.html">-->
+        <!--<span>Admin list </span></a>-->
+    <!--<a class="adminBtn"  style="vertical-align:middle" href="/app/entities/registry/userpage.html">-->
+        <!--<span>User list </span></a>-->
     <hr>
 
 <div class="table-responsive">

@@ -75,6 +75,11 @@ public class UploadBulkService {
             return;
         }
 
+        if(StringUtils.isBlank(medicalCaseName)){
+            log.warn("Cannot save Medical case without a description {}", categoryToFieldToValue.toString());
+            return;
+        }
+
         Patient patient = Optional.ofNullable(patientService.findOneByCnp(cnp))
             .orElse(new Patient()
                 .cnp(cnp));
@@ -86,6 +91,11 @@ public class UploadBulkService {
         medicalCase.setFields(new ArrayList<>());
 
         categoryToFieldToValue.entrySet().forEach(addFieldValueToMedicalCase(medicalCase, fieldMap));
+
+        if(medicalCase.getFields().size() != fieldMap.size()) {
+            log.warn("Wrong fields!");
+            return;
+        }
 
         medicalCaseService.save(medicalCase);
     }
