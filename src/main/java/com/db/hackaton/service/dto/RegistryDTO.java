@@ -23,8 +23,7 @@ public class RegistryDTO {
     @Size(min = 1, max = 100)
     private String name;
 
-    @NotBlank
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     private String description;
 
     private String uuid;

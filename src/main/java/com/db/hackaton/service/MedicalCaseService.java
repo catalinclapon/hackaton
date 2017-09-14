@@ -140,6 +140,7 @@ public class MedicalCaseService {
 
         row.put("CNP", medicalCase.getPatientCnp() != null ? medicalCase.getPatientCnp() : "N/A");
         row.put("Name", medicalCase.getName());
+        row.put("Status", medicalCase.getStatus());
         for (MedicalCaseField field : medicalCase.getFields()) {
             if (field.getField() != null && fields.contains(field.getField().getId())) {
                 row.put(field.getField().getName(), field.getValue());
