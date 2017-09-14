@@ -1,30 +1,30 @@
 {
     "userManagement": {
         "home": {
-            "title": "Users",
-            "createLabel": "Create a new user",
-            "createOrEditLabel": "Create or edit a user"
+            "title": "Utilizatori",
+            "createLabel": "Creeaza un nou utilizator",
+            "createOrEditLabel": "Creeaza sau editeaza un utilizator"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "An user is updated with identifier {{ param }}",
-        "deleted": "An user is deleted with identifier {{ param }}",
+        "created": "Utilizatorul cu identificatorul {{ param }} a fost creat.",
+        "updated": "Utilizatorul cu identificatorul {{ param }} a fost actualizat",
+        "deleted": "Utilizatorul cu identificatorul {{ param }} a fost sters",
         "delete": {
-            "question": "Are you sure you want to delete user {{ login }}?"
+            "question": "Esti sigur ca vrei sa stergi utilizatorul cu identificatorul {{ id }}?"
         },
         "detail": {
-            "title": "User"
+            "title": "Utilizator"
         },
         "login": "Login",
-        "firstName": "First name",
-        "lastName": "Last name",
-        "email": "Email",
-        "activated": "Activated",
-        "deactivated": "Deactivated",
-        "profiles": "Profiles",
-        "langKey": "Language",
-        "createdBy": "Created by",
-        "createdDate": "Created date",
-        "lastModifiedBy": "Modified by",
-        "lastModifiedDate": "Modified date"
+        "firstName": "Prenume",
+        "lastName": "Nume",
+        "email": "Adresa de Email",
+        "activated": "Activat",
+        "deactivated": "Dezactivat",
+        "profiles": "Profiluri",
+        "langKey": "Limba",
+        "createdBy": "Creat de",
+        "createdDate": "Data creari",
+        "lastModifiedBy": "Modificat de",
+        "lastModifiedDate": "Data modificarii"
     }
 }

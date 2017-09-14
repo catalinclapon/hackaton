@@ -1,26 +1,26 @@
 {
     "audits": {
-        "title": "Audits",
+        "title": "Audit",
         "filter": {
-            "title": "Filter per date",
-            "from": "from",
-            "to": "to",
+            "title": "Filtrare dupa data",
+            "from": "de la",
+            "to": "la",
             "button": {
-                "weeks": "Weeks",
-                "today": "today",
-                "clear": "clear",
-                "close": "close"
+                "weeks": "Saptamani",
+                "today": "azi",
+                "clear": "sterge",
+                "close": "inchide"
             }
         },
         "table": {
             "header": {
-                "principal": "User",
-                "date": "Date",
-                "status": "State",
-                "data": "Extra data"
+                "principal": "Utilizator",
+                "date": "Data",
+                "status": "Stare",
+                "data": "Data extra"
             },
             "data": {
-                "remoteAddress": "Remote Address:"
+                "remoteAddress": "Adresa remote:"
             }
         }
     }

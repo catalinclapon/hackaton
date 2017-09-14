@@ -1,10 +1,10 @@
 {
     "home": {
-        "message": "Who we are and what we do?",
-        "info": " We are an association composed of patients, a non-governmental organization (NGO) with national representativeness born out of the desire to put people's interests first when it comes to human health. We are a group of nationally representative citizens with rapid growth who have decided not to let the way they are treated, the way we spend the money we pay for the snatches, and last but not least what we get for the money on we pay them.",
+        "message": "Cine suntem si ce facem?",
+        "info": " Suntem o asociatie formata din pacienti, o organizatie non-guvernamentala (ONG) cu reprezentare nationala nascuta din dorinta de a pune pe interesele si nevoile oamenilor pe primul loc atunci cand vine vorba de sanatate.",
         "logged": {
-            "message": "You are logged in as user \"{{username}}\"."
+            "message": "Esti logat ca utilizatorul \"{{username}}\"."
         },
-        "registries": "Open Registries"
+        "registries": "Registri disponibili"
     }
 }

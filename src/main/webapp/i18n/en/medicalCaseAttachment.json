@@ -2,23 +2,23 @@
     "hackatonApp": {
         "medicalCaseAttachment" : {
             "home": {
-                "title": "Medical Case Attachments",
-                "createLabel": "Create a new Medical Case Attachment",
-                "createOrEditLabel": "Create or edit a Medical Case Attachment",
-                "search": "Search for Medical Case Attachment"
+                "title": "Atasamentele cazului medical",
+                "createLabel": "Creeaza un nou atasament pentru cazul medical",
+                "createOrEditLabel": "Creeaza sau actualizeaza un atasament al cazului medical",
+                "search": "Cauta atasamentul cazului medical"
             },
-            "created": "A new Medical Case Attachment is created with identifier {{ param }}",
-            "updated": "A Medical Case Attachment is updated with identifier {{ param }}",
-            "deleted": "A Medical Case Attachment is deleted with identifier {{ param }}",
+            "created": "Un nou atasament al cazului medical a fost creat cu identificatorul {{ param }}",
+            "updated": "Atasamentul cu identificatorul {{ param }} a fost actualizat",
+            "deleted": "Atasamentul cu identificatorul {{ param }} a fost sters",
             "delete": {
-                "question": "Are you sure you want to delete Medical Case Attachment {{ id }}?"
+                "question": "Esti sigur ca vrei sa stergi atasamentul cu identificatorul {{ id }}?"
             },
             "detail": {
-                "title": "Medical Case Attachment"
+                "title": "Atasamentul cazului medical"
             },
-            "title": "Title",
-            "location": "Location",
-            "medicalCase": "Medical Case"
+            "title": "Titlu",
+            "location": "Locatie",
+            "medicalCase": "Caz medical"
         }
     }
 }

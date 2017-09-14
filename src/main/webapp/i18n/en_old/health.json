@@ -1,23 +1,23 @@
 {
     "health": {
-        "title": "Indici de sanatate",
+        "title": "Health Checks",
         "refresh.button": "Refresh",
         "stacktrace": "Stacktrace",
         "details": {
-            "details": "Detalii",
-            "properties": "Proprietati",
-            "name": "Nume",
-            "value": "Valoare",
-            "error": "Erori"
+            "details": "Details",
+            "properties": "Properties",
+            "name": "Name",
+            "value": "Value",
+            "error": "Error"
         },
         "indicator": {
-            "diskSpace": "Spatiu pe disk",
+            "diskSpace": "Disk space",
             "mail": "Email",
             "elasticsearch": "Elasticsearch",
-            "db": "Baza de date"
+            "db": "Database"
         },
         "table": {
-            "service": "Numele serviciului",
+            "service": "Service name",
             "status": "Status"
         },
         "status": {

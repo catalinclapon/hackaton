@@ -1,37 +1,37 @@
 {
     "hackatonApp": {
         "registry" : {
-            "admin": "Admin",
+            "admin": "Administrator",
             "home": {
-                "title": "Registries",
-                "createLabel": "Create a new Registry",
-                "createOrEditLabel": "Create or edit a Registry",
-                "search": "Search for Registry",
-                "bulkUpload": "Bulk upload",
-                "downloadTemplate": "Download template",
+                "title": "Registre",
+                "createLabel": "Creeaza un nou registru",
+                "createOrEditLabel": "Creeaza sau editeaza un registru",
+                "search": "Cauta un registru",
+                "bulkUpload": "Adauga cazuri",
+                "downloadTemplate": "Descarca sablon",
                 "exportPdf": "Export PDF"
             },
-            "created": "A new Registry is created with identifier {{ param }}",
-            "updated": "A Registry is updated with identifier {{ param }}",
-            "deleted": "A Registry is deleted with identifier {{ param }}",
+            "created": "Registrul cu identificatorul {{ param }} a fost creat.",
+            "updated": "Registrul cu identificatorul {{ param }} a fost actualizat",
+            "deleted": "Registrul cu identificatorul {{ param }} a fost sters",
             "delete": {
-                "question": "Are you sure you want to delete Registry {{ id }}?"
+                "question": "Esti sigur ca vrei sa stergi registrul cu identificatorul {{ id }}?"
             },
             "detail": {
-                "title": "Registry"
+                "title": "Campurile registrurlui"
             },
-            "name": "Name",
-            "desc": "Desc",
+            "name": "Nume",
+            "desc": "Descriere",
             "uuid": "Uuid",
             "status": "Status",
             "field": {
-                "name": "Name",
-                "desc": "Description",
-                "type": "Type",
-                "min": "Min value",
-                "required": "Required",
-                "max": "Max value",
-                "values": "Values"
+                "name": "Nume",
+                "desc": "Descriere",
+                "type": "Tip",
+                "min": "Valoare minima",
+                "required": "Obligatoriu",
+                "max": "Valoare maxima",
+                "values": "Valoare"
             }
         }
     }
