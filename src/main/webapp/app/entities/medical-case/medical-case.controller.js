@@ -21,6 +21,7 @@
         vm.loadAll = loadAll;
         vm.searchQuery = pagingParams.search;
         vm.currentSearch = pagingParams.search;
+        vm.medicalCases=[];
 
         loadAll();
 
@@ -57,6 +58,8 @@
                 AlertService.error(error.data.message);
             }
         }
+        
+     
 
         function loadPage(page) {
             vm.page = page;

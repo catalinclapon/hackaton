@@ -1,5 +1,5 @@
 <div>
-    <h2 data-translate="hackatonApp.registry.home.title">Registries</h2>
+    <h2 data-translate="hackatonApp.registry.home.title">Registrii</h2>
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
@@ -8,7 +8,7 @@
                 <button class="btn btn-primary" ui-sref="registry.new" has-any-authority="ROLE_ADMIN">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span class="hidden-xs-down"  data-translate="hackatonApp.registry.home.createLabel">
-                        Create new Registry
+                       Creaza un nou registru
                     </span>
                 </button>
                 </li>
@@ -16,7 +16,7 @@
             <div class="col-xs-8 no-padding-right">
                 <form name="searchForm" class="form-inline">
                     <div class="input-group pull-right" >
-                        <input type="text" class="form-control" ng-model="vm.searchQuery"  id="search" onkeyup="searchUserGroup()" placeholder="Search...">
+                        <input type="text" class="form-control" ng-model="vm.searchQuery"  id="search" onkeyup="searchUserGroup()" placeholder="Cauta...">
                     </div>
                 </form>
             </div>
@@ -27,8 +27,8 @@
         <table class="jh-table table table-striped" id="registryTable">
             <thead>
             <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                <th jh-sort-by="name"><span data-translate="hackatonApp.registry.name">Name</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="desc"><span data-translate="hackatonApp.registry.desc">Desc</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="name"><span data-translate="hackatonApp.registry.name">Nume</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="desc"><span data-translate="hackatonApp.registry.desc">Descriere</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <!-- Add the status column -->
                 <th jh-sort-by="status" has-any-authority="ROLE_ADMIN"><span data-translate="hackatonApp.registry.status">Status</span><span class="glyphicon glyphicon-sort"></span></th>
                 <th></th>
@@ -38,6 +38,7 @@
             <tr ng-repeat="registry in vm.registries track by registry.id">
                 <td><a ui-sref="registry-detail({id:registry.id})">{{registry.name}}</a></td>
                 <td>{{registry.desc}}</td>
+                
                 <!-- Add the status column -->
                 <td has-any-authority="ROLE_ADMIN">{{registry.status}}</td>
                
@@ -45,9 +46,9 @@
                     <div class="btn-group flex-btn-group-container">
                     <!-- Add the activate and close buttons -->
                     <button has-any-authority="ROLE_ADMIN" class="btn btn-info btn-sm" ng-click="vm.setStatus(registry, 'CLOSED')" ng-show="registry.status=='ACTIVATED'"
-                            data-translate="">Deactivated</button>
+                            data-translate="">Dezactiveaza</button>
                     <button has-any-authority="ROLE_ADMIN" class="btn btn-info btn-sm" ng-click="vm.setStatus(registry, 'ACTIVATED')" ng-show="registry.status=='CLOSED' || registry.status=='DRAFT'"
-                             data-translate="">Activated</button>
+                             data-translate="">Activeaza</button>
                         <button type="submit"
                                 ui-sref="registry-detail({id:registry.id})"
                                 class="btn btn-info btn-sm" has-any-authority="ROLE_DOCTOR">

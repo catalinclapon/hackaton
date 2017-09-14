@@ -44,4 +44,7 @@ public interface MedicalCaseRepository extends JpaRepository<MedicalCase,Long> {
     List<MedicalCase> findByLatestModifiedDateAndRegistryIdAndCnp(@Param("registryId") Long registryId, @Param("cnp") String cnp);
 
     List<MedicalCase> findByRegistryUuid(String registryUuid);
+    
+    @Query("update MedicalCase medicalCase set status=:newStatus where medicalCase.id=:id")
+    int setStatusForMedicalCase(String newStatus,Long id);
 }
