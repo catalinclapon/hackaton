@@ -2,24 +2,24 @@
     "hackatonApp": {
         "medicalCase" : {
             "home": {
-                "title": "Medical Cases",
-                "createLabel": "Create a new Medical Case",
-                "createOrEditLabel": "Create or edit a Medical Case",
-                "search": "Search for Medical Case"
+                "title": "Cazuri medicale",
+                "createLabel": "Creeaza un nou caz medical",
+                "createOrEditLabel": "Creeaza sau actualizeaza un caz medical",
+                "search": "Cauta un caz medical"
             },
-            "created": "A new Medical Case is created with identifier {{ param }}",
-            "updated": "A Medical Case is updated with identifier {{ param }}",
-            "deleted": "A Medical Case is deleted with identifier {{ param }}",
+            "created": "Un nou caz medical a fost creat cu identificatorul {{ param }}",
+            "updated": "Cazul medical cu identificatorul {{ param }} a fost actualizat",
+            "deleted": "Cazul medical cu identificatorul {{ param }} a fost sters",
             "delete": {
-                "question": "Are you sure you want to delete Medical Case {{ id }}?"
+                "question": "Esti sigur ca vrei sa stergi cazul medical cu identificatorul {{ id }}?"
             },
             "detail": {
-                "title": "Medical Case"
+                "title": "Caz medical"
             },
-            "name": "Name",
+            "name": "Nume",
             "uuid": "Uuid",
             "status": "Status",
-            "patient": "Patient"
+            "patient": "Pacient"
         }
     }
 }

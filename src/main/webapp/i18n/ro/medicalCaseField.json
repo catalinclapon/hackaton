@@ -2,23 +2,23 @@
     "hackatonApp": {
         "medicalCaseField" : {
             "home": {
-                "title": "Medical Case Fields",
-                "createLabel": "Create a new Medical Case Field",
-                "createOrEditLabel": "Create or edit a Medical Case Field",
-                "search": "Search for Medical Case Field"
+                "title": "Campurile cazului medical",
+                "createLabel": "Creeaza un nou camp pentru un caz medical",
+                "createOrEditLabel": "Creeaza sau actualizeaza un camp al unui caz medical",
+                "search": "Cauta un camp al unui caz medical"
             },
-            "created": "A new Medical Case Field is created with identifier {{ param }}",
-            "updated": "A Medical Case Field is updated with identifier {{ param }}",
-            "deleted": "A Medical Case Field is deleted with identifier {{ param }}",
+            "created": "Un nou camp al cazului medical a fost creat cu identificatorul {{ param }}",
+            "updated": "Campul cu identificatorul {{ param }} a fost actualizat",
+            "deleted": "Campul cu identificatorul {{ param }} a fost sters",
             "delete": {
-                "question": "Are you sure you want to delete Medical Case Field {{ id }}?"
+                "question": "Esti sigur ca vrei sa stergi campul cu identificatorul {{ id }}?"
             },
             "detail": {
-                "title": "Medical Case Field"
+                "title": "Campul cazului medical"
             },
-            "value": "Value",
-            "field": "Field",
-            "medicalCase": "Medical Case"
+            "value": "Valoare",
+            "field": "Camp",
+            "medicalCase": "Caz medical"
         }
     }
 }
