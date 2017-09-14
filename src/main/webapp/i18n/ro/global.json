@@ -9,74 +9,74 @@
                 "main": "Entitati",
                 "registry": "Registri",
                 "registryField": "Campul registrului",
-                "medicalCase": "Medical Case",
-                "patient": "Patient",
-                "medicalCaseField": "Medical Case Field",
-                "medicalCaseAttachment": "Medical Case Attachment",
-                "groups": "Groups",
-                "userGroup": "User Group",
+                "medicalCase": "Caz medical",
+                "patient": "Pacient",
+                "medicalCaseField": "Campul cazului medical",
+                "medicalCaseAttachment": "Atasamentul cazului medical",
+                "groups": "Grupuri",
+                "userGroup": "Grupul utilizatorilor",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-                "field": "Field"
+                "field": "Camp"
             },
             "account": {
-                "main": "Account",
-                "settings": "Settings",
-                "password": "Password",
-                "sessions": "Sessions",
-                "login": "Sign in",
-                "logout": "Sign out",
-                "register": "Register"
+                "main": "Cont",
+                "settings": "Setari",
+                "password": "Parola",
+                "sessions": "Sesiuni",
+                "login": "Log in",
+                "logout": "Log out",
+                "register": "Inregistrare"
             },
             "admin": {
-                "main": "Administration",
-                "userManagement": "User management",
-                "tracker": "User tracker",
-                "metrics": "Metrics",
-                "health": "Health",
-                "configuration": "Configuration",
-                "logs": "Logs",
-                "audits": "Audits",
+                "main": "Administrare",
+                "userManagement": "Managementul userilor",
+                "tracker": "Urmarirea utilizatorilor",
+                "metrics": "Metrici",
+                "health": "Sanatate",
+                "configuration": "Configurari",
+                "logs": "Loguri",
+                "audits": "Audit",
                 "apidocs": "API",
-                "database": "Database",
+                "database": "Baza de date",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
-            "language": "Language"
+            "language": "Limba"
         },
         "form": {
-            "username": "Username",
-            "username.placeholder": "Your username",
-            "newpassword": "New password",
-            "newpassword.placeholder": "New password",
-            "confirmpassword": "New password confirmation",
-            "confirmpassword.placeholder": "Confirm the new password",
+            "username": "Nume de utilizator",
+            "username.placeholder": "Numele tau de utilizator",
+            "newpassword": "Parola noua",
+            "newpassword.placeholder": "Parola noua",
+            "confirmpassword": "Confirma noua parola",
+            "confirmpassword.placeholder": "Confirma noua parola",
             "email": "Email",
-            "email.placeholder": "Your email"
+            "email.placeholder": "Email-ul tau"
         },
         "messages": {
             "info": {
-                "authenticated": "If you want to <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>, you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
-                "register": "You don't have an account yet? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Register a new account</a>"
+                "authenticated": "Daca vrei sa te <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">loghezi</a>, poti incerca unul dintre conturilor default:<br/>- Administrator (login=\"admin\" si parola=\"admin\") <br/>- Utilizator (login=\"user\" si parola=\"user\").",
+                "register": "Nu ai inca un cont? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Inregistreaza-te.</a>"
             },
             "error": {
-                "dontmatch": "The password and its confirmation do not match!"
+                "dontmatch": "Parola si confirmarea parolei nu sunt identice!"
             },
             "validate": {
                 "newpassword": {
-                    "required": "Your password is required.",
-                    "minlength": "Your password is required to be at least 4 characters.",
-                    "maxlength": "Your password cannot be longer than 50 characters.",
-                    "strength": "Password strength:"
+                    "required": "Este obligatoriu sa introduci o parola",
+                    "minlength": "Parola ta trebuie sa aiba minim 4 caractere",
+                    "maxlength": "Parola ta nu poate avea mai mult de 50 de caractere",
+                    "strength": "Siguranta parolei:"
                 },
                 "confirmpassword": {
-                    "required": "Your confirmation password is required.",
-                    "minlength": "Your confirmation password is required to be at least 4 characters.",
-                    "maxlength": "Your confirmation password cannot be longer than 50 characters."
+                    "required": "Este obligatoriu sa introduci confirmarea parolei",
+                    "minlength": "Confirmarea parolei tale trebuie sa aiba minim 4 caractere",
+                    "maxlength": "Confirmarea parolei tale nu poate avea mai mult de 50 de caractere"
                 },
                 "email": {
-                    "required": "Your email is required.",
-                    "invalid": "Your email is invalid.",
-                    "minlength": "Your email is required to be at least 5 characters.",
-                    "maxlength": "Your email cannot be longer than 50 characters."
+                    "required": "Este obligatoriu sa introduci un email",
+                    "invalid": "Email-ul tau este invalid",
+                    "minlength": "Email-ul tau trebuie sa aiba minim 5 caractere",
+                    "maxlength": "Email-ul tau nu poate avea mai mult de 50 de caractere."
                 }
             }
         },
@@ -84,55 +84,55 @@
             "id": "ID"
         },
         "ribbon": {
-            "dev":"Development"
+            "dev":"Dezvoltare"
         }
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "open": "Open",
-            "save": "Save",
-            "view": "View",
-            "approve": "Approve",
-            "newGroup": "Add new group"
+            "addblob": "Adauga blob",
+            "addimage": "Adauga imagine",
+            "back": "Inapoi",
+            "cancel": "Anuleaza",
+            "delete": "Sterge",
+            "edit": "Modifica",
+            "open": "Deschide",
+            "save": "Salveaza",
+            "view": "Vizualizeaza",
+            "approve": "Aproba",
+            "newGroup": "Adauga un nou grup"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Camp",
+            "value": "Valoare"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Confirma operatia de sterger"
         },
         "upload": {
-            "title": "Upload bulk operation"
+            "title": "Bulk upload"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{ min }} characters.",
-            "maxlength": "This field cannot be longer than {{ max }} characters.",
-            "min": "This field should be at least {{ min }}.",
-            "max": "This field cannot be more than {{ max }}.",
-            "minbytes": "This field should be at least {{ min }} bytes.",
-            "maxbytes": "This field cannot be more than {{ max }} bytes.",
-            "pattern": "This field should follow pattern for {{ pattern }}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "Acest camp este obligatoriu.",
+            "minlength": "Acest camp este obligatoriu sa aiba minim {{ min }} caractere.",
+            "maxlength": "Acets camp nu poate avea mai mult de {{ max }} caractere.",
+            "min": "Acest camp ar trebui sa aiba cel putin {{ min }}.",
+            "max": "This field cannot be more than {{ max }} caractere.",
+            "minbytes": "Acest camp ar trebui sa aiba minim {{ min }} octeti.",
+            "maxbytes": "Acest camp ar trebui sa aiba maxim {{ max }} octeti.",
+            "pattern": "Acest camp ar trebui sa respecte pattern-ul pentru {{ pattern }}.",
+            "number": "Acest camp ar trebui sa fie un numar.",
+            "datetimelocal": "Acest camp ar trebui sa fie o data."
         }
     },
     "error": {
-        "internalServerError": "Internal server error",
-        "server.not.reachable": "Server not reachable",
-        "url.not.found": "Not found",
-        "NotNull": "Field {{ fieldName }} cannot be empty!",
-        "Size": "Field {{ fieldName }} does not meet min/max size requirements!",
-        "userexists": "Login name already used!",
-        "emailexists": "Email is already in use!",
-        "idexists": "A new {{ entityName }} cannot already have an ID"
+        "internalServerError": "Eroare de server",
+        "server.not.reachable": "Serverul nu este disponibil",
+        "url.not.found": "Nu a fost gasit",
+        "NotNull": "Campul{{ fieldName }} nu poate fi gol!",
+        "Size": "Campul {{ fieldName }} nu indeplineste cerintele de dimensiune minima/maxima!",
+        "userexists": "Nume de login deja utilizat!",
+        "emailexists": "Email-ul tau deja este utilizat!",
+        "idexists": "O noua entitate {{ entityName }} nu poate avea deja un ID"
     },
     "footer": "&copy; Colegiul Pacientilor"
 }
