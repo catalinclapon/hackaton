@@ -1,26 +1,26 @@
 {
     "reset": {
         "request": {
-            "title": "Reset your password",
+            "title": "Resetare parola",
             "form": {
-                "button": "Reset password"
+                "button": "Resetare"
             },
             "messages": {
-                "info": "Enter the email address you used to register",
-                "success": "Check your emails for details on how to reset your password.",
-                "notfound": "<strong>Email address isn't registered!</strong> Please check and try again"
+                "info": "Introduceti adresa de mail cu care v-ati intregistrat",
+                "success": "Verificati-va email-ul pentru detalii cu privire la resetarea parolei.",
+                "notfound": "<strong>Adresa de email nu este inregistrata!</strong> Va rugam sa verificati si sa incercati din nou"
             }
         },
         "finish" : {
-            "title": "Reset password",
+            "title": "Resetare parola",
             "form": {
-                "button": "Validate new password"
+                "button": "Confirma noua parola"
             },
             "messages": {
-                "info": "Choose a new password",
-                "success": "<strong>Your password has been reset.</strong> Please <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>.",
-                "keymissing": "The reset key is missing.",
-                "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
+                "info": "Alege o parola noua",
+                "success": "<strong>Parola dvs a fost resetata.</strong> Va rugam <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificati-va</a>.",
+                "keymissing": "Lipseste reset key-ul.",
+                "error": "Parola nu a putut fi resetata. O cerere de resetare dureaza doar 24 de ore."
             }
         }
     }
