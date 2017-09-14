@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Gateway",
+        "routes": {
+            "title": "Rute curente",
+            "url": "URL",
+            "service": "serviciu",
+            "servers": "Servere disponibile",
+            "error": "Avertisment! Nici un server disponibil."
+        },
+        "refresh": {
+            "button": "Refresh"
+        }
+    }
+}

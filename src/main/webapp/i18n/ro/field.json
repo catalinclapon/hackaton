@@ -1,0 +1,28 @@
+{
+    "hackatonApp": {
+        "field" : {
+            "home": {
+                "title": "Campuri",
+                "createLabel": "Creeaza un nou camp",
+                "createOrEditLabel": "Creeaza sau modifica un camp",
+                "search": "Cauta un camp"
+            },
+            "created": "Un nou camp a fost creat cu identificatorul {{ param }}",
+            "updated": "Campul cu identificatorul {{ param }} a fost modificat",
+            "deleted": "Campul cu identificatorul {{ param }} a fost sters",
+            "delete": {
+                "question": "Esti sigur ca vrei sa stergi campul cu identificatorul {{ id }}?"
+            },
+            "detail": {
+                "title": "Camp"
+            },
+            "name": "Nume",
+            "desc": "Descriere",
+            "type": "Tip",
+            "min": "Minim",
+            "required": "Obligatoriu",
+            "max": "Maxim",
+            "extValidation": "Validare"
+        }
+    }
+}

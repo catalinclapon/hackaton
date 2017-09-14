@@ -1,0 +1,9 @@
+{
+    "activate": {
+        "title": "Activare",
+        "messages": {
+            "success": "<strong>Contul tau a fost activat.</strong> Please <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>.",
+            "error": "<strong>Contul tau nu a putut fi activat.</strong> Te rugam sa folosesti formularul de inregistrare."
+        }
+    }
+}
