@@ -1,0 +1,24 @@
+{
+    "hackatonApp": {
+        "medicalCaseField" : {
+            "home": {
+                "title": "Medical Case Fields",
+                "createLabel": "Create a new Medical Case Field",
+                "createOrEditLabel": "Create or edit a Medical Case Field",
+                "search": "Search for Medical Case Field"
+            },
+            "created": "A new Medical Case Field is created with identifier {{ param }}",
+            "updated": "A Medical Case Field is updated with identifier {{ param }}",
+            "deleted": "A Medical Case Field is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Medical Case Field {{ id }}?"
+            },
+            "detail": {
+                "title": "Medical Case Field"
+            },
+            "value": "Value",
+            "field": "Field",
+            "medicalCase": "Medical Case"
+        }
+    }
+}

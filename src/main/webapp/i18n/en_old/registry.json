@@ -1,0 +1,38 @@
+{
+    "hackatonApp": {
+        "registry" : {
+            "admin": "Admin",
+            "home": {
+                "title": "Registries",
+                "createLabel": "Create a new Registry",
+                "createOrEditLabel": "Create or edit a Registry",
+                "search": "Search for Registry",
+                "bulkUpload": "Bulk upload",
+                "downloadTemplate": "Download template",
+                "exportPdf": "Export PDF"
+            },
+            "created": "A new Registry is created with identifier {{ param }}",
+            "updated": "A Registry is updated with identifier {{ param }}",
+            "deleted": "A Registry is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Registry {{ id }}?"
+            },
+            "detail": {
+                "title": "Registry"
+            },
+            "name": "Name",
+            "desc": "Desc",
+            "uuid": "Uuid",
+            "status": "Status",
+            "field": {
+                "name": "Name",
+                "desc": "Description",
+                "type": "Type",
+                "min": "Min value",
+                "required": "Required",
+                "max": "Max value",
+                "values": "Values"
+            }
+        }
+    }
+}

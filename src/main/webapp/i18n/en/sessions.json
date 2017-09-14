@@ -1,15 +1,15 @@
 {
     "sessions": {
-        "title": "Active sessions for [<b>{{username}}</b>]",
+        "title": "Activeaza sesiunea pentru utilizatorul [<b>{{username}}</b>]",
         "table": {
-            "ipaddress": "IP address",
+            "ipaddress": "Adresa IP",
             "useragent": "User Agent",
-            "date": "Date",
-            "button": "Invalidate"
+            "date": "Data",
+            "button": "Infirma"
         },
         "messages": {
-            "success": "<strong>Session invalidated!</strong>",
-            "error": "<strong>An error has occurred!</strong> The session could not be invalidated."
+            "success": "<strong>Sesiune infirmata!</strong>",
+            "error": "<strong>A aparut o eroare!</strong> Sesiunea nu a putut fi infirmata."
         }
     }
 }

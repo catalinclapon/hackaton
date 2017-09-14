@@ -95,7 +95,7 @@
                     <a class="dropdown-toggle" uib-dropdown-toggle href="" id="user-groups-menu-item">
                         <span>
                             <span class="glyphicon glyphicon-tower"></span>
-                            <span class="hidden-sm">Users/Groups management</span>
+                            <span class="hidden-sm">Administrarea grupurilor de utilizatori</span>
                             <b class="caret"></b>
                         </span>
                     </a>
@@ -104,21 +104,21 @@
                         <li ui-sref-active="active" has-any-authority="ROLE_ADMIN">
                             <a ui-sref="user-management" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-user"></span>&nbsp;
-                                <span>User management</span>
+                                <span>Administrarea utilizatorilor</span>
                             </a>
                         </li>
                     <!-- has-any-authority="ROLE_ADMIN" -->
                         <li ui-sref-active="active" has-any-authority="ROLE_ADMIN">
                             <a ui-sref="group-management" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-user"></span>&nbsp;
-                                <span>Group management</span>
+                                <span>Administrarea grupurilor</span>
                             </a>
                         </li>
                     <!--  -->
                         <li ui-sref-active="active" has-any-authority="ROLE_ADMIN, ROLE_PROVIDER">
                             <a ui-sref="user-group-management" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-user"></span>&nbsp;
-                                <span>User/Group management</span>
+                                <span>Administrarea grupurilor de utilizatori</span>
                             </a>
                         </li>
                     </ul>

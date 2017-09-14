@@ -2,27 +2,27 @@
     "hackatonApp": {
         "field" : {
             "home": {
-                "title": "Fields",
-                "createLabel": "Create a new Field",
-                "createOrEditLabel": "Create or edit a Field",
-                "search": "Search for Field"
+                "title": "Campuri",
+                "createLabel": "Creeaza un nou camp",
+                "createOrEditLabel": "Creeaza sau actualizeaza un camp",
+                "search": "Cauta un camp"
             },
-            "created": "A new Field is created with identifier {{ param }}",
-            "updated": "A Field is updated with identifier {{ param }}",
-            "deleted": "A Field is deleted with identifier {{ param }}",
+            "created": "Un nou camp a fost creat cu identificatorul {{ param }}",
+            "updated": "Campul cu identificatorul {{ param }} a fost actualizat",
+            "deleted": "Campul cu identificatorul {{ param }} a fost sters",
             "delete": {
-                "question": "Are you sure you want to delete Field {{ id }}?"
+                "question": "Esti sigur ca vrei sa stergi campul cu identificatorul {{ id }}?"
             },
             "detail": {
-                "title": "Field"
+                "title": "Camp"
             },
-            "name": "Name",
-            "desc": "Desc",
-            "type": "Type",
-            "min": "Min",
-            "required": "Required",
-            "max": "Max",
-            "extValidation": "Ext Validation"
+            "name": "Nume",
+            "desc": "Descriere",
+            "type": "Tip",
+            "min": "Minim",
+            "required": "Obligatoriu",
+            "max": "Maxim",
+            "extValidation": "Validare"
         }
     }
 }

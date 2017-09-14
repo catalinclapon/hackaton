@@ -2,24 +2,24 @@
     "hackatonApp": {
         "patient" : {
             "home": {
-                "title": "Patients",
-                "createLabel": "Create a new Patient",
-                "createOrEditLabel": "Create or edit a Patient",
-                "search": "Search for Patient"
+                "title": "Pacienti",
+                "createLabel": "Creeaza un nou pacient",
+                "createOrEditLabel": "Creeaza sau editeaza un pacient",
+                "search": "Cauta un pacient"
             },
-            "created": "A new Patient is created with identifier {{ param }}",
-            "updated": "A Patient is updated with identifier {{ param }}",
-            "deleted": "A Patient is deleted with identifier {{ param }}",
+            "created": "Pacientul cu identificatorul {{ param }} a fost creat.",
+            "updated": "Pacientul cu identificatorul {{ param }} a fost actualizat",
+            "deleted": "Pacientul cu identificatorul {{ param }} a fost sters",
             "delete": {
-                "question": "Are you sure you want to delete Patient {{ id }}?"
+                "question": "Esti sigur ca vrei sa stergi pacientul cu identificatorul {{ id }}?"
             },
             "detail": {
-                "title": "Patient"
+                "title": "Pacient"
             },
-            "firstName": "First Name",
-            "lastName": "Last Name",
-            "cnp": "Cnp",
-            "user": "User"
+            "firstName": "Prenume",
+            "lastName": "Nume",
+            "cnp": "CNP",
+            "user": "Utilizator"
         }
     }
 }

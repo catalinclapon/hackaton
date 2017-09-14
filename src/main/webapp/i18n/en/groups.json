@@ -2,21 +2,21 @@
     "hackatonApp": {
         "groups" : {
             "home": {
-                "title": "Groups",
-                "createLabel": "Create a new Groups",
-                "createOrEditLabel": "Create or edit a Groups",
-                "search": "Search for Groups"
+                "title": "Grupuri",
+                "createLabel": "Creeaza un nou grup",
+                "createOrEditLabel": "Creeaza sau editeaza un grup",
+                "search": "Cauta grupuri"
             },
-            "created": "A new Groups is created with identifier {{ param }}",
-            "updated": "A Groups is updated with identifier {{ param }}",
-            "deleted": "A Groups is deleted with identifier {{ param }}",
+            "created": "Un nou grup a fost creat cu identificatorul {{ param }}",
+            "updated": "Grupul cu identificatorul {{ param }} a fost actualizat",
+            "deleted": "Grupul cu identificatorul {{ param }} a fost sters",
             "delete": {
-                "question": "Are you sure you want to delete Groups {{ id }}?"
+                "question": "Esti sigur ca vrei sa stergi grupul cu id-ul {{ id }}?"
             },
             "detail": {
-                "title": "Groups"
+                "title": "Grupuri"
             },
-            "name": "Name"
+            "name": "Nume"
         }
     }
 }
