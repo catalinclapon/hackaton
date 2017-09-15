@@ -13,4 +13,6 @@ import org.springframework.data.jpa.repository.*;
 @Repository
 public interface MedicalCaseFieldRepository extends JpaRepository<MedicalCaseField,Long> {
 
+    void deleteById(Long id);
+
 }

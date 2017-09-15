@@ -4,12 +4,9 @@ import com.db.hackaton.domain.Field;
 import com.db.hackaton.domain.Registry;
 import com.db.hackaton.domain.RegistryField;
 import com.db.hackaton.domain.User;
+import com.db.hackaton.repository.*;
 import com.db.hackaton.service.dto.FieldDTO;
 import com.db.hackaton.service.dto.UserDTO;
-import com.db.hackaton.repository.FieldRepository;
-import com.db.hackaton.repository.RegistryFieldRepository;
-import com.db.hackaton.repository.RegistryRepository;
-import com.db.hackaton.repository.UserRepository;
 import com.db.hackaton.repository.search.RegistrySearchRepository;
 import com.db.hackaton.security.SecurityUtils;
 import com.db.hackaton.service.RegistryService;
@@ -46,11 +43,13 @@ public class RegistryServiceImpl implements RegistryService {
 
 	private final RegistrySearchRepository registrySearchRepository;
 
+	private final MedicalCaseFieldRepository medicalCaseFieldRepository;
+
 	private final UserRepository userRepository;
 
 	public RegistryServiceImpl(RegistryRepository registryRepository, RegistryFieldRepository registryFieldRepository,
 			FieldRepository fieldRepository, RegistrySearchRepository registrySearchRepository,
-			UserRepository userRepository) {
+			UserRepository userRepository, MedicalCaseFieldRepository medicalCaseFieldRepository) {
 		this.registryRepository = registryRepository;
 		this.registryFieldRepository = registryFieldRepository;
 		this.fieldRepository = fieldRepository;
@@ -58,6 +57,7 @@ public class RegistryServiceImpl implements RegistryService {
 
 		this.userRepository = userRepository;
 
+		this.medicalCaseFieldRepository = medicalCaseFieldRepository;
 	}
 
 	/**
@@ -103,6 +103,8 @@ public class RegistryServiceImpl implements RegistryService {
         Registry registry = registryRepository.findOne(registryDTO.getId());
         registry.setName(registryDTO.getName());
         registry.setDesc(registryDTO.getDescription());
+        if(registry.getStatus() != registryDTO.getStatus() && registryDTO.getStatus() != null)
+            registry.setStatus(registryDTO.getStatus());
         registryRepository.saveAndFlush(registry);
 
         // TODO Extract all fields from DTO
@@ -123,6 +125,7 @@ public class RegistryServiceImpl implements RegistryService {
 
                 if (!isPresent) {
                     registryFieldRepository.delete(registryField);
+                    medicalCaseFieldRepository.deleteById(registryField.getField().getId());
                 }
             }
         }
