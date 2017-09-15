@@ -103,7 +103,8 @@ public class RegistryServiceImpl implements RegistryService {
         Registry registry = registryRepository.findOne(registryDTO.getId());
         registry.setName(registryDTO.getName());
         registry.setDesc(registryDTO.getDescription());
-        registry.setStatus(registryDTO.getStatus());
+        if(registry.getStatus() != registryDTO.getStatus() && registryDTO.getStatus() != null)
+            registry.setStatus(registryDTO.getStatus());
         registryRepository.saveAndFlush(registry);
 
         // TODO Extract all fields from DTO
