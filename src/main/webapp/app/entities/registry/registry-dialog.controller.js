@@ -31,6 +31,7 @@
         vm.groupedFields = groupByKey();
         vm.newGroup = newGroup;
         vm.addNewField = addNewField;
+        vm.hasAtLeastOneField = checkFieldGroups();
 
 
         $timeout(function (){
@@ -92,6 +93,8 @@
             var cat = vm.groups[index];
             delete vm.groupedFields[cat];
             vm.groups.remove(cat);
+
+            vm.hasAtLeastOneField = checkFieldGroups();
         }
 
         function removeField(field, index) {
@@ -99,6 +102,8 @@
             if(angular.isDefined(grouped)){
                 grouped.remove(field)
             }
+
+            vm.hasAtLeastOneField = checkFieldGroups();
         }
 
         function newGroup(){
@@ -130,6 +135,23 @@
                     values: ''
                 };
             }
+
+            vm.hasAtLeastOneField = checkFieldGroups();
+        }
+
+        function checkFieldGroups() {
+            var hasField = false;
+
+            vm.groups.forEach(function(item, index) {
+                var fields = vm.groupedFields[index];
+                if(angular.isDefined(fields)){
+                    fields.forEach(function(field, findex){
+                        hasField = true;
+                    });
+                }
+            });
+
+            return hasField;
         }
 
         function groupByKey(){

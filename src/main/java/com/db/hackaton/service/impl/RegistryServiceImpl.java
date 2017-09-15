@@ -1,7 +1,10 @@
 package com.db.hackaton.service.impl;
 
+import com.db.hackaton.domain.Field;
 import com.db.hackaton.domain.Registry;
+import com.db.hackaton.domain.RegistryField;
 import com.db.hackaton.domain.User;
+import com.db.hackaton.service.dto.FieldDTO;
 import com.db.hackaton.service.dto.UserDTO;
 import com.db.hackaton.repository.FieldRepository;
 import com.db.hackaton.repository.RegistryFieldRepository;
@@ -21,9 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -70,17 +71,9 @@ public class RegistryServiceImpl implements RegistryService {
 	public RegistryDTO save(RegistryDTO registryDTO) {
 		log.debug("Request to save Registry : {}", registryDTO);
 		// set status superseded to current registry
-		if (registryDTO.getId() != null) {
-			registryRepository.save(Optional.of(registryDTO).map(RegistryDTO::build).map(registry -> {
-				registry.setStatus("CLOSED");
-				// remove registry
-				registrySearchRepository.delete(registry);
-				return registry;
-			}).get());
-		} else if (registryDTO.getUuid() == null) {
+		if (registryDTO.getUuid() == null) {
 			registryDTO.setUuid(UUID.randomUUID().toString());
 		}
-		// save as new version:
 		Registry registry = registryRepository.save(Optional.of(registryDTO).map(RegistryDTO::build)
 				.map(registry1 -> registry1.id(null).status("DRAFT")).get());
 
@@ -99,16 +92,51 @@ public class RegistryServiceImpl implements RegistryService {
 
 	/**
 	 * Update a registry
-	 * 
+	 *
 	 */
 
 	@Override
 	public RegistryDTO updateRegistry(RegistryDTO registryDTO) {
 		log.debug("Request to update Registry: {} ", registryDTO);
 
-		registryRepository.setStatusForRegistries(registryDTO.getStatus(), registryDTO.getUuid());
+        // save as new version:
+        Registry registry = registryRepository.findOne(registryDTO.getId());
+        registry.setName(registryDTO.getName());
+        registry.setDesc(registryDTO.getDescription());
+        registryRepository.saveAndFlush(registry);
 
-		return registryDTO;
+        // TODO Extract all fields from DTO
+        List<RegistryFieldDTO> newFieldsList = registryDTO.getFields();
+
+        for (RegistryField registryField : registry.getFields()) {
+            if (registryField != null) {
+                boolean isPresent = false;
+                for (RegistryFieldDTO registryFieldDTO : registryDTO.getFields()) {
+                    if (registryField.getField().getId() == registryFieldDTO.getField().getId()) {
+                        registryField.setCategory(registryFieldDTO.getCategory());
+                        registryFieldRepository.saveAndFlush(registryField);
+                        isPresent = true;
+
+                        break;
+                    }
+                }
+
+                if (!isPresent) {
+                    registryFieldRepository.delete(registryField);
+                }
+            }
+        }
+
+        for (RegistryFieldDTO registryFieldDTO : newFieldsList) {
+            if (registryFieldDTO.getField().getId() == null) {
+                RegistryField toSaveRF = RegistryFieldDTO.build(registryFieldDTO);
+                toSaveRF.setRegistry(registry);
+                toSaveRF.setField(fieldRepository.saveAndFlush(FieldDTO.build(registryFieldDTO.getField())));
+                registryFieldRepository.saveAndFlush(toSaveRF);
+            }
+        }
+
+        return registryDTO;
 	}
 
 	/**

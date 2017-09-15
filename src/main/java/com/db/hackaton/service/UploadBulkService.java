@@ -5,6 +5,7 @@ import com.db.hackaton.domain.Field;
 import com.db.hackaton.domain.MedicalCase;
 import com.db.hackaton.domain.MedicalCaseField;
 import com.db.hackaton.domain.Patient;
+import com.db.hackaton.repository.FieldRepository;
 import com.db.hackaton.service.dto.FieldDTO;
 import com.db.hackaton.service.dto.MedicalCaseDTO;
 import com.db.hackaton.service.dto.MedicalCaseFieldDTO;
@@ -34,14 +35,16 @@ public class UploadBulkService {
     private FieldService fieldService;
     private MedicalCaseFieldService medicalCaseFieldService;
     private RegistryService registryService;
+    private FieldRepository fieldRepository;
 
-    public UploadBulkService(ApplicationProperties applicationProperties, RegistryService registryService, MedicalCaseService medicalCaseService, PatientService patientService, FieldService fieldService, MedicalCaseFieldService medicalCaseFieldService) {
+    public UploadBulkService(ApplicationProperties applicationProperties, RegistryService registryService, MedicalCaseService medicalCaseService, PatientService patientService, FieldService fieldService, MedicalCaseFieldService medicalCaseFieldService, FieldRepository fieldRepository) {
         this.applicationProperties = applicationProperties;
         this.medicalCaseService = medicalCaseService;
         this.patientService = patientService;
         this.fieldService = fieldService;
         this.medicalCaseFieldService = medicalCaseFieldService;
         this.registryService = registryService;
+        this.fieldRepository = fieldRepository;
     }
 
     public void save(Map<Pair<String, String>, String> categoryToFieldToValue, String registerUuid) {
@@ -52,6 +55,7 @@ public class UploadBulkService {
         Map<String, Long> fieldMap = registryService.getFieldMapByUuid(registerUuid);
 
         String cnp = "";
+        String medicalCaseName = "";
         // Find Patient
         for (Map.Entry<Pair<String, String>, String> entry : categoryToFieldToValue.entrySet()) {
             if (entry.getKey().getSecond().toUpperCase().equals("CNP")) {
@@ -59,11 +63,20 @@ public class UploadBulkService {
                     .map(val -> val.replaceAll("\"", ""))
                     .orElse(null);
                 log.info("Got cnp {}", cnp);
-                break;
+            } else if (entry.getKey().getSecond().equals("Name")) {
+                medicalCaseName = Optional.ofNullable(entry.getValue())
+                    .map(val -> val.replaceAll("\"", ""))
+                    .orElse(null);
+                log.info("Got medicalCaseName {}", medicalCaseName);
             }
         }
         if(StringUtils.isBlank(cnp)){
             log.warn("Cannot save Medical case without CNP {}", categoryToFieldToValue.toString());
+            return;
+        }
+
+        if(StringUtils.isBlank(medicalCaseName)){
+            log.warn("Cannot save Medical case without a description {}", categoryToFieldToValue.toString());
             return;
         }
 
@@ -74,9 +87,15 @@ public class UploadBulkService {
 
         medicalCase.setPatientCnp(patient.getCnp());
         medicalCase.setRegistryUuid(registerUuid);
+        medicalCase.setName(medicalCaseName);
         medicalCase.setFields(new ArrayList<>());
 
         categoryToFieldToValue.entrySet().forEach(addFieldValueToMedicalCase(medicalCase, fieldMap));
+
+        if(medicalCase.getFields().size() != fieldMap.size()) {
+            log.warn("Wrong fields!");
+            return;
+        }
 
         medicalCaseService.save(medicalCase);
     }
@@ -90,6 +109,8 @@ public class UploadBulkService {
                 return;
             }
 
+            Field field = fieldRepository.findById(fieldId.get());
+
             Pair<String, String> key = entry.getKey();
             String value = entry.getValue();
             log.info("Got getKey: {}", key);
@@ -97,9 +118,8 @@ public class UploadBulkService {
 
             medicalCaseDTO.getFields()
                 .add(MedicalCaseFieldDTO.builder()
-                    .field(FieldDTO.builder()
-                        .id(fieldId.get())
-                        .build())
+                    .id(fieldId.get())
+                    .field(FieldDTO.build(field))
                     .value(value)
                     .build());
         };

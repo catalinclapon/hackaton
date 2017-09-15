@@ -1,0 +1,10 @@
+{
+    "home": {
+        "message": "Who we are and what we do?",
+        "info": " We are an association composed of patients, a non-governmental organization (NGO) with national representativeness born out of the desire to put people's interests first when it comes to human health. We are a group of nationally representative citizens with rapid growth who have decided not to let the way they are treated, the way we spend the money we pay for the snatches, and last but not least what we get for the money on we pay them.",
+        "logged": {
+            "message": "You are logged in as user \"{{username}}\"."
+        },
+        "registries": "Open Registries"
+    }
+}

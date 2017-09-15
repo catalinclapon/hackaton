@@ -2,24 +2,24 @@
     "hackatonApp": {
         "registryField" : {
             "home": {
-                "title": "Registry Fields",
-                "createLabel": "Create a new Registry Field",
-                "createOrEditLabel": "Create or edit a Registry Field",
-                "search": "Search for Registry Field"
+                "title": "Campurile Registrului",
+                "createLabel": "Creeaza un nou Camp de Registru",
+                "createOrEditLabel": "Creaza sau editeaza un Camp de Registru",
+                "search": "Cauta un Camp de Registru"
             },
-            "created": "A new Registry Field is created with identifier {{ param }}",
-            "updated": "A Registry Field is updated with identifier {{ param }}",
-            "deleted": "A Registry Field is deleted with identifier {{ param }}",
+            "created": "Campul de Registru cu identificatorul {{ param }} a fost creat.",
+            "updated": "Campul de Registru cu identificatorul {{ param }} a fost actualizat",
+            "deleted": "Campul de Registru cu identificatorul {{ param }} a fost sters",
             "delete": {
-                "question": "Are you sure you want to delete Registry Field {{ id }}?"
+                "question": "Esti sigur ca vrei sa stergi campul de registru cu identificatorul {{ id }}?"
             },
             "detail": {
-                "title": "Registry Field"
+                "title": "Campurile registrurlui"
             },
-            "order": "Order",
-            "category": "Category",
-            "registry": "Registry",
-            "field": "Field"
+            "order": "Ordinea",
+            "category": "Categoria",
+            "registry": "Registrul",
+            "field": "Campul"
         }
     }
 }

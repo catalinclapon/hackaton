@@ -109,9 +109,8 @@ public class UploadBulkController {
                 }
                 log.info("\n");
             }
+            uploadBulkService.save(categoryToFieldToValue, registerUuid);
         }
-
-        uploadBulkService.save(categoryToFieldToValue, registerUuid);
 
         workbook.close();
         inputStream.close();

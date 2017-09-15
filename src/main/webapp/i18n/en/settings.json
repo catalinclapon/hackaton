@@ -1,38 +1,38 @@
 {
     "settings": {
-        "title": "User settings for [<b>{{username}}</b>]",
+        "title": "Setari penrtu utilizatorul [<b>{{username}}</b>]",
         "form": {
-            "firstname": "First Name",
-            "firstname.placeholder": "Your first name",
-            "lastname": "Last Name",
-            "lastname.placeholder": "Your last name",
-            "language": "Language",
-            "isPatient": "I am a patient",
+            "firstname": "Prenume",
+            "firstname.placeholder": "Ion",
+            "lastname": "Nume",
+            "lastname.placeholder": "Popescu",
+            "language": "Limba",
+            "isPatient": "Sunt un pacient",
             "cnp": "CNP",
             "cnp.placeholder": "2731124201027",
             "button": "Save"
         },
         "messages": {
             "error": {
-                "fail": "<strong>An error has occurred!</strong> Settings could not be saved.",
-                "emailexists": "<strong>Email is already in use!</strong> Please choose another one."
+                "fail": "<strong>Eroare!</strong> Setarile nu au putut fi salvate.",
+                "emailexists": "<strong>Adresa de email este deja folosita!</strong> Va rugam sa alegeti alta."
             },
-            "success": "<strong>Settings saved!</strong>",
+            "success": "<strong>Setari salvate!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "Your first name is required.",
-                    "minlength": "Your first name is required to be at least 1 character",
-                    "maxlength": "Your first name cannot be longer than 50 characters"
+                    "required": "Prenumele dvs a fost salvat.",
+                    "minlength": "Prenumele dvs trebuie sa aiba cel putin un caracter",
+                    "maxlength": "Prenumele dvs poate sa aiba cel mult 50 de caractere"
                 },
                 "lastname": {
-                    "required": "Your last name is required.",
-                    "minlength": "Your last name is required to be at least 1 character",
-                    "maxlength": "Your last name cannot be longer than 50 characters"
+                    "required": "Numele dvs a fost salvat.",
+                    "minlength": "Numele dvs trebuie sa aiba cel putin un caracter",
+                    "maxlength": "Numele dvs poate sa aiba cel mult 50 de caractere"
                 },
                 "cnp": {
-                    "required": "CNP is required for a patient",
-                    "minlength": "CNP is required to have 13 characters",
-                    "maxlength": "CNP is required to have 13 characters"
+                    "required": "CNP-ul este necesar pentru un pacient",
+                    "minlength": "CNP-ul trebuie sa aiba 13 cifre",
+                    "maxlength": "CNP-ul trebuie sa aiba 13 cifre"
                 }
             }
         }

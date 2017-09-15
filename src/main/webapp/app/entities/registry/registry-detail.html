@@ -82,18 +82,17 @@
     <table class="jh-table table table-striped" id="registryTable">
         <thead>
         <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-            <th jh-sort-by="name" has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"><span>CNP</span> <span class="glyphicon glyphicon-sort"></span></th>
-            <th jh-sort-by="desc"><span>Nume</span> <span class="glyphicon glyphicon-sort"></span></th>
-            <th jh-sort-by="status" has-any-authority="ROLE_ADMIN, ROLE_DOCTOR"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
-            
+            <th jh-sort-by="name"><span>CNP</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="desc"><span>Descriere</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="status" has-any-authority="ROLE_ADMIN"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
         </tr>
         </thead>
 
         <tbody>
         <tr ng-repeat="medicalCase in vm.getSpecificMedicalCases">
-            <td has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN">{{medicalCase.CNP}}</td>
-            <td has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN, ROLE_PATIENT">{{medicalCase.Name}}</td>
-            <td has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN, ROLE_PATIENT">{{medicalCase.status}}</td>
+            <td>{{medicalCase.CNP}}</a></td>
+            <td>{{medicalCase.Name}}</td>
+            <td>{{medicalCase.status}}</td>
             <td class="text-right">
                 <div class="btn-group flex-btn-group-container">
 
@@ -102,37 +101,32 @@
                             class="btn btn-info btn-sm">
                         <span class="glyphicon glyphicon-eye-open"></span>
                         <span class="hidden-sm-down"
-                              data-translate="Vizualizeaza">Vizualizeaza</span>
+                              data-translate="View">View</span>
                     </button>
-                    
 
-                    <!-- Approve button -->
                     <button has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
                             ui-sref="registry-detail.medical-case-approve({cnp:medicalCase.CNP})"
-                            class="btn btn-success btn-sm"
-                            ng-click="vm.changeStatus(medicalCase, 'APPROVED')">
+                            class="btn btn-success btn-sm">
                         <span class="glyphicon glyphicon-flag"></span>
                         <span class="hidden-sm-down ng-scope"
-                              data-translate="Aproba">Aproba</span>
+                              data-translate="Approve">Approve</span>
                     </button>
-                    
-                    
+
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
                             ui-sref="registry-detail.medical-case-edit({cnp:medicalCase.CNP})"
                             class="btn btn-warning btn-sm">
                         <span class="glyphicon glyphicon-pencil"></span>
-                        <span class="hidden-sm-down ng-scope" data-translate="Actualizeaza">Actualizeaza</span>
+                        <span class="hidden-sm-down ng-scope" data-translate="Update">Update</span>
                     </button>
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
                             ui-sref="registry-detail.medical-case-archive({cnp:medicalCase.CNP})"
-                            class="btn btn-success btn-sm"
-                            ng-click="vm.changeStatus(medicalCase,'ARCHIVE')">
+                            class="btn btn-success btn-sm">
                         <span class="glyphicon glyphicon-paperclip"></span>
-                        <span class="hidden-sm-down ng-scope" data-translate="Arhiveaza">Arhiveaza</span>
+                        <span class="hidden-sm-down ng-scope" data-translate="Archive">Archive</span>
                     </button>
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
@@ -160,11 +154,11 @@
     <button type="submit"
                 ui-sref="registry-detail.medical-case-new"
             class="btn btn-info">
-        <span class="glyphicon glyphicon-plus"></span>&nbsp;<span data-translate="Adauga un caz medical">Adauga un caz medical</span>
+        <span class="glyphicon glyphicon-plus"></span>&nbsp;<span data-translate="New medical case"> New medical case</span>
     </button>
     <button type="submit"
             ui-sref="{{ vm.previousState }}"
             class="btn btn-info">
-        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="Inapoi">Inapoi</span>
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
     </button>
 </div>
