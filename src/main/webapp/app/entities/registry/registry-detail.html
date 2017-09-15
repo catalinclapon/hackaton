@@ -82,9 +82,10 @@
     <table class="jh-table table table-striped" id="registryTable">
         <thead>
         <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-            <th jh-sort-by="name"><span>CNP</span> <span class="glyphicon glyphicon-sort"></span></th>
-            <th jh-sort-by="desc"><span>Descriere</span> <span class="glyphicon glyphicon-sort"></span></th>
-            <th jh-sort-by="status" has-any-authority="ROLE_ADMIN"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="name" has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"><span>CNP</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="desc"><span>Nume</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="status" has-any-authority="ROLE_ADMIN, ROLE_DOCTOR"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
+
         </tr>
         </thead>
 
@@ -104,14 +105,16 @@
                               data-translate="View">View</span>
                     </button>
 
+
                     <button has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
-                            type="submit"
-                            ui-sref="registry-detail.medical-case-approve({cnp:medicalCase.CNP})"
-                            class="btn btn-success btn-sm">
+                            type="submit"s
+                            class="btn btn-success btn-sm"
+                            ng-click="vm.changeStatus(medicalCase, 'APPROVED')">
                         <span class="glyphicon glyphicon-flag"></span>
                         <span class="hidden-sm-down ng-scope"
                               data-translate="Approve">Approve</span>
                     </button>
+
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
@@ -123,8 +126,8 @@
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
-                            ui-sref="registry-detail.medical-case-archive({cnp:medicalCase.CNP})"
-                            class="btn btn-success btn-sm">
+                            class="btn btn-success btn-sm"
+                            ng-click="vm.changeStatus(medicalCase,'ARCHIVE')">
                         <span class="glyphicon glyphicon-paperclip"></span>
                         <span class="hidden-sm-down ng-scope" data-translate="Archive">Archive</span>
                     </button>
