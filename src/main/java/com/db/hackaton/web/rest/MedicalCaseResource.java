@@ -100,20 +100,27 @@ public class MedicalCaseResource {
     }
 
     /**
-     * POST  /edit-case : Update an existing medicalCase.
+     * PUT  /medical-cases : Update an existing medicalCase.
      *
      * @param medicalCase the medicalCase to create
      * @return the ResponseEntity with status 201 (Created) and with body the new medicalCase, or with status 400 (Bad Request) if the medicalCase has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PostMapping("/edit-case")
+    @PutMapping("/medical-cases")
     @Timed
     public ResponseEntity<MedicalCaseDTO> updateMedicalCase(@Valid @RequestBody MedicalCaseDTO medicalCase) throws URISyntaxException {
         log.debug("REST request to update MedicalCase : {}", medicalCase);
 
-        MedicalCaseDTO result = medicalCaseService.update(medicalCase);
-        return ResponseEntity.created(new URI("/api/medical-cases/" + result.getId()))
+        MedicalCaseDTO result = medicalCaseService.updateStatus(medicalCase);
+       
+       /* return ResponseEntity.created(new URI("/api/medical-cases/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+            .body(result);*/
+        
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        
+        
     }
 }

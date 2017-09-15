@@ -140,7 +140,6 @@ public class MedicalCaseService {
 
         row.put("CNP", medicalCase.getPatientCnp() != null ? medicalCase.getPatientCnp() : "N/A");
         row.put("Name", medicalCase.getName());
-        row.put("Status", medicalCase.getStatus());
         for (MedicalCaseField field : medicalCase.getFields()) {
             if (field.getField() != null && fields.contains(field.getField().getId())) {
                 row.put(field.getField().getName(), field.getValue());
@@ -250,8 +249,22 @@ public class MedicalCaseService {
         return MedicalCaseDTO.build(medicalCase);
     }
 
-    public MedicalCaseDTO findByRegistryIdAndCNP(Long registryId, String cnp){
-        List<MedicalCase> medicalCaseList = medicalCaseRepository.findByLatestModifiedDateAndRegistryIdAndCnp(registryId, cnp);
+	@SuppressWarnings("static-access")
+	@Transactional
+	public MedicalCaseDTO updateStatus(MedicalCaseDTO medicalCaseDTO) {
+		log.debug("Reguest to update the status for a medical case: {}", medicalCaseDTO);
+
+        String medicalCaseStatus = medicalCaseDTO.getStatus();
+        medicalCaseDTO = findByRegistryIdAndCNP(medicalCaseDTO.getId(), medicalCaseDTO.getPatientCnp());
+		medicalCaseRepository.setStatusForMedicalCase(medicalCaseStatus, medicalCaseDTO.getId());
+
+		return medicalCaseDTO;
+	}
+
+    @Transactional
+	public MedicalCaseDTO findByRegistryIdAndCNP(Long registryId, String cnp) {
+		List<MedicalCase> medicalCaseList = medicalCaseRepository
+				.findByLatestModifiedDateAndRegistryIdAndCnp(registryId, cnp);
 
         return MedicalCaseDTO.build(medicalCaseList.get(0));
     }

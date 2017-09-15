@@ -57,15 +57,13 @@
             <span class="hidden-xs-down" data-translate="hackatonApp.registry.home.bulkUpload"> Bulk upload </span>
         </button>
 
-        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/template"
-           has-any-authority="ROLE_DOCTOR" download="{{vm.registry.name}}.xlsx">
+        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/template" download="{{vm.registry.name}}.xlsx">
             <span class="glyphicon glyphicon-download"></span>
             <span class="hidden-xs-down"
                   data-translate="hackatonApp.registry.home.downloadTemplate"> Download template </span>
         </a>
 
-        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/pdfExport"
-           has-any-authority="ROLE_DOCTOR" download="{{vm.registry.name}}.pdf">
+        <a class="btn btn-primary" target="_blank" href="/api/registries/{{vm.registry.id}}/pdfExport" download="{{vm.registry.name}}.pdf">
             <span class="glyphicon glyphicon-download"></span>
             <span class="hidden-xs-down"
                   data-translate="hackatonApp.registry.home.exportPdf"> Export PDF </span>
@@ -74,19 +72,20 @@
     </div>
     </div>
     <h2>{{vm.registry.name}}</h2>
-    <!--<a class="adminBtn" style="vertical-align:middle" href="/app/entities/registry/adminpage.html">-->
-        <!--<span>Admin list </span></a>-->
-    <!--<a class="adminBtn"  style="vertical-align:middle" href="/app/entities/registry/userpage.html">-->
-        <!--<span>User list </span></a>-->
+    <a class="adminBtn" style="vertical-align:middle" href="/app/entities/registry/adminpage.html">
+        <span>Admin list </span></a>
+    <a class="adminBtn"  style="vertical-align:middle" href="/app/entities/registry/userpage.html">
+        <span>User list </span></a>
     <hr>
 
 <div class="table-responsive">
     <table class="jh-table table table-striped" id="registryTable">
         <thead>
         <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-            <th jh-sort-by="name"><span>CNP</span> <span class="glyphicon glyphicon-sort"></span></th>
-            <th jh-sort-by="desc"><span>Descriere</span> <span class="glyphicon glyphicon-sort"></span></th>
-            <th jh-sort-by="status" has-any-authority="ROLE_ADMIN, ROLE_DOCTOR, ROLE_PROVIDER"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="name" has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"><span>CNP</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="desc"><span>Nume</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="status" has-any-authority="ROLE_ADMIN, ROLE_DOCTOR"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
+
         </tr>
         </thead>
 
@@ -94,7 +93,7 @@
         <tr ng-repeat="medicalCase in vm.getSpecificMedicalCases">
             <td>{{medicalCase.CNP}}</a></td>
             <td>{{medicalCase.Name}}</td>
-            <td has-any-authority="ROLE_ADMIN, ROLE_DOCTOR, ROLE_PROVIDER">{{medicalCase.Status}}</td>
+            <td>{{medicalCase.status}}</td>
             <td class="text-right">
                 <div class="btn-group flex-btn-group-container">
 
@@ -106,15 +105,16 @@
                               data-translate="View">View</span>
                     </button>
 
-                    <button has-any-authority="ROLE_DOCTOR, ROLE_ADMIN"
-                            type="submit"
-                            ui-sref="registry-detail.medical-case-approve({cnp:medicalCase.CNP})"
+                    <button has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                            type="submit"s
                             class="btn btn-success btn-sm"
-                            ng-show="medicalCase.Status != 'APPROVED'">
+                            ng-click="vm.changeStatus(medicalCase, 'APPROVED')">
+
                         <span class="glyphicon glyphicon-flag"></span>
                         <span class="hidden-sm-down ng-scope"
                               data-translate="Approve">Approve</span>
                     </button>
+
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
@@ -126,6 +126,7 @@
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
+                            ng-click="vm.changeStatus(medicalCase,'ARCHIVE')"
                             ui-sref="registry-detail.medical-case-archive({cnp:medicalCase.CNP})"
                             class="btn btn-danger btn-sm"
                             ng-show="medicalCase.Status == 'PENDING_APPROVAL'">
@@ -136,8 +137,10 @@
                     <button has-any-authority="ROLE_PATIENT,ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
                             ui-sref="registry-detail.medical-case-archive({cnp:medicalCase.CNP})"
+                            ng-click="vm.changeStatus(medicalCase,'ARCHIVE')"
                             class="btn btn-success btn-sm"
                             ng-show="medicalCase.Status != 'PENDING_APPROVAL'">
+
                         <span class="glyphicon glyphicon-paperclip"></span>
                         <span class="hidden-sm-down ng-scope" data-translate="Archive">Archive</span>
                     </button>
@@ -155,10 +158,10 @@
         </tbody>
     </table>
 </div>
-<!--<div class="text-center">
+<div class="text-center">
     <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
     <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
-</div>-->
+</div>
 
 </tbody>
 

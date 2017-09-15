@@ -59,4 +59,7 @@ public class MedicalCaseDTO {
             .status(mcDTO.getStatus())
             .name(mcDTO.getName());
     }
+    
+    
+    
 }

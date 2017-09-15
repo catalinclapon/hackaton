@@ -5,15 +5,18 @@
         .module('hackatonApp')
         .controller('RegistryDetailController', RegistryDetailController);
 
-    RegistryDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Registry', 'RegistryData', '$translate', '$interval', 'AlertService'];
+    RegistryDetailController.$inject = ['$scope','MedicalCase', '$rootScope', '$stateParams', 'previousState', 'entity', 'Registry', 'RegistryData', '$translate', '$interval', 'AlertService'];
 
-    function RegistryDetailController($scope, $rootScope, $stateParams, previousState, entity, Registry, RegistryData, $translate, $interval, AlertService) {
+    function RegistryDetailController($scope,MedicalCase, $rootScope, $stateParams, previousState, entity, Registry, RegistryData, $translate, $interval, AlertService) {
         var vm = this, fields = entity.fields, fieldIds = [];
 
+        vm.changeStatus=changeStatus;
         vm.registry = entity;
+        vm.medicalCase=entity;
         vm.getSpecificMedicalCases = [];
         vm.previousState = previousState.name;
         vm.selectedCnp = '';
+        vm.medicalCases=[];
 
         var unsubscribe = $rootScope.$on('hackatonApp:registryUpdate', function (event, result) {
             vm.registry = result;
@@ -32,12 +35,13 @@
                                 id: entity.id,
                                 uuid: entity.uuid,
                                 fields: fieldIds
+
                     }, onSuccess, onError);
 
             function onSuccess(data, headers) {
                 vm.getSpecificMedicalCases = data;
 
-                /*vm.links = ParseLinks.parse(headers('link'));
+              /*  vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.registries = data;
@@ -48,6 +52,14 @@
                 AlertService.error(error.data.message);
             }
         }
+
+     // change status function
+		function changeStatus(medicalCase, status) {
+			medicalCase.status = status;
+			medicalCase.id = vm.medicalCase.id;
+			medicalCase.patientCnp = vm.getSpecificMedicalCases[0].CNP;
+			MedicalCase.update(medicalCase);
+		}
 
         if (angular.isDefined(entity.fields)) {
 

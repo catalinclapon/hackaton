@@ -7,7 +7,7 @@
     MedicalCase.$inject = ['$resource'];
 
     function MedicalCase ($resource) {
-        var resourceUrl =  'api/medical-cases/:registryId/:cnp';
+        var resourceUrl =  'api/medical-cases/:registryId/:cnp';//:registryId/:cnp
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
