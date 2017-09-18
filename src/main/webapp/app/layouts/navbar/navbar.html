@@ -41,55 +41,6 @@
                         <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                     </ul>
                 </li>
-                <li ng-class="{active: vm.$state.includes('account')}" uib-dropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="account-menu">
-                        <span>
-                            <span class="glyphicon glyphicon-user"></span>
-                            <span class="hidden-sm" data-translate="global.menu.account.main">
-                                Account
-                            </span>
-                            <b class="caret"></b>
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu" uib-dropdown-menu>
-                        <li ui-sref-active="active" ng-switch-when="true">
-                            <a ui-sref="settings" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-wrench"></span>&nbsp;
-                                <span data-translate="global.menu.account.settings">Settings</span>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active" ng-switch-when="true">
-                            <a ui-sref="password" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-lock"></span>&nbsp;
-                                <span data-translate="global.menu.account.password">Password</span>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active" ng-switch-when="true">
-                            <a ui-sref="sessions" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-cloud"></span>&nbsp;
-                                <span data-translate="global.menu.account.sessions">Sessions</span>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active" ng-switch-when="true">
-                            <a href="" ng-click="vm.logout()" id="logout">
-                                <span class="glyphicon glyphicon-log-out"></span>&nbsp;
-                                <span data-translate="global.menu.account.logout">Sign out</span>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active" ng-switch-when="false">
-                            <a href="" ng-click="vm.login()" id="login">
-                                <span class="glyphicon glyphicon-log-in"></span>&nbsp;
-                                <span data-translate="global.menu.account.login">Sign in</span>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active" ng-switch-when="false">
-                            <a ui-sref="register" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;
-                                <span data-translate="global.menu.account.register">Register</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
 
                 <li ng-switch-when="true" has-any-authority="ROLE_ADMIN, ROLE_PROVIDER" uib-dropdown class="dropdown pointer">
                     <a class="dropdown-toggle" uib-dropdown-toggle href="" id="user-groups-menu-item">
@@ -189,6 +140,56 @@
                     <ul class="dropdown-menu" uib-dropdown-menu ng-if="languageVm.languages.length > 1">
                         <li active-menu="{{language}}" ng-repeat="language in languageVm.languages">
                             <a href="" ng-click="languageVm.changeLanguage(language);vm.collapseNavbar();">{{language | findLanguageFromKey}}</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li ng-class="{active: vm.$state.includes('account')}" uib-dropdown class="dropdown pointer">
+                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="account-menu">
+                        <span>
+                            <span class="glyphicon glyphicon-user"></span>
+                            <span class="hidden-sm" data-translate="global.menu.account.main">
+                                Account
+                            </span>
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu" uib-dropdown-menu>
+                        <li ui-sref-active="active" ng-switch-when="true">
+                            <a ui-sref="settings" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-wrench"></span>&nbsp;
+                                <span data-translate="global.menu.account.settings">Settings</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-switch-when="true">
+                            <a ui-sref="password" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-lock"></span>&nbsp;
+                                <span data-translate="global.menu.account.password">Password</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-switch-when="true">
+                            <a ui-sref="sessions" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-cloud"></span>&nbsp;
+                                <span data-translate="global.menu.account.sessions">Sessions</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-switch-when="true">
+                            <a href="" ng-click="vm.logout()" id="logout">
+                                <span class="glyphicon glyphicon-log-out"></span>&nbsp;
+                                <span data-translate="global.menu.account.logout">Sign out</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-switch-when="false">
+                            <a href="" ng-click="vm.login()" id="login">
+                                <span class="glyphicon glyphicon-log-in"></span>&nbsp;
+                                <span data-translate="global.menu.account.login">Sign in</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-switch-when="false">
+                            <a ui-sref="register" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;
+                                <span data-translate="global.menu.account.register">Register</span>
+                            </a>
                         </li>
                     </ul>
                 </li>
