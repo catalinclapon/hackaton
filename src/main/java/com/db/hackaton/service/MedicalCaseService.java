@@ -138,8 +138,11 @@ public class MedicalCaseService {
     private Map<String, String> createFields(MedicalCase medicalCase, List<MedicalCase> cases, List<Long> fields) {
         Map<String, String> row = new HashMap<>();
 
-        row.put("CNP", medicalCase.getPatientCnp() != null ? medicalCase.getPatientCnp() : "N/A");
+        if (CollectionUtils.isEmpty(patientRepository.findByUserIsCurrentUser())) {
+            row.put("CNP", medicalCase.getPatientCnp() != null ? medicalCase.getPatientCnp() : "N/A");
+        }
         row.put("Name", medicalCase.getName());
+        row.put("Status", medicalCase.getStatus());
         for (MedicalCaseField field : medicalCase.getFields()) {
             if (field.getField() != null && fields.contains(field.getField().getId())) {
                 row.put(field.getField().getName(), field.getValue());
