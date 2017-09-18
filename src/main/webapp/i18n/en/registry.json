@@ -3,13 +3,13 @@
         "registry" : {
             "admin": "Administrator",
             "home": {
-                "title": "Registre",
+                "title": "Registri",
                 "createLabel": "Creeaza un nou registru",
                 "createOrEditLabel": "Creeaza sau editeaza un registru",
                 "search": "Cauta un registru",
                 "bulkUpload": "Adauga cazuri",
                 "downloadTemplate": "Descarca sablon",
-                "exportPdf": "Export PDF"
+                "exportPdf": "Exporta PDF"
             },
             "created": "Registrul cu identificatorul {{ param }} a fost creat.",
             "updated": "Registrul cu identificatorul {{ param }} a fost actualizat",
