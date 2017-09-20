@@ -197,7 +197,34 @@
                     });
                 }]
             })
-
+            .state('registry-detail.medical-case-delete', {
+                parent: 'registry-detail',
+                url: '/medical-case/{cnp}/delete',
+                data: {
+                    authorities: ['ROLE_ADMIN','ROLE_DOCTOR','ROLE_PATIENT']
+                },
+                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'app/entities/medical-case/medical-case-delete-dialog.html',
+                        controller: 'MedicalCaseDeleteController',
+                        controllerAs: 'vm',
+                        backdrop: 'static',
+                        size: 'lg',
+                        resolve: {
+                            registry: ['Registry', function (Registry) {
+                                return Registry.get({id: $stateParams.id}).$promise;
+                            }],
+                            entity: ['MedicalCase', function(MedicalCase) {
+                                return MedicalCase.get({registryId: $stateParams.id, cnp : $stateParams.cnp}).$promise;
+                            }]
+                        }
+                    }).result.then(function () {
+                        $state.go('registry-detail', {id: $stateParams.id}, {reload: 'registry-detail'});
+                    }, function () {
+                        $state.go('registry-detail');
+                    });
+                }]
+            })
             .state('registry-detail.medical-case-view', {
                 parent: 'registry-detail',
                 url: '/medical-case/{cnp}/view',
