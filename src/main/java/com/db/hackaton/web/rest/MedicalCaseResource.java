@@ -134,6 +134,7 @@ public class MedicalCaseResource {
     @Timed
     public ResponseEntity<Void> deleteMedicalCase(@PathVariable Long id) {
         log.debug("REST request to delete MedicalCase : {}", id);
+        medicalCaseService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

@@ -45,7 +45,8 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     @Column(name = "patient_cnp")
     private String patientCnp;
 
-    @OneToMany(mappedBy = "medicalCase", targetEntity = MedicalCaseField.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "medicalCase", targetEntity = MedicalCaseField.class, fetch = FetchType.EAGER,
+        cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MedicalCaseField> fields = new TreeSet<>();
 
     public Long getId() {

@@ -125,14 +125,6 @@ public class MedicalCaseService {
         medicalCaseRepository.delete(id);
         medicalCaseSearchRepository.delete(id);
 
-        medicalCaseRepository.save(Optional.of(medicalCaseDTO)
-            .map(MedicalCaseDTO::build)
-            .map(mc -> {
-                mc.setStatus("DELETED");
-                medicalCaseSearchRepository.delete(mc);
-                return mc;
-            }).get());
-
     }
 
     private Map<String, String> createFields(MedicalCase medicalCase, List<MedicalCase> cases, List<Long> fields) {
