@@ -144,7 +144,7 @@
                     </button>
 
                     <a class="btn btn-primary btn btn-info btn-sm" has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
-                       target="_blank" href="/api/registries/{{vm.registry.id}}/pdfExport" download="{{vm.registry.name}}.pdf">
+                       target="_blank" href="/api/medical-cases/{{medicalCase.id}}/pdfExport" download="{{medicalCase.Name}}.pdf">
                         <span class="glyphicon glyphicon-floppy-disk"></span>
                         <span class="hidden-xs-down"
                               data-translate="hackatonApp.registry.home.exportPdf"> Export </span>

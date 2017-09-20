@@ -221,59 +221,13 @@ public class RegistryResource {
     public void exportPdf(@PathVariable Long id,
                           HttpServletResponse response) throws IOException {
 
+        log.debug("Export to PDF Registry : {}", id);
+
         RegistryDTO registry = registryService.findOne(id);
-        // Create a document and add a page to it
-        PDDocument document = new PDDocument();
-
-        // Create a new font object selecting one of the PDF base fonts
-        PDFont font = PDType1Font.HELVETICA_BOLD;
-
         List<MedicalCase> cases = medicalCaseService.findByRegistryUuid(registry.getUuid());
-        for (MedicalCase mc : cases) {
-            PDPage page = new PDPage();
-            document.addPage(page);
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDDocument document = medicalCaseService.exportDocuments(cases);
 
-            contentStream.beginText();
-            contentStream.setFont(font, 12);
-            contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(100, 700);
-
-            contentStream.showText("CNP: " + mc.getPatientCnp());
-            contentStream.newLine();
-            contentStream.showText("Medical case description: " + mc.getName());
-            contentStream.newLine();
-            contentStream.showText("Medical case status: " + mc.getStatus());
-            contentStream.newLine();
-            contentStream.showText("Last modified date:" + mc.getLastModifiedDate());
-            contentStream.newLine();
-
-            for (MedicalCaseField field : mc.getFields()) {
-                contentStream.showText(field.getField().getName() + ": "+ field.getValue());
-                contentStream.newLine();
-            }
-            contentStream.endText();
-            contentStream.close();
-        }
-
-
-        // Save the results and ensure that the document is properly closed:
-        File file = new File(applicationProperties.getLocalStoragePath() + "/" + registry.getUuid() + ".pdf");
-        document.save(file);
-        document.close();
-        try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bos.write(FileUtils.readFileToByteArray(file));
-
-            //byte[] -> InputStream
-            ByteArrayInputStream inStream = new ByteArrayInputStream(bos.toByteArray());
-
-            org.apache.commons.io.IOUtils.copy(inStream, response.getOutputStream());
-            response.flushBuffer();
-        } catch (IOException ex) {
-            log.info("Error writing file to output stream. Registry Id '{}'", id, ex);
-            throw new RuntimeException("IOError writing file to output stream");
-
-        }
+        String pathName = applicationProperties.getLocalStoragePath() + "/" + registry.getUuid() + ".pdf";
+        medicalCaseService.saveDocument(document, pathName, response);
     }
 }
