@@ -112,15 +112,28 @@ public class MedicalCaseResource {
         log.debug("REST request to update MedicalCase : {}", medicalCase);
 
         MedicalCaseDTO result = medicalCaseService.updateStatus(medicalCase);
-       
+
        /* return ResponseEntity.created(new URI("/api/medical-cases/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);*/
-        
+
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
                 .body(result);
-        
-        
+
+
+    }
+
+    /**
+     * DELETE  /medical-cases/:id : delete the medical case with id = "id".
+     *
+     * @param id the id of the medicalCase to delete
+     * @return the ResponseEntity with status 200 (OK) and with body the medicalCase, or with status 404 (Not Found)
+     */
+    @DeleteMapping("/medical-cases/{id}")
+    @Timed
+    public ResponseEntity<Void> deleteMedicalCase(@PathVariable Long id) {
+        log.debug("REST request to delete MedicalCase : {}", id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

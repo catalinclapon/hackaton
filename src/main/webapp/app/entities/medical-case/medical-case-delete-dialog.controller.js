@@ -18,7 +18,7 @@
             $uibModalInstance.dismiss('cancel');
         }
 
-        function confirmDelete (id) {
+        function confirmDelete(id) {
             MedicalCase.delete({id: id},
                 function () {
                     $uibModalInstance.close(true);

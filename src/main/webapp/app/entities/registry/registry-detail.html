@@ -126,7 +126,7 @@
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
-                            ng-click="vm.changeStatus(medicalCase,'DELETED')"
+                            ui-sref="registry-detail.medical-case-delete({cnp:medicalCase.CNP})"
                             class="btn btn-danger btn-sm"
                             ng-show="medicalCase.Status == 'PENDING_APPROVAL'">
                         <span class="glyphicon glyphicon-trash"></span>

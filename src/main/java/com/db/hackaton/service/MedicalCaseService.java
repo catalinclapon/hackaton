@@ -138,11 +138,10 @@ public class MedicalCaseService {
     private Map<String, String> createFields(MedicalCase medicalCase, List<MedicalCase> cases, List<Long> fields) {
         Map<String, String> row = new HashMap<>();
 
-        if (CollectionUtils.isEmpty(patientRepository.findByUserIsCurrentUser())) {
-            row.put("CNP", medicalCase.getPatientCnp() != null ? medicalCase.getPatientCnp() : "N/A");
-        }
+        row.put("CNP", medicalCase.getPatientCnp() != null ? medicalCase.getPatientCnp() : "N/A");
         row.put("Name", medicalCase.getName());
         row.put("Status", medicalCase.getStatus());
+        row.put("id", medicalCase.getId().toString());
         for (MedicalCaseField field : medicalCase.getFields()) {
             if (field.getField() != null && fields.contains(field.getField().getId())) {
                 row.put(field.getField().getName(), field.getValue());
@@ -258,7 +257,7 @@ public class MedicalCaseService {
 		log.debug("Reguest to update the status for a medical case: {}", medicalCaseDTO);
 
         String medicalCaseStatus = medicalCaseDTO.getStatus();
-        medicalCaseDTO = findByRegistryIdAndCNP(medicalCaseDTO.getId(), medicalCaseDTO.getPatientCnp());
+        medicalCaseDTO = MedicalCaseDTO.build(medicalCaseRepository.findById(medicalCaseDTO.getId()));
 		medicalCaseRepository.setStatusForMedicalCase(medicalCaseStatus, medicalCaseDTO.getId());
 
 		return medicalCaseDTO;

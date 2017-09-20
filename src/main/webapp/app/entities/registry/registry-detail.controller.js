@@ -56,8 +56,7 @@
      // change status function
 		function changeStatus(medicalCase, status) {
 			medicalCase.status = status;
-			medicalCase.id = vm.medicalCase.id;
-			medicalCase.patientCnp = vm.getSpecificMedicalCases[0].CNP;
+			medicalCase.id = vm.getSpecificMedicalCases[0].id;
 			MedicalCase.update(medicalCase);
 		}
 
