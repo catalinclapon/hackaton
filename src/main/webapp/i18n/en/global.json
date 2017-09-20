@@ -106,7 +106,7 @@
             "value": "Valoare"
         },
         "delete": {
-            "title": "Confirma operatia de sterger"
+            "title": "Confirma operatia de stergere"
         },
         "upload": {
             "title": "Bulk upload"
