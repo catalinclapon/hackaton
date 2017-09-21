@@ -42,6 +42,14 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="approval_by" type="varchar(50)">
+
+            </column>
+
+            <column name="approval_date" type="varchar(50)">
+
+            </column>
+
             <!-- audit //-->
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>

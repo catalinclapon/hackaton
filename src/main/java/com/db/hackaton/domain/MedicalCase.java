@@ -45,9 +45,16 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     @Column(name = "patient_cnp")
     private String patientCnp;
 
+    @Column(name="approval_by")
+    private String approval_by;
+
+    @Column (name="approval_date")
+    private String approval_date;
+
     @OneToMany(mappedBy = "medicalCase", targetEntity = MedicalCaseField.class, fetch = FetchType.EAGER,
         cascade = CascadeType.MERGE, orphanRemoval = true)
     private Set<MedicalCaseField> fields = new TreeSet<>();
+
 
     public Long getId() {
         return id;
@@ -127,6 +134,26 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
         this.fields = fields;
     }
 
+    public String getApprovalBy(){
+        return approval_by;
+    }
+
+    public void setApprovalBy(String approval_by){
+        this.approval_by=approval_by;
+    }
+
+    public MedicalCase approvalBy(String approval_by){
+        setApprovalBy(approval_by);
+        return this;
+    }
+
+    public String getApproval_date(){
+        return approval_date;
+    }
+
+    public void setApprovalDate(String approval_date){
+    this.approval_date=approval_date;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {
