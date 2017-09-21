@@ -92,7 +92,7 @@
 
         <tbody>
         <tr ng-repeat="medicalCase in vm.getSpecificMedicalCases">
-            <td has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN" >{{medicalCase.CNP}}</a></td>
+            <td has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN">{{medicalCase.CNP}}</a></td>
             <td>{{medicalCase.Name}}</td>
             <td>{{medicalCase.Status}}</td>
             <td>{{medicalCase.approval_by}}</td>
@@ -109,9 +109,11 @@
                     </button>
 
                     <button has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
-
+                            type="submit"
                             class="btn btn-success btn-sm"
-                            ng-click="vm.changeStatus(medicalCase, 'APPROVED')">
+                            ng-click="vm.changeStatus(medicalCase, 'APPROVED')"
+                            ng-show="medicalCase.Status == 'PENDING_APPROVAL'"
+                            onClick="window.location.reload();">
 
                         <span class="glyphicon glyphicon-flag"></span>
                         <span class="hidden-sm-down ng-scope"
@@ -119,10 +121,11 @@
                     </button>
 
 
-                    <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                    <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_ADMIN"
                             type="submit"
                             ui-sref="registry-detail.medical-case-edit({cnp:medicalCase.CNP})"
-                            class="btn btn-warning btn-sm">
+                            class="btn btn-warning btn-sm"
+                            ng-show="medicalCase.Status != 'ARCHIVED'">
                         <span class="glyphicon glyphicon-pencil"></span>
                         <span class="hidden-sm-down ng-scope" data-translate="Update">Update</span>
                     </button>
@@ -136,23 +139,24 @@
                         <span class="hidden-sm-down ng-scope" data-translate="Sterge">Sterge</span>
                     </button>
 
-                    <button has-any-authority="ROLE_PATIENT,ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                    <button has-any-authority="ROLE_DOCTOR, ROLE_ADMIN"
                             type="submit"
                             ng-click="vm.changeStatus(medicalCase,'ARCHIVED')"
                             class="btn btn-success btn-sm"
-                            ng-show="medicalCase.Status != 'PENDING_APPROVAL'">
+                            ng-show="medicalCase.Status != 'PENDING_APPROVAL' && medicalCase.Status != 'ARCHIVED'"
+                            onClick="window.location.reload();">
 
                         <span class="glyphicon glyphicon-paperclip"></span>
                         <span class="hidden-sm-down ng-scope" data-translate="Archive">Archive</span>
                     </button>
 
-                    <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
-                            type="submit"
-                            ui-sref="registry-detail.medical-case-export({cnp:medicalCase.CNP})"
-                            class="btn btn-info btn-sm">
+                    <a class="btn btn-primary btn btn-info btn-sm" has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                       target="_blank" href="/api/medical-cases/{{medicalCase.id}}/pdfExport" download="{{medicalCase.Name}}.pdf">
                         <span class="glyphicon glyphicon-floppy-disk"></span>
-                        <span class="hidden-sm-down ng-scope" data-translate="Export">Export</span>
-                    </button>
+                        <span class="hidden-xs-down"
+                              data-translate="hackatonApp.registry.home.exportPdf"> Export </span>
+                    </a>
+
                 </div>
             </td>
         </tr>
