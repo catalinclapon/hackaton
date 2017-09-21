@@ -105,10 +105,11 @@
                               data-translate="View">View</span>
                     </button>
 
-                    <button has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                    <button has-any-authority="ROLE_DOCTOR, ROLE_ADMIN"
                             type="submit"
                             class="btn btn-success btn-sm"
-                            ng-click="vm.changeStatus(medicalCase, 'APPROVED')">
+                            ng-click="vm.changeStatus(medicalCase, 'APPROVED')"
+                            ng-show="medicalCase.Status != 'APPROVED'">
 
                         <span class="glyphicon glyphicon-flag"></span>
                         <span class="hidden-sm-down ng-scope"
@@ -116,10 +117,11 @@
                     </button>
 
 
-                    <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                    <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_ADMIN"
                             type="submit"
                             ui-sref="registry-detail.medical-case-edit({cnp:medicalCase.CNP})"
-                            class="btn btn-warning btn-sm">
+                            class="btn btn-warning btn-sm"
+                            ng-show="medicalCase.Status != 'ARCHIVED'">
                         <span class="glyphicon glyphicon-pencil"></span>
                         <span class="hidden-sm-down ng-scope" data-translate="Update">Update</span>
                     </button>
@@ -133,11 +135,11 @@
                         <span class="hidden-sm-down ng-scope" data-translate="Sterge">Sterge</span>
                     </button>
 
-                    <button has-any-authority="ROLE_PATIENT,ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                    <button has-any-authority="ROLE_DOCTOR, ROLE_ADMIN"
                             type="submit"
                             ng-click="vm.changeStatus(medicalCase,'ARCHIVED')"
                             class="btn btn-success btn-sm"
-                            ng-show="medicalCase.Status != 'PENDING_APPROVAL'">
+                            ng-show="medicalCase.Status != 'PENDING_APPROVAL' || medicalCase.Status != 'ARCHIVED'">
 
                         <span class="glyphicon glyphicon-paperclip"></span>
                         <span class="hidden-sm-down ng-scope" data-translate="Archive">Archive</span>
