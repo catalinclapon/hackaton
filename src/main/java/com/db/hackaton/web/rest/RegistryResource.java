@@ -19,6 +19,8 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -183,6 +185,13 @@ public class RegistryResource {
             XSSFSheet sheet = workbook.createSheet(registry.getName());
             //create header
             Row row = sheet.createRow(0);
+
+
+            //text format for cnp column
+            DataFormat fmt = workbook.createDataFormat();
+            CellStyle textStyle = workbook.createCellStyle();
+            textStyle.setDataFormat(fmt.getFormat("@"));
+            sheet.setDefaultColumnStyle(0, textStyle);
 
             int columnCount = 0;
             Cell cellCnp = row.createCell(columnCount++);
