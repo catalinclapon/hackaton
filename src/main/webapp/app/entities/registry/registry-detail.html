@@ -145,13 +145,13 @@
                         <span class="hidden-sm-down ng-scope" data-translate="Archive">Archive</span>
                     </button>
 
-                    <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
-                            type="submit"
-                            ui-sref="registry-detail.medical-case-export({cnp:medicalCase.CNP})"
-                            class="btn btn-info btn-sm">
+                    <a class="btn btn-primary btn btn-info btn-sm" has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
+                       target="_blank" href="/api/medical-cases/{{medicalCase.id}}/pdfExport" download="{{medicalCase.Name}}.pdf">
                         <span class="glyphicon glyphicon-floppy-disk"></span>
-                        <span class="hidden-sm-down ng-scope" data-translate="Export">Export</span>
-                    </button>
+                        <span class="hidden-xs-down"
+                              data-translate="hackatonApp.registry.home.exportPdf"> Export </span>
+                    </a>
+
                 </div>
             </td>
         </tr>
