@@ -85,15 +85,18 @@
             <th jh-sort-by="name" has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"><span>CNP</span> <span class="glyphicon glyphicon-sort"></span></th>
             <th jh-sort-by="desc"><span>Nume</span> <span class="glyphicon glyphicon-sort"></span></th>
             <th jh-sort-by="status"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
-
+            <th jh-sort-by="aprobat de"><span>Aprobat de</span><span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="data aprobarii" has-any-authority="ROLE_ADMIN, ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER"><span>Data aprobarii</span> <span class="glyphicon glyphicon-sort"></span></th>
         </tr>
         </thead>
 
         <tbody>
         <tr ng-repeat="medicalCase in vm.getSpecificMedicalCases">
-            <td has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN">{{medicalCase.CNP}}</a></td>
+            <td has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN" >{{medicalCase.CNP}}</a></td>
             <td>{{medicalCase.Name}}</td>
             <td>{{medicalCase.Status}}</td>
+            <td>{{medicalCase.approval_by}}</td>
+            <td>{{medicalCase.approval_date}}</td>
             <td class="text-right">
                 <div class="btn-group flex-btn-group-container">
 
@@ -106,7 +109,7 @@
                     </button>
 
                     <button has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
-                            type="submit"
+
                             class="btn btn-success btn-sm"
                             ng-click="vm.changeStatus(medicalCase, 'APPROVED')">
 

@@ -41,6 +41,7 @@
             function onSuccess(data, headers) {
                 vm.getSpecificMedicalCases = data;
 
+
               /*  vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
@@ -57,7 +58,11 @@
 		function changeStatus(medicalCase, status) {
 			medicalCase.status = status;
 			medicalCase.id = vm.getSpecificMedicalCases[0].id;
-			MedicalCase.update(medicalCase);
+			medicalCase.patientCnp = vm.getSpecificMedicalCases[0].CNP;
+			MedicalCase.update(medicalCase, function() {
+                                          				vm.loadAll();
+                                          				vm.clear();
+                                          			});
 		}
 
         if (angular.isDefined(entity.fields)) {
