@@ -74,8 +74,8 @@
     </div>
     </div>
     <h2>{{vm.registry.name}}</h2>
-    <a class="adminBtn" style="vertical-align:middle" href="/app/entities/registry/registry-admins.html">
-        <span>Adauga admin</span></a>
+    <a has-any-authority="ROLE_ADMIN" class="adminBtn" style="vertical-align:middle" href="/app/entities/registry/registry-admins.html">
+        <span >Adauga admin</span></a>
     <hr>
 
 <div class="table-responsive">
@@ -85,8 +85,13 @@
             <th jh-sort-by="name" has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"><span>CNP</span> <span class="glyphicon glyphicon-sort"></span></th>
             <th jh-sort-by="desc"><span>Nume</span> <span class="glyphicon glyphicon-sort"></span></th>
             <th jh-sort-by="status"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
-            <th jh-sort-by="aprobat de"><span>Aprobat de</span><span class="glyphicon glyphicon-sort"></span></th>
-            <th jh-sort-by="data aprobarii" has-any-authority="ROLE_ADMIN, ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER"><span>Data aprobarii</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="aprobat de" >
+                <span>Aprobat de</span>
+                <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="data aprobarii"
+                has-any-authority="ROLE_ADMIN, ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER">
+                <span>Data aprobarii</span>
+                <span class="glyphicon glyphicon-sort"></span></th>
         </tr>
         </thead>
 

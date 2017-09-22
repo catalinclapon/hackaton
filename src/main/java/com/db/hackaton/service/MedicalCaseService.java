@@ -92,10 +92,11 @@ public class MedicalCaseService {
 
         String medicalCaseStatus = "PENDING_APPROVAL";
 
+        List<UserGroup> currentUserGroupList = userGroupRepository.findByUserIsCurrentUser();
+        Set<Authority> authorities = currentUserGroupList.get(0).getUser().getAuthorities();
+        Authority authority = (Authority) authorities.toArray()[0];
+
         if(CollectionUtils.isNotEmpty(userGroupRepository.findByUserIsCurrentUser())) {
-            List<UserGroup> currentUserGroupList = userGroupRepository.findByUserIsCurrentUser();
-            Set<Authority> authorities = currentUserGroupList.get(0).getUser().getAuthorities();
-            Authority authority = (Authority) authorities.toArray()[0];
             if(!authority.getName().equals(AuthoritiesConstants.PATIENT)) {
                 medicalCaseStatus = "APPROVED";
             }
@@ -109,6 +110,12 @@ public class MedicalCaseService {
             .get());
 
         medicalCaseDTO.setId(medicalCase.getId());
+
+        if(!authority.getName().equals(AuthoritiesConstants.PATIENT)) {
+            medicalCaseRepository.setAprovalBy(SecurityUtils.getCurrentUserLogin(), medicalCaseDTO.getId());
+            String approval_date = Instant.now().toString();
+            medicalCaseRepository.setApprovalDate(approval_date, medicalCaseDTO.getId());
+        }
 
         medicalCaseDTO.getFields().stream()
             .map(MedicalCaseFieldDTO::build)
