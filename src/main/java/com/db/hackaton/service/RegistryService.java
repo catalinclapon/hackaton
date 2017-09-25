@@ -20,12 +20,12 @@ public interface RegistryService {
      * @return the persisted entity
      */
     RegistryDTO save(RegistryDTO registry);
-    
-    
+
+
     /* *
      * Update a registry
      */
-     
+
   RegistryDTO updateRegistry(RegistryDTO registry);
 
     /**
@@ -43,6 +43,15 @@ public interface RegistryService {
      *  @return the entity
      */
     RegistryDTO findOne(Long id);
+
+    /**
+     *  Get the "id" registry.
+     *
+     *  @param status the status of the entity
+     *  @param registryUuid the uuid of the entity
+     *  @return the entity
+     */
+    RegistryDTO findOneByStatusAndRegistryUuid(String status, String registryUuid);
 
     /**
      *  Delete the "id" registry.

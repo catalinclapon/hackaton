@@ -2,7 +2,11 @@ package com.db.hackaton.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.db.hackaton.config.ApplicationProperties;
+import com.db.hackaton.domain.Registry;
+import com.db.hackaton.domain.RegistryField;
+import com.db.hackaton.repository.RegistryRepository;
 import com.db.hackaton.service.UploadBulkService;
+import com.db.hackaton.service.dto.RegistryDTO;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,10 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Irina-Mihaela on 6/15/2017.
@@ -35,10 +36,12 @@ public class UploadBulkController {
 
     private UploadBulkService uploadBulkService;
     private ApplicationProperties applicationProperties;
+    private RegistryRepository registryRepository;
 
-    public UploadBulkController(ApplicationProperties applicationProperties, UploadBulkService uploadBulkService) {
+    public UploadBulkController(ApplicationProperties applicationProperties, UploadBulkService uploadBulkService, RegistryRepository registryRepository) {
         this.uploadBulkService = uploadBulkService;
         this.applicationProperties = applicationProperties;
+        this.registryRepository = registryRepository;
     }
 
     @PostMapping("/uploadBulk")
@@ -55,7 +58,7 @@ public class UploadBulkController {
 
     @GetMapping("/registries/saveBulk")
     public void saveBulkData(@RequestParam String filePath, @RequestParam String registerUuid) throws IOException {
-        System.out.println(registerUuid);
+
         // Store column index to category_field reference
         Map<Integer, Pair<String, String>> indexToCategoryToField = new HashMap<>();
         // Store values
@@ -86,6 +89,10 @@ public class UploadBulkController {
                     log.info("Got cell.getColumnIndex() {} with value {}", cell.getColumnIndex(), Pair.of(categoryName, fieldName));
                     indexToCategoryToField.put(cell.getColumnIndex(), Pair.of(categoryName, fieldName));
                 }
+                //check columns with Registry fields
+                if (!uploadBulkService.sameFieldsCheck(registerUuid, indexToCategoryToField)) {
+                    return;
+                }
             } else {
                 while (cellIterator.hasNext()) {
                     Cell cell = cellIterator.next();
@@ -108,8 +115,8 @@ public class UploadBulkController {
                     categoryToFieldToValue.put(indexToCategoryToField.get(cell.getColumnIndex()), value);
                 }
                 log.info("\n");
+                uploadBulkService.save(categoryToFieldToValue, registerUuid);
             }
-            uploadBulkService.save(categoryToFieldToValue, registerUuid);
         }
 
         workbook.close();

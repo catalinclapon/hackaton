@@ -170,18 +170,33 @@ public class RegistryServiceImpl implements RegistryService {
 	}
 
 	/**
-	 * Get one registry by id.
-	 *
-	 * @param id
-	 *            the id of the entity
-	 * @return the entity
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public RegistryDTO findOne(Long id) {
-		log.debug("Request to get Registry : {}", id);
-		return RegistryDTO.build(registryRepository.findOne(id));
-	}
+     * Get one registry by id.
+     *
+     * @param id
+     *            the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public RegistryDTO findOne(Long id) {
+        log.debug("Request to get Registry : {}", id);
+        return RegistryDTO.build(registryRepository.findOne(id));
+    }
+
+
+    /**
+     * Get one registry by id.
+     *
+     * @param status status of the registry
+     * @param registryUuid uuid of the registry
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public RegistryDTO findOneByStatusAndRegistryUuid(String status, String registryUuid) {
+        log.debug("Request to get Registry : {}", registryUuid);
+        return RegistryDTO.build(registryRepository.findOneByStatusAndUuid(status, registryUuid));
+    }
 
 	/**
 	 * Delete the registry by id.

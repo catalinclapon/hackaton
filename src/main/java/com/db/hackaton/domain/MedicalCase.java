@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.TreeSet;
 import java.util.Objects;
 import java.util.Set;
@@ -152,8 +153,14 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     }
 
     public void setApprovalDate(String approval_date){
-    this.approval_date=approval_date;
+        this.approval_date=approval_date;
     }
+
+    public MedicalCase approvalDate() {
+        setApprovalDate(Instant.now().toString());
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
