@@ -38,8 +38,8 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="patient_id" type="bigint">
-                <constraints nullable="false" />
+            <column name="patient_cnp" type="varchar(13)">
+                <constraints nullable="false"/>
             </column>
 
             <column name="approval_by" type="varchar(50)">
