@@ -1,6 +1,7 @@
 package com.db.hackaton.service.dto;
 
 import com.db.hackaton.domain.MedicalCase;
+import com.db.hackaton.domain.MedicalCaseAttachment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,12 +31,18 @@ public class MedicalCaseDTO {
 
     private List<MedicalCaseFieldDTO> fields;
 
+    private List<MedicalCaseAttachmentDTO> attachments;
+
     public static MedicalCaseDTO build(MedicalCase mc) {
         return builder()
             .id(mc.getId())
             .fields(Optional.ofNullable(mc.getFields())
                 .orElse(Collections.emptySet()).stream()
                 .map(MedicalCaseFieldDTO::build)
+                .collect(Collectors.toList()))
+            .attachments(Optional.ofNullable(mc.getAttachments())
+                .orElse(Collections.emptyList()).stream()
+                .map(MedicalCaseAttachmentDTO::build)
                 .collect(Collectors.toList()))
             .uuid(mc.getUuid())
             .status(mc.getStatus())
@@ -59,7 +66,7 @@ public class MedicalCaseDTO {
             .status(mcDTO.getStatus())
             .name(mcDTO.getName());
     }
-    
-    
-    
+
+
+
 }

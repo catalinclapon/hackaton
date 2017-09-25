@@ -1,11 +1,14 @@
 package com.db.hackaton.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -31,6 +34,9 @@ public class MedicalCaseAttachment implements Serializable {
 
     @ManyToOne
     private MedicalCase medicalCase;
+
+    @Column(name = "created_date")
+    private Instant createdDate;
 
     public Long getId() {
         return id;
@@ -79,32 +85,55 @@ public class MedicalCaseAttachment implements Serializable {
         this.medicalCase = medicalCase;
     }
 
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        MedicalCaseAttachment medicalCaseAttachment = (MedicalCaseAttachment) o;
-        if (medicalCaseAttachment.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), medicalCaseAttachment.getId());
+        if (this == o) return true;
+
+        if (!(o instanceof MedicalCaseAttachment)) return false;
+
+        MedicalCaseAttachment that = (MedicalCaseAttachment) o;
+
+        return new EqualsBuilder()
+            .append(id, that.id)
+            .append(title, that.title)
+            .append(location, that.location)
+            .append(medicalCase, that.medicalCase)
+            .append(createdDate, that.createdDate)
+            .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return new HashCodeBuilder(17, 37)
+            .append(id)
+            .append(title)
+            .append(location)
+            .append(medicalCase)
+            .append(createdDate)
+            .toHashCode();
     }
 
     @Override
     public String toString() {
         return "MedicalCaseAttachment{" +
-            "id=" + getId() +
-            ", title='" + getTitle() + "'" +
-            ", location='" + getLocation() + "'" +
-            "}";
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", location='" + location + '\'' +
+            ", medicalCase=" + medicalCase +
+            ", createdDate=" + createdDate +
+            '}';
+    }
+
+    public MedicalCaseAttachment id(Long id) {
+        setId(id);
+        return this;
     }
 }

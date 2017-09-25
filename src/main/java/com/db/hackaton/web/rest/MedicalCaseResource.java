@@ -3,28 +3,17 @@ package com.db.hackaton.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.db.hackaton.config.ApplicationProperties;
 import com.db.hackaton.domain.MedicalCase;
-import com.db.hackaton.domain.MedicalCaseField;
+import com.db.hackaton.service.MedicalCaseAttachmentService;
 import com.db.hackaton.service.MedicalCaseService;
 import com.db.hackaton.service.RegistryService;
+import com.db.hackaton.service.dto.MedicalCaseAttachmentDTO;
 import com.db.hackaton.service.dto.MedicalCaseDTO;
-import com.db.hackaton.service.dto.RegistryDTO;
 import com.db.hackaton.web.rest.util.HeaderUtil;
-import com.db.hackaton.web.rest.util.PaginationUtil;
-import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,19 +21,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing MedicalCase.
@@ -59,11 +45,14 @@ public class MedicalCaseResource {
 
     private final MedicalCaseService medicalCaseService;
     private final RegistryService registryService;
+    private final MedicalCaseAttachmentService medicalCaseAttachmentService;
 
     private ApplicationProperties applicationProperties;
 
-    public MedicalCaseResource(MedicalCaseService medicalCaseService, RegistryService registryService, ApplicationProperties applicationProperties) {
+    public MedicalCaseResource(MedicalCaseService medicalCaseService, RegistryService registryService,
+                               MedicalCaseAttachmentService medicalCaseAttachmentService, ApplicationProperties applicationProperties) {
         this.medicalCaseService = medicalCaseService;
+        this.medicalCaseAttachmentService = medicalCaseAttachmentService;
         this.applicationProperties = applicationProperties;
         this.registryService = registryService;
     }
@@ -104,14 +93,24 @@ public class MedicalCaseResource {
 
     @PostMapping("/upload")
     @Timed
-    public void upload(@RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<MedicalCaseAttachmentDTO> upload(@RequestParam("file") MultipartFile file) throws IOException {
         byte[] bytes;
+        MedicalCaseAttachmentDTO medicalCaseAttachmentDTO = null;
+
         if (!file.isEmpty()) {
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            String formatDateTime = now.format(formatter);
+
             bytes = file.getBytes();
-            String filePath = applicationProperties.getLocalStoragePath() + "/" + file.getOriginalFilename();
+            String filePath = applicationProperties.getLocalStoragePath() + "/" + formatDateTime + "_" + file.getOriginalFilename();
             FileUtils.writeByteArrayToFile(new File(filePath), file.getBytes());
+
+            medicalCaseAttachmentDTO = medicalCaseAttachmentService.save(new MedicalCaseAttachmentDTO(null, file.getOriginalFilename(), filePath, null));
         }
+
         System.out.println(String.format("receive %s", file.getOriginalFilename()));
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(medicalCaseAttachmentDTO));
     }
 
     /**
@@ -166,5 +165,14 @@ public class MedicalCaseResource {
 
         String pathName = applicationProperties.getLocalStoragePath() + "/" + cases.get(0).getUuid() + ".pdf";
         medicalCaseService.saveDocument(document, pathName, response);
+    }
+
+    @GetMapping(produces = {MediaType.APPLICATION_PDF_VALUE}, value = "/medical-cases/attachment/{id}")
+    @Timed
+    public void downloadAttachment(@PathVariable Long id, HttpServletResponse response) throws IOException {
+
+        log.debug("Download attachment with id : {}", id);
+
+        medicalCaseAttachmentService.downloadAttachment(id, response);
     }
 }

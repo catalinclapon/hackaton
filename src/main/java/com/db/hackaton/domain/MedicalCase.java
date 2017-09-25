@@ -7,9 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.TreeSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A MedicalCase.
@@ -48,6 +46,10 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
     @OneToMany(mappedBy = "medicalCase", targetEntity = MedicalCaseField.class, fetch = FetchType.EAGER,
         cascade = CascadeType.MERGE, orphanRemoval = true)
     private Set<MedicalCaseField> fields = new TreeSet<>();
+
+    @OneToMany(mappedBy = "medicalCase", targetEntity = MedicalCaseAttachment.class, fetch = FetchType.EAGER,
+        cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<MedicalCaseAttachment> attachments = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -125,6 +127,14 @@ public class MedicalCase extends AbstractAuditingEntity implements Serializable 
 
     public void setFields(Set<MedicalCaseField> fields){
         this.fields = fields;
+    }
+
+    public List<MedicalCaseAttachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<MedicalCaseAttachment> attachments) {
+        this.attachments = attachments;
     }
 
     @Override

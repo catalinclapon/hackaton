@@ -1,6 +1,4 @@
 
-<form name="viewForm" role="form" novalidate>
-
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="vm.clear()">&times</button>
@@ -49,21 +47,17 @@
             <br><br>
             Files:
             <ul>
-                <li ng-repeat="f in files">{{f.name}} {{f.$errorParam}}
-                    <span class="progress" ng-show="f.progress >= 0">
-                    <div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div>
-                </span>
-                </li>
-                <li ng-repeat="f in errFiles">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                <li ng-repeat="attachment in vm.medicalCase.attachments">
+                    <a target="_blank" href="/api/medical-cases/attachment/{{attachment.id}}">{{attachment.title}}</a>
                 </li>
             </ul>
             {{errorMsg}}
         </div>
-
     </div>
+
+    <!--
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
         </button>
-    </div>
-</form>
+    </div>-->

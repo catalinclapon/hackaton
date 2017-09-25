@@ -6,7 +6,6 @@ import com.db.hackaton.repository.search.MedicalCaseSearchRepository;
 import com.db.hackaton.security.AuthoritiesConstants;
 import com.db.hackaton.service.dto.MedicalCaseDTO;
 import com.db.hackaton.service.dto.MedicalCaseFieldDTO;
-import com.db.hackaton.service.dto.PatientDTO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -38,14 +37,16 @@ public class MedicalCaseService {
     private final Logger log = LoggerFactory.getLogger(MedicalCaseService.class);
 
     private final MedicalCaseRepository medicalCaseRepository;
+    private final MedicalCaseAttachmentRepository medicalCaseAttachmentRepository;
     private final MedicalCaseFieldRepository medicalCaseFieldRepository;
 
     private final MedicalCaseSearchRepository medicalCaseSearchRepository;
     private final PatientRepository patientRepository;
     private final UserGroupRepository userGroupRepository;
 
-    public MedicalCaseService(MedicalCaseRepository medicalCaseRepository, MedicalCaseFieldRepository medicalCaseFieldRepository, MedicalCaseSearchRepository medicalCaseSearchRepository, PatientRepository patientRepository, UserGroupRepository userGroupRepository) {
+    public MedicalCaseService(MedicalCaseRepository medicalCaseRepository, MedicalCaseAttachmentRepository medicalCaseAttachmentRepository, MedicalCaseFieldRepository medicalCaseFieldRepository, MedicalCaseSearchRepository medicalCaseSearchRepository, PatientRepository patientRepository, UserGroupRepository userGroupRepository) {
         this.medicalCaseRepository = medicalCaseRepository;
+        this.medicalCaseAttachmentRepository = medicalCaseAttachmentRepository;
         this.medicalCaseFieldRepository = medicalCaseFieldRepository;
         this.medicalCaseSearchRepository = medicalCaseSearchRepository;
         this.patientRepository = patientRepository;
@@ -108,7 +109,11 @@ public class MedicalCaseService {
             .forEach(medicalCaseFieldRepository::saveAndFlush);
 
         medicalCaseSearchRepository.save(medicalCase);
-        //medicalCaseSearchRepository.save(result);
+
+        medicalCaseDTO.getAttachments().forEach(attachmentDTO ->
+            medicalCaseAttachmentRepository.updateMedicalCaseForAttachment(medicalCase, attachmentDTO.getId())
+        );
+
         return medicalCaseDTO;
     }
 
