@@ -79,7 +79,7 @@
                         $scope.errorMsg = response.status + ': ' + response.data;
                 }, function (evt) {
                     file.progress = Math.min(100, parseInt(100.0 *
-                    evt.loaded / evt.total));
+                        evt.loaded / evt.total));
                 });
             });
         }
@@ -127,11 +127,13 @@
 
             result.attachments = [];
 
-            $scope.files.forEach((function (item) {
-                if (item.result !== undefined && item.result.id !== undefined) {
-                    result.attachments.push({id: item.result.id});
-                }
-            }));
+            if ($scope.files !== undefined) {
+                $scope.files.forEach((function (item) {
+                    if (item.result !== undefined && item.result.id !== undefined) {
+                        result.attachments.push({id: item.result.id});
+                    }
+                }));
+            }
 
             return result;
         }
