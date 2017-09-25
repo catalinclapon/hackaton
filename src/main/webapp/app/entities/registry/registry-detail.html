@@ -74,8 +74,8 @@
     </div>
     </div>
     <h2>{{vm.registry.name}}</h2>
-    <a class="adminBtn" style="vertical-align:middle" href="/app/entities/registry/registry-admins.html">
-        <span>Adauga admin</span></a>
+    <a has-any-authority="ROLE_ADMIN" class="adminBtn" style="vertical-align:middle" href="/app/entities/registry/registry-admins.html">
+        <span >Adauga admin</span></a>
     <hr>
 
 <div class="table-responsive">
@@ -85,7 +85,13 @@
             <th jh-sort-by="name" has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"><span>CNP</span> <span class="glyphicon glyphicon-sort"></span></th>
             <th jh-sort-by="desc"><span>Nume</span> <span class="glyphicon glyphicon-sort"></span></th>
             <th jh-sort-by="status"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
-
+            <th jh-sort-by="aprobat de" >
+                <span>Aprobat de</span>
+                <span class="glyphicon glyphicon-sort"></span></th>
+            <th jh-sort-by="data aprobarii"
+                has-any-authority="ROLE_ADMIN, ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER">
+                <span>Data aprobarii</span>
+                <span class="glyphicon glyphicon-sort"></span></th>
         </tr>
         </thead>
 
@@ -94,6 +100,8 @@
             <td has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN">{{medicalCase.CNP}}</a></td>
             <td>{{medicalCase.Name}}</td>
             <td>{{medicalCase.Status}}</td>
+            <td>{{medicalCase.approval_by}}</td>
+            <td>{{medicalCase.approval_date}}</td>
             <td class="text-right">
                 <div class="btn-group flex-btn-group-container">
 
@@ -105,11 +113,12 @@
                               data-translate="View">View</span>
                     </button>
 
-                    <button has-any-authority="ROLE_DOCTOR, ROLE_ADMIN"
+                    <button has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
                             type="submit"
                             class="btn btn-success btn-sm"
                             ng-click="vm.changeStatus(medicalCase, 'APPROVED')"
-                            ng-show="medicalCase.Status != 'APPROVED'">
+                            ng-show="medicalCase.Status == 'PENDING_APPROVAL'"
+                            onClick="window.location.reload();">
 
                         <span class="glyphicon glyphicon-flag"></span>
                         <span class="hidden-sm-down ng-scope"
@@ -139,7 +148,8 @@
                             type="submit"
                             ng-click="vm.changeStatus(medicalCase,'ARCHIVED')"
                             class="btn btn-success btn-sm"
-                            ng-show="medicalCase.Status != 'PENDING_APPROVAL' || medicalCase.Status != 'ARCHIVED'">
+                            ng-show="medicalCase.Status != 'PENDING_APPROVAL' && medicalCase.Status != 'ARCHIVED'"
+                            onClick="window.location.reload();">
 
                         <span class="glyphicon glyphicon-paperclip"></span>
                         <span class="hidden-sm-down ng-scope" data-translate="Archive">Archive</span>

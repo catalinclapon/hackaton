@@ -112,4 +112,10 @@ public class MailService {
         String subject = messageSource.getMessage("email.social.registration.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
     }
+
+    @Async
+    public void sendApproveMedicalCaseEmail(User user){
+        log.debug("Sending approve medical case email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "approveMedicalCaseEmail", "email.approve.medicalCase.title");
+    }
 }

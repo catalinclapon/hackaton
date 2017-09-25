@@ -4,8 +4,10 @@ import com.db.hackaton.domain.*;
 import com.db.hackaton.repository.*;
 import com.db.hackaton.repository.search.MedicalCaseSearchRepository;
 import com.db.hackaton.security.AuthoritiesConstants;
+import com.db.hackaton.security.SecurityUtils;
 import com.db.hackaton.service.dto.MedicalCaseDTO;
 import com.db.hackaton.service.dto.MedicalCaseFieldDTO;
+import com.db.hackaton.service.util.RandomUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,14 +46,22 @@ public class MedicalCaseService {
     private final MedicalCaseSearchRepository medicalCaseSearchRepository;
     private final PatientRepository patientRepository;
     private final UserGroupRepository userGroupRepository;
+    private final UserRepository userRepository;
 
-    public MedicalCaseService(MedicalCaseRepository medicalCaseRepository, MedicalCaseAttachmentRepository medicalCaseAttachmentRepository, MedicalCaseFieldRepository medicalCaseFieldRepository, MedicalCaseSearchRepository medicalCaseSearchRepository, PatientRepository patientRepository, UserGroupRepository userGroupRepository) {
+    private final MailService mailService;
+
+    public MedicalCaseService(MedicalCaseRepository medicalCaseRepository, MedicalCaseFieldRepository medicalCaseFieldRepository,
+                              MedicalCaseSearchRepository medicalCaseSearchRepository, PatientRepository patientRepository,
+                              UserGroupRepository userGroupRepository, MailService mailService, UserRepository userRepository,
+                              MedicalCaseAttachmentRepository medicalCaseAttachmentRepository) {
         this.medicalCaseRepository = medicalCaseRepository;
         this.medicalCaseAttachmentRepository = medicalCaseAttachmentRepository;
         this.medicalCaseFieldRepository = medicalCaseFieldRepository;
         this.medicalCaseSearchRepository = medicalCaseSearchRepository;
         this.patientRepository = patientRepository;
         this.userGroupRepository = userGroupRepository;
+        this.userRepository = userRepository;
+        this.mailService = mailService;
     }
 
     /**
@@ -84,10 +95,11 @@ public class MedicalCaseService {
 
         String medicalCaseStatus = "PENDING_APPROVAL";
 
+        List<UserGroup> currentUserGroupList = userGroupRepository.findByUserIsCurrentUser();
+        Set<Authority> authorities = currentUserGroupList.get(0).getUser().getAuthorities();
+        Authority authority = (Authority) authorities.toArray()[0];
+
         if(CollectionUtils.isNotEmpty(userGroupRepository.findByUserIsCurrentUser())) {
-            List<UserGroup> currentUserGroupList = userGroupRepository.findByUserIsCurrentUser();
-            Set<Authority> authorities = currentUserGroupList.get(0).getUser().getAuthorities();
-            Authority authority = (Authority) authorities.toArray()[0];
             if(!authority.getName().equals(AuthoritiesConstants.PATIENT)) {
                 medicalCaseStatus = "APPROVED";
             }
@@ -101,6 +113,12 @@ public class MedicalCaseService {
             .get());
 
         medicalCaseDTO.setId(medicalCase.getId());
+
+        if(!authority.getName().equals(AuthoritiesConstants.PATIENT)) {
+            medicalCaseRepository.setAprovalBy(SecurityUtils.getCurrentUserLogin(), medicalCaseDTO.getId());
+            String approval_date = Instant.now().toString();
+            medicalCaseRepository.setApprovalDate(approval_date, medicalCaseDTO.getId());
+        }
 
         medicalCaseDTO.getFields().stream()
             .map(MedicalCaseFieldDTO::build)
@@ -150,6 +168,9 @@ public class MedicalCaseService {
         row.put("Name", medicalCase.getName());
         row.put("Status", medicalCase.getStatus());
         row.put("id", medicalCase.getId().toString());
+        row.put("approval_by", medicalCase.getApprovalBy());
+        row.put("approval_date", medicalCase.getApproval_date());
+
         for (MedicalCaseField field : medicalCase.getFields()) {
             if (field.getField() != null && fields.contains(field.getField().getId())) {
                 row.put(field.getField().getName(), field.getValue());
@@ -259,17 +280,27 @@ public class MedicalCaseService {
         return MedicalCaseDTO.build(medicalCase);
     }
 
-	@SuppressWarnings("static-access")
-	@Transactional
-	public MedicalCaseDTO updateStatus(MedicalCaseDTO medicalCaseDTO) {
-		log.debug("Reguest to update the status for a medical case: {}", medicalCaseDTO);
+    @Transactional
+    public MedicalCaseDTO updateStatus(MedicalCaseDTO medicalCaseDTO) {
+        log.debug("Reguest to update the status for a medical case: {}", medicalCaseDTO);
 
+        // send email to patient if the doctor approve the medical case
+        if (medicalCaseDTO.getStatus().equals("APPROVED")) {
+            Patient patient = patientRepository.findFirstByCnp(medicalCaseDTO.getPatientCnp());
+            User user = userRepository.findOne(patient.getUser().getId());
+            user.setActivationKey(RandomUtil.generateActivationKey());
+            mailService.sendApproveMedicalCaseEmail(user);
+        }
+
+        // change status, approval_by, approval_date
         String medicalCaseStatus = medicalCaseDTO.getStatus();
-        medicalCaseDTO = MedicalCaseDTO.build(medicalCaseRepository.findById(medicalCaseDTO.getId()));
-		medicalCaseRepository.setStatusForMedicalCase(medicalCaseStatus, medicalCaseDTO.getId());
+        medicalCaseRepository.setStatusForMedicalCase(medicalCaseStatus, medicalCaseDTO.getId());
+        medicalCaseRepository.setAprovalBy(SecurityUtils.getCurrentUserLogin(), medicalCaseDTO.getId());
+        String approval_date = Instant.now().toString();
+        medicalCaseRepository.setApprovalDate(approval_date, medicalCaseDTO.getId());
 
-		return medicalCaseDTO;
-	}
+        return medicalCaseDTO;
+    }
 
     @Transactional
 	public MedicalCaseDTO findByRegistryIdAndCNP(Long registryId, String cnp) {

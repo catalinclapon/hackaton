@@ -50,4 +50,13 @@ public interface MedicalCaseRepository extends JpaRepository<MedicalCase,Long> {
     @Modifying
     @Query("update MedicalCase medicalCase set medicalCase.status = :newStatus where medicalCase.id = :id")
     int setStatusForMedicalCase(@Param("newStatus") String newStatus, @Param("id") Long id);
+
+    @Modifying
+    @Query("update MedicalCase medicalCase set medicalCase.approval_by= :doctor where medicalCase.id= :id")
+    int setAprovalBy(@Param("doctor") String doctor,@Param("id") Long id);
+
+    @Modifying
+    @Query("update MedicalCase medicalCase set medicalCase.approval_date=:approval_date where medicalCase.id=:id")
+    int setApprovalDate(@Param("approval_date") String approval_date, @Param("id") Long id);
+
 }
