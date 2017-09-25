@@ -6,10 +6,10 @@ import com.db.hackaton.domain.MedicalCase;
 import com.db.hackaton.domain.MedicalCaseField;
 import com.db.hackaton.domain.Patient;
 import com.db.hackaton.repository.FieldRepository;
-import com.db.hackaton.service.dto.FieldDTO;
-import com.db.hackaton.service.dto.MedicalCaseDTO;
-import com.db.hackaton.service.dto.MedicalCaseFieldDTO;
-import com.db.hackaton.service.dto.PatientDTO;
+import com.db.hackaton.repository.UserGroupRepository;
+import com.db.hackaton.repository.UserRepository;
+import com.db.hackaton.security.SecurityUtils;
+import com.db.hackaton.service.dto.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Service
@@ -36,8 +34,12 @@ public class UploadBulkService {
     private MedicalCaseFieldService medicalCaseFieldService;
     private RegistryService registryService;
     private FieldRepository fieldRepository;
+    private UserGroupRepository userGroupRepository;
 
-    public UploadBulkService(ApplicationProperties applicationProperties, RegistryService registryService, MedicalCaseService medicalCaseService, PatientService patientService, FieldService fieldService, MedicalCaseFieldService medicalCaseFieldService, FieldRepository fieldRepository) {
+    public UploadBulkService(ApplicationProperties applicationProperties, RegistryService registryService,
+                             MedicalCaseService medicalCaseService, PatientService patientService,
+                             FieldService fieldService, MedicalCaseFieldService medicalCaseFieldService,
+                             FieldRepository fieldRepository, UserGroupRepository userGroupRepository) {
         this.applicationProperties = applicationProperties;
         this.medicalCaseService = medicalCaseService;
         this.patientService = patientService;
@@ -45,6 +47,26 @@ public class UploadBulkService {
         this.medicalCaseFieldService = medicalCaseFieldService;
         this.registryService = registryService;
         this.fieldRepository = fieldRepository;
+        this.userGroupRepository = userGroupRepository;
+    }
+
+
+    @Transactional
+    public boolean sameFieldsCheck(String registryUuid, Map<Integer, Pair<String, String>> indexToCategoryToField) {
+
+        RegistryDTO registry = registryService.findOneByStatusAndRegistryUuid("ACTIVATED", registryUuid);
+
+        if (registry.getFields().size() != indexToCategoryToField.size() - 2) {
+            return false;
+        }
+        for (RegistryFieldDTO registryFields : registry.getFields()) {
+            Pair field = Pair.of(registryFields.getCategory(), registryFields.getField().getName());
+            if (!indexToCategoryToField.containsValue(field)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void save(Map<Pair<String, String>, String> categoryToFieldToValue, String registerUuid) {
@@ -88,6 +110,8 @@ public class UploadBulkService {
         medicalCase.setPatientCnp(patient.getCnp());
         medicalCase.setRegistryUuid(registerUuid);
         medicalCase.setName(medicalCaseName);
+        medicalCase.setApproval_by(SecurityUtils.getCurrentUserLogin());
+        medicalCase.setApproval_date(Instant.now().toString());
         medicalCase.setFields(new ArrayList<>());
 
         categoryToFieldToValue.entrySet().forEach(addFieldValueToMedicalCase(medicalCase, fieldMap));
