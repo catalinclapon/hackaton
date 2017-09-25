@@ -29,6 +29,10 @@ public class MedicalCaseDTO {
 
     private String status;
 
+    private String approval_by;
+
+    private String approval_date;
+
     private List<MedicalCaseFieldDTO> fields;
 
     private List<MedicalCaseAttachmentDTO> attachments;
@@ -49,6 +53,8 @@ public class MedicalCaseDTO {
             .registryUuid(mc.getRegistryUuid())
             .patientCnp(mc.getPatientCnp())
             .name(mc.getName())
+            .approval_by(mc.getApprovalBy())
+            .approval_date(mc.getApproval_date())
             .build();
     }
 
@@ -64,7 +70,9 @@ public class MedicalCaseDTO {
             .uuid(mcDTO.getUuid())
             .registryUuid(mcDTO.getRegistryUuid())
             .status(mcDTO.getStatus())
-            .name(mcDTO.getName());
+            .name(mcDTO.getName())
+            .approvalBy(mcDTO.getApproval_by())
+            .approvalDate();
     }
 
 
