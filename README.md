@@ -50,7 +50,7 @@ For further instructions on how to develop with JHipster, have a look at [Using 
 
 To optimize the hackaton application for production, run:
 
-    ./mvnw -Pprod clean package
+    ./mvnw -Pprod clean package -Dmaven.test.skip=true
 
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 To ensure everything worked, run:
