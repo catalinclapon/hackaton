@@ -3,7 +3,6 @@ package com.db.hackaton.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.db.hackaton.config.ApplicationProperties;
 import com.db.hackaton.domain.MedicalCase;
-import com.db.hackaton.domain.MedicalCaseField;
 import com.db.hackaton.service.MedicalCaseService;
 import com.db.hackaton.service.RegistryService;
 import com.db.hackaton.service.dto.RegistryDTO;
@@ -14,10 +13,6 @@ import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -231,12 +226,9 @@ public class RegistryResource {
                           HttpServletResponse response) throws IOException {
 
         log.debug("Export to PDF Registry : {}", id);
-
-        RegistryDTO registry = registryService.findOne(id);
-        List<MedicalCase> cases = medicalCaseService.findByRegistryUuid(registry.getUuid());
+        List<MedicalCase> cases = medicalCaseService.getCasesForExportPdf(id);
         PDDocument document = medicalCaseService.exportDocuments(cases);
-
-        String pathName = applicationProperties.getLocalStoragePath() + "/" + registry.getUuid() + ".pdf";
+        String pathName = applicationProperties.getLocalStoragePath() + "/" + id + ".pdf";
         medicalCaseService.saveDocument(document, pathName, response);
     }
 }
