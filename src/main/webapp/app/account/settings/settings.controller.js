@@ -56,7 +56,6 @@
                     vm.settingsAccount.activated = account.activated;
                     vm.settingsAccount.login = account.login;
 
-
                 });
                 JhiLanguageService.getCurrent().then(function(current) {
                     if (vm.settingsAccount.langKey !== current) {

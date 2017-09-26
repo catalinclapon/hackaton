@@ -61,6 +61,12 @@ public class UserPatientService {
             List<Patient> listPatients = patientRepository.findByUserIsCurrentUser();
             if (listPatients.size() > 0) {
                 Patient patient = listPatients.get(0);
+
+                if(patient.getCnp() != null) {
+                    log.debug("You can't change your cnp!");
+                    return;
+                }
+
                 patient.setCnp(cnp);
                 patientRepository.save(patient);
             } else {
@@ -73,7 +79,6 @@ public class UserPatientService {
             }
 
             if (isEmailChange) {
-
                 user.setActivationKey(RandomUtil.generateActivationKey());
                 mailService.sendActivationEmail(user);
 

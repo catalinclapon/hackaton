@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "Setari penrtu utilizatorul [<b>{{username}}</b>]",
+        "title": "Setari pentru utilizatorul [<b>{{username}}</b>]",
         "form": {
             "firstname": "Prenume",
             "firstname.placeholder": "Ion",
