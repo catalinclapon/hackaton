@@ -7,6 +7,7 @@ import com.db.hackaton.security.AuthoritiesConstants;
 import com.db.hackaton.security.SecurityUtils;
 import com.db.hackaton.service.dto.MedicalCaseDTO;
 import com.db.hackaton.service.dto.MedicalCaseFieldDTO;
+import com.db.hackaton.service.dto.RegistryDTO;
 import com.db.hackaton.service.util.RandomUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -49,11 +50,12 @@ public class MedicalCaseService {
     private final UserRepository userRepository;
 
     private final MailService mailService;
+    private final RegistryService registryService;
 
     public MedicalCaseService(MedicalCaseRepository medicalCaseRepository, MedicalCaseFieldRepository medicalCaseFieldRepository,
                               MedicalCaseSearchRepository medicalCaseSearchRepository, PatientRepository patientRepository,
                               UserGroupRepository userGroupRepository, MailService mailService, UserRepository userRepository,
-                              MedicalCaseAttachmentRepository medicalCaseAttachmentRepository) {
+                              MedicalCaseAttachmentRepository medicalCaseAttachmentRepository, RegistryService registryService) {
         this.medicalCaseRepository = medicalCaseRepository;
         this.medicalCaseAttachmentRepository = medicalCaseAttachmentRepository;
         this.medicalCaseFieldRepository = medicalCaseFieldRepository;
@@ -62,6 +64,7 @@ public class MedicalCaseService {
         this.userGroupRepository = userGroupRepository;
         this.userRepository = userRepository;
         this.mailService = mailService;
+        this.registryService = registryService;
     }
 
     /**
@@ -149,6 +152,19 @@ public class MedicalCaseService {
     }
 
     /**
+     * Get cases for doctors.
+     *
+     * @param registryId the id of the registry
+     * @param approval_by the login of the doctor
+     * @return the list of cases
+     */
+    @Transactional(readOnly = true)
+    public List<MedicalCase> findByLatestModifiedDateAndRegistryIdAndApprovalBy(Long registryId, String approval_by) {
+        log.debug("Request to get Registry : {}", registryId);
+        return medicalCaseRepository.findByLatestModifiedDateAndRegistryIdAndApprovalBy(registryId, approval_by);
+    }
+
+    /**
      * Delete the  medicalCase by id.
      *
      * @param id the id of the entity
@@ -159,6 +175,18 @@ public class MedicalCaseService {
         medicalCaseRepository.delete(id);
         medicalCaseSearchRepository.delete(id);
 
+    }
+
+    public List<MedicalCase> getCasesForExportPdf(Long registryId) {
+
+        RegistryDTO registry = registryService.findOne(registryId);
+        User currentUser = userGroupRepository.findByUserIsCurrentUser().get(0).getUser();
+        Authority authority = (Authority) currentUser.getAuthorities().toArray()[0];
+        if (authority.getName().equals(AuthoritiesConstants.DOCTOR)) {
+            return findByLatestModifiedDateAndRegistryIdAndApprovalBy(registry.getId(), currentUser.getLogin());
+        } else {
+            return findByRegistryUuid(registry.getUuid());
+        }
     }
 
     private Map<String, String> createFields(MedicalCase medicalCase, List<MedicalCase> cases, List<Long> fields) {
@@ -335,6 +363,10 @@ public class MedicalCaseService {
             contentStream.showText("Medical case status: " + mc.getStatus());
             contentStream.newLine();
             contentStream.showText("Last modified date:" + mc.getLastModifiedDate());
+            contentStream.newLine();
+            contentStream.showText("Approved By:" + mc.getApprovalBy());
+            contentStream.newLine();
+            contentStream.showText("Approved Date:" + mc.getApproval_date());
             contentStream.newLine();
 
             for (MedicalCaseField field : mc.getFields()) {

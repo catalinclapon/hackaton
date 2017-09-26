@@ -45,6 +45,15 @@ public interface MedicalCaseRepository extends JpaRepository<MedicalCase,Long> {
         "AND r.id = :registryId)")
     List<MedicalCase> findByLatestModifiedDateAndRegistryIdAndCnp(@Param("registryId") Long registryId, @Param("cnp") String cnp);
 
+    @Query("select medicalCase from MedicalCase medicalCase JOIN Registry registry ON registry.uuid = medicalCase.registryUuid " +
+        "WHERE registry.id = :registryId AND medicalCase.approval_by = :approval_by " +
+        "AND medicalCase.lastModifiedDate = " +
+        "(select MAX(mc.lastModifiedDate) from MedicalCase mc JOIN Registry r ON r.uuid = mc.registryUuid " +
+        "WHERE medicalCase.patientCnp = mc.patientCnp " +
+        "AND r.id = :registryId)")
+    List<MedicalCase> findByLatestModifiedDateAndRegistryIdAndApprovalBy(@Param("registryId") Long registryId, @Param("approval_by") String approval_by);
+
+
     List<MedicalCase> findByRegistryUuid(String registryUuid);
 
     @Modifying
