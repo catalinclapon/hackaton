@@ -16,8 +16,8 @@
             "success": "<strong>Inregistrare salvata!</strong> Va rugam sa va verificati adresa de email pentru confirmare.",
             "error": {
                 "fail": "<strong>Inregistrare esuata!</strong> Incercati din nou mai tarziu.",
-                "userexists": "<strong>Numele de utlizator este in uz!</strong> Va rugam alegeri altul.",
-                "emailexists": "<strong>Adresa de email este in uz!</strong> Va rugam alegeti alta."
+                "userexists": "<strong>Numele de utlizator este deja folosit!</strong> Va rugam alegeri altul.",
+                "emailexists": "<strong>Adresa de email este deja folosita</strong> Va rugam alegeti alta."
             }
         }
     }
