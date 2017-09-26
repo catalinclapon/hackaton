@@ -206,7 +206,7 @@ public class MedicalCaseService {
 
 
     private List<Map<String, String>> findCasesByGroup(List<MedicalCase> cases, List<Long> fields, List<UserGroup> currentUserGroupList) {
-        List<Map<String, String>> result = new ArrayList<>();
+        LinkedHashSet<Map<String, String>> result = new LinkedHashSet<>();
 
         for(UserGroup userGroup : currentUserGroupList) {
             for (Patient patient : patientRepository.findAllByGroupId(userGroup.getGroup().getId())) {
@@ -214,7 +214,7 @@ public class MedicalCaseService {
             }
         }
 
-        return result;
+        return new ArrayList<>(result);
     }
 
 
