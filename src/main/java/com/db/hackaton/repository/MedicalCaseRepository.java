@@ -25,9 +25,18 @@ public interface MedicalCaseRepository extends JpaRepository<MedicalCase,Long> {
         "and r.id = :registryId")
     List<MedicalCase> findByRegistryIdAndCNP(@Param("registryId") Long registryId, @Param("cnp") String cnp);
 
+    @Query("select medicalCase "+
+            "from MedicalCase medicalCase JOIN Registry r ON r.uuid = medicalCase.registryUuid  "+
+            "where medicalCase.patientCnp = :cnp "+
+            "and medicalCase.registryUuid = :registryUuid")
+    List<MedicalCase> findByRegistryUuidAndCNP(@Param("registryUuid") String registryUuid, @Param("cnp") String cnp);
+
     MedicalCase findById(Long id);
 
     List<MedicalCase> findByStatusAndRegistryUuid(String status, String registryUuid);
+
+
+
 
     @Query("select medicalCase from MedicalCase medicalCase JOIN Registry registry ON registry.uuid = medicalCase.registryUuid " +
         "WHERE medicalCase.registryUuid = :registryUuid " +

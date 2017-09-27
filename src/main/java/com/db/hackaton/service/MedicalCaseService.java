@@ -9,13 +9,27 @@ import com.db.hackaton.service.dto.MedicalCaseDTO;
 import com.db.hackaton.service.dto.MedicalCaseFieldDTO;
 import com.db.hackaton.service.util.RandomUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.time.Instant;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,6 +74,7 @@ public class MedicalCaseService {
     public MedicalCaseDTO save(MedicalCaseDTO medicalCaseDTO) {
 
         log.debug("Request to save MedicalCase : {}", medicalCaseDTO);
+
         if (medicalCaseDTO.getId() != null) {
             medicalCaseRepository.save(Optional.of(medicalCaseDTO)
                 .map(MedicalCaseDTO::build)
@@ -77,6 +92,14 @@ public class MedicalCaseService {
             medicalCaseDTO.setPatientCnp(patientRepository.findByUserIsCurrentUser().get(0).getCnp());
         } else if(StringUtils.isBlank(medicalCaseDTO.getPatientCnp())) {
             // throw new Exception("no cnp");  // already verified in frontend
+        }
+
+        if(CollectionUtils.isNotEmpty(patientRepository.findByUserIsCurrentUser())){
+            //verific daca pacientul actual are deja un caz in registrul curent
+
+
+        }else{
+            //inseamna ca userul actual nu este pacient, deci poate sa introduca noi cazuri in registrul curent
         }
 
         String medicalCaseStatus = "PENDING_APPROVAL";
@@ -104,6 +127,7 @@ public class MedicalCaseService {
             .map(mc -> mc.id(null)
                 .medicalCase(medicalCase))
             .forEach(medicalCaseFieldRepository::saveAndFlush);
+
 
         medicalCaseSearchRepository.save(medicalCase);
         //medicalCaseSearchRepository.save(result);
@@ -291,5 +315,65 @@ public class MedicalCaseService {
 				.findByLatestModifiedDateAndRegistryIdAndCnp(registryId, cnp);
 
         return MedicalCaseDTO.build(medicalCaseList.get(0));
+    }
+
+    public PDDocument exportDocuments(List<MedicalCase> cases) throws IOException  {
+
+        // Create a document and add a page to it
+        PDDocument document = new PDDocument();
+
+        // Create a new font object selecting one of the PDF base fonts
+        PDFont font = PDType1Font.HELVETICA_BOLD;
+
+        for (MedicalCase mc : cases) {
+            PDPage page = new PDPage();
+            document.addPage(page);
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+            contentStream.beginText();
+            contentStream.setFont(font, 12);
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(100, 700);
+
+            contentStream.showText("CNP: " + mc.getPatientCnp());
+            contentStream.newLine();
+            contentStream.showText("Medical case description: " + mc.getName());
+            contentStream.newLine();
+            contentStream.showText("Medical case status: " + mc.getStatus());
+            contentStream.newLine();
+            contentStream.showText("Last modified date:" + mc.getLastModifiedDate());
+            contentStream.newLine();
+
+            for (MedicalCaseField field : mc.getFields()) {
+                contentStream.showText(field.getField().getName() + ": "+ field.getValue());
+                contentStream.newLine();
+            }
+            contentStream.endText();
+            contentStream.close();
+        }
+
+        return document;
+    }
+
+    public void saveDocument(PDDocument document, String pathName,
+                             HttpServletResponse response) throws IOException  {
+
+        File file = new File(pathName);
+        document.save(file);
+        document.close();
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bos.write(FileUtils.readFileToByteArray(file));
+
+            //byte[] -> InputStream
+            ByteArrayInputStream inStream = new ByteArrayInputStream(bos.toByteArray());
+
+            org.apache.commons.io.IOUtils.copy(inStream, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException ex) {
+            log.info("Error writing file to output stream.", ex);
+            throw new RuntimeException("IOError writing file to output stream");
+
+        }
     }
 }
