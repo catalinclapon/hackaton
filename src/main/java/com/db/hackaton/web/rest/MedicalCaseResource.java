@@ -4,6 +4,11 @@ import com.codahale.metrics.annotation.Timed;
 import com.db.hackaton.config.ApplicationProperties;
 import com.db.hackaton.domain.MedicalCase;
 import com.db.hackaton.domain.MedicalCaseField;
+import com.db.hackaton.domain.User;
+import com.db.hackaton.repository.MedicalCaseRepository;
+import com.db.hackaton.repository.PatientRepository;
+import com.db.hackaton.repository.UserRepository;
+import com.db.hackaton.security.SecurityUtils;
 import com.db.hackaton.service.MedicalCaseService;
 import com.db.hackaton.service.RegistryService;
 import com.db.hackaton.service.dto.MedicalCaseDTO;
@@ -12,6 +17,7 @@ import com.db.hackaton.web.rest.util.HeaderUtil;
 import com.db.hackaton.web.rest.util.PaginationUtil;
 import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -40,6 +46,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -58,14 +65,23 @@ public class MedicalCaseResource {
     private static final String ENTITY_NAME = "medicalCase";
 
     private final MedicalCaseService medicalCaseService;
-    private final RegistryService registryService;
+
 
     private ApplicationProperties applicationProperties;
 
-    public MedicalCaseResource(MedicalCaseService medicalCaseService, RegistryService registryService, ApplicationProperties applicationProperties) {
+    private PatientRepository patientRepository;
+
+    private MedicalCaseRepository medicalCaseRepository;
+
+
+    public MedicalCaseResource(MedicalCaseService medicalCaseService, ApplicationProperties applicationProperties,
+                               PatientRepository patientRepository,
+                               MedicalCaseRepository medicalCaseRepository
+                               ) {
         this.medicalCaseService = medicalCaseService;
         this.applicationProperties = applicationProperties;
-        this.registryService = registryService;
+       this.medicalCaseRepository=medicalCaseRepository;
+        this.patientRepository = patientRepository;
     }
 
     /**
@@ -79,10 +95,36 @@ public class MedicalCaseResource {
     @Timed
     public ResponseEntity<MedicalCaseDTO> createMedicalCase(@Valid @RequestBody MedicalCaseDTO medicalCase) throws URISyntaxException {
         log.debug("REST request to save MedicalCase : {}", medicalCase);
+
+
         if (medicalCase.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new medicalCase cannot already have an ID")).body(null);
         }
+
+        if (CollectionUtils.isNotEmpty(patientRepository.findByUserIsCurrentUser())) {
+
+
+            if (CollectionUtils.isNotEmpty(medicalCaseRepository.findByRegistryUuidAndCNP(medicalCase.getRegistryUuid(), patientRepository.findByUserIsCurrentUser().get(0).getCnp()))) {
+
+                log.debug("Medical case existent: {}", CollectionUtils.isNotEmpty(medicalCaseRepository.findByRegistryUuidAndCNP(medicalCase.getRegistryUuid(), patientRepository.findByUserIsCurrentUser().get(0).getCnp())));
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "In momentul de fata detineti un caz medical in registrul curent!")).body(null);
+            }
+            else {
+
+                log.debug("USERUL NU ESTE PACIENT, DECI POATE INTRODUCE CAZURI");
+                MedicalCaseDTO result = medicalCaseService.save(medicalCase);
+
+                return ResponseEntity.created(new URI("/api/medical-cases/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                    .body(result);
+
+
+            }
+        }
+        log.debug("TRECE DE IF ELSE");
         MedicalCaseDTO result = medicalCaseService.save(medicalCase);
+
+
         return ResponseEntity.created(new URI("/api/medical-cases/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
