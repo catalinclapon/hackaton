@@ -110,7 +110,7 @@
                             class="btn btn-info btn-sm">
                         <span class="glyphicon glyphicon-eye-open"></span>
                         <span class="hidden-sm-down"
-                              data-translate="View">View</span>
+                              data-translate="entity.action.view">View</span>
                     </button>
 
                     <button has-any-authority="ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
@@ -122,7 +122,7 @@
 
                         <span class="glyphicon glyphicon-flag"></span>
                         <span class="hidden-sm-down ng-scope"
-                              data-translate="Approve">Approve</span>
+                              data-translate="entity.action.approve">Approve</span>
                     </button>
 
 
@@ -132,7 +132,7 @@
                             class="btn btn-warning btn-sm"
                             ng-show="medicalCase.Status != 'ARCHIVED'">
                         <span class="glyphicon glyphicon-pencil"></span>
-                        <span class="hidden-sm-down ng-scope" data-translate="Update">Update</span>
+                        <span class="hidden-sm-down ng-scope" data-translate="entity.action.edit">Update</span>
                     </button>
 
                     <button has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
@@ -141,7 +141,7 @@
                             class="btn btn-danger btn-sm"
                             ng-show="medicalCase.Status == 'PENDING_APPROVAL'">
                         <span class="glyphicon glyphicon-trash"></span>
-                        <span class="hidden-sm-down ng-scope" data-translate="Sterge">Sterge</span>
+                        <span class="hidden-sm-down ng-scope" data-translate="entity.action.delete">Sterge</span>
                     </button>
 
                     <button has-any-authority="ROLE_DOCTOR, ROLE_ADMIN"
@@ -152,7 +152,7 @@
                             onClick="window.location.reload();">
 
                         <span class="glyphicon glyphicon-paperclip"></span>
-                        <span class="hidden-sm-down ng-scope" data-translate="Archive">Archive</span>
+                        <span class="hidden-sm-down ng-scope" data-translate="entity.action.archive">Archive</span>
                     </button>
 
                     <a class="btn btn-primary btn btn-info btn-sm" has-any-authority="ROLE_PATIENT, ROLE_DOCTOR, ROLE_PROVIDER, ROLE_ADMIN"
