@@ -1,7 +1,7 @@
 {
     "home": {
         "message": "Cine suntem si ce facem?",
-        "info": " Suntem o asociatie formata din pacienti, o organizatie non-guvernamentala (ONG) cu reprezentare nationala nascuta din dorinta de a pune pe interesele si nevoile oamenilor pe primul loc atunci cand vine vorba de sanatate.",
+        "info": " Suntem o asociatie formata din pacienti, un ONG (organizatie non-guvernamentala) cu reprezentare nationala nascuta din dorinta de a pune interesele si nevoile oamenilor pe primul loc atunci cand vine vorba de sanatate.",
         "logged": {
             "message": "Esti logat ca utilizatorul \"{{username}}\"."
         },
